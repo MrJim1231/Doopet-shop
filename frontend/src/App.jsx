@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Delivery from "./pages/Delivery";
 import Contacts from "./pages/Contacts";
+import AddCategory from "./admin/AddCategory";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route path="/admin/add-category" element={<AddCategory />} />
         </Routes>
       </div>
     </Router>
