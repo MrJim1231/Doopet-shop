@@ -1,0 +1,50 @@
+@use "../abstracts" as *;
+
+.header {
+  &__topbar-container {
+    background-color: $color-light-gray;
+  }
+
+  &__topbar {
+    width: min(100% - 20px, 1200px);
+    padding: 14px 0;
+    margin-inline: auto;
+
+    &-list {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      gap: 45px;
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 8px; // расстояние между иконкой и текстом
+      // font-family: $font-main;
+      // font-size: 16px;
+      // font-weight: 400;
+
+      &-btn {
+        border: none;
+        background-color: $color-light-gray;
+      }
+
+      // &--account {
+      // }
+    }
+  }
+
+  &__link {
+    color: $color-black;
+    // letter-spacing: 0.5px;
+    // word-spacing: -2px;
+    // letter-spacing: 1.2px;
+    // font-family: $font-main;
+    // font-size: 16px;
+    // font-weight: 400;
+  }
+  &__link--sm {
+    font-size: 14px;
+  }
+}

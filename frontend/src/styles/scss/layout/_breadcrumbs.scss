@@ -1,0 +1,79 @@
+@use "../abstracts" as *;
+
+.breadcrumbs {
+  margin-top: 21px;
+  background-color: $color-gray;
+
+  &__container {
+    width: min(100% - 20px, 1200px);
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 0;
+  }
+
+  &__items {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Группа для стрелки и текста/ссылки */
+  &__item-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__link {
+    color: #373737;
+    font-size: 16px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #1e3a8a;
+    }
+  }
+
+  &__text {
+    color: #373737;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  &__item--active .breadcrumbs__text {
+    font-weight: 600;
+    color: #000;
+  }
+
+  &__separator {
+    color: #999;
+    margin: 0 8px;
+    font-size: 14px;
+  }
+
+  &__icon {
+    color: #373737;
+    display: inline-block;
+    flex-shrink: 0;
+
+    &--home {
+      width: 21px;
+      height: 21px;
+    }
+
+    &--arrow {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

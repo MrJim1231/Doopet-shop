@@ -1,0 +1,16 @@
+// filepath: c:\Users\berol\OneDrive\Desktop\Doopet\src\styles\scss\main.scss
+
+// Абстракции
+@use "./abstracts";
+
+// Базовые стили
+@use "./base";
+
+// Макет
+@use "./layout";
+
+// Компоненты
+@use "./components";
+
+// Страницы
+@use "./pages";

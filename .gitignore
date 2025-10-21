@@ -1,0 +1,22 @@
+# Node.js зависимости
+node_modules/
+
+# Файлы окружения
+.env
+.env.local
+.env.*.local
+
+# Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Сборка фронтенда (если будет)
+dist/
+build/
+
+# MacOS
+.DS_Store
+
+# VS Code
+.vscode/

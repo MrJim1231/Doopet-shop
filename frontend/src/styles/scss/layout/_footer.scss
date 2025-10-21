@@ -1,0 +1,130 @@
+@use "../abstracts" as *;
+
+.footer {
+  background-color: #1f1f1f;
+  color: $color-white;
+  padding: 60px 0;
+
+  &__container {
+    width: min(100% - 20px, $container-size);
+    margin-inline: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+
+  &__col {
+    flex: 1;
+    min-width: 220px;
+    max-width: 280px;
+
+    &--about {
+      // max-width: 340px;
+      flex: 1.5; // будет шире других колонок
+      max-width: 340px;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  &__logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  &__logo-text {
+    height: 22px;
+  }
+
+  &__description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cccccc;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: $color-white;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      color: #cccccc;
+      font-size: 15px;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $color-accent;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+
+    &-icon {
+      width: 18px;
+      height: 18px;
+      /* белый цвет иконки */
+      filter: brightness(0) invert(1);
+      transition: filter 0.3s;
+
+      &:hover {
+        filter: brightness(0) invert(0.8) sepia(1) saturate(5) hue-rotate(20deg);
+      }
+    }
+
+    a,
+    span {
+      color: #cccccc;
+      font-size: 15px;
+      text-decoration: none;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+  }
+
+  &__socials {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+
+    &-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-icon {
+      width: 24px;
+      height: 24px;
+      transition: opacity 0.3s, filter 0.3s;
+      filter: brightness(0) invert(1); /* делаем белыми соц. иконки */
+
+      &:hover {
+        opacity: 0.8;
+        filter: brightness(0) invert(0.8) sepia(1) saturate(5) hue-rotate(20deg);
+      }
+    }
+  }
+}

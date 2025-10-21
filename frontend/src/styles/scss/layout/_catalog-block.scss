@@ -1,0 +1,86 @@
+@use "../abstracts" as *;
+
+.catalog-block {
+  &__container {
+    width: min(100% - 20px, $container-size);
+    margin-inline: auto;
+    display: flex;
+    justify-content: space-between;
+    // padding-top: 15px;
+    margin-top: 21px;
+    position: relative; // обязательно, чтобы z-index работал
+    z-index: 2; // выше баннера
+  }
+
+  &__menu {
+    background-color: $color-accent;
+    border-radius: 5px;
+    color: $color-white;
+    padding: 14px 43px 14px 30px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  &__menu-btn {
+    border: none;
+    background-color: $color-accent;
+  }
+
+  &__menu-icon {
+    width: 25px;
+    height: 18px;
+  }
+
+  &__menu-text {
+    font-size: 20px;
+  }
+
+  &__search {
+    width: 745px;
+    background-color: $color-gray;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  &__search-input {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+  }
+
+  &__search-btn {
+    border: none;
+    // background-color: $color-accent;
+  }
+
+  &__search-icon {
+  }
+
+  &__cart {
+    background-color: $color-accent;
+    border-radius: 5px;
+    color: $color-white;
+    padding: 15px 20px 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__cart-btn {
+    border: none;
+    background: transparent;
+  }
+
+  &__cart-icon {
+    background-color: $color-accent;
+    // display: block;
+    // vertical-align: middle;
+  }
+
+  &__cart-text {
+  }
+}
