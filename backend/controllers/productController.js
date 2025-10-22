@@ -60,11 +60,9 @@ const createProduct = async (req, res) => {
     }
 
     if (isNaN(price) || isNaN(stock) || (oldPrice && isNaN(oldPrice))) {
-      return res
-        .status(400)
-        .json({
-          message: "Цена, старая цена и количество должны быть числами",
-        });
+      return res.status(400).json({
+        message: "Цена, старая цена и количество должны быть числами",
+      });
     }
 
     const category = await Category.findById(categoryId);
@@ -88,8 +86,8 @@ const createProduct = async (req, res) => {
       stock,
       categoryId,
       image: imagePath,
-      tag: tag || "",
-      label: label || "",
+      tag: tag ?? "",
+      label: label ?? "",
     });
 
     const createdProduct = await newProduct.save();

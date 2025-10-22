@@ -9,7 +9,6 @@
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 32px;
-    /* 👇 фикс растяжения */
     align-items: start;
   }
 
@@ -158,6 +157,7 @@
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: 100%;
+    overflow: hidden;
 
     &:hover {
       transform: translateY(-4px);
@@ -174,6 +174,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
+    overflow: hidden; // чтобы лейблы не вылезали
   }
 
   /* ====== ЛЕЙБЛЫ ====== */
@@ -184,25 +185,33 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    z-index: 2;
   }
 
   &__label {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     color: #fff;
     border-radius: 4px;
-    padding: 6px 14px;
+    padding: 5px 12px;
     line-height: 1;
     display: inline-block;
     width: fit-content;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 
     &--hit {
-      background-color: #6b6ff5;
+      background: linear-gradient(135deg, #6b6ff5, #5b5fe5);
     }
 
     &--new {
-      background-color: #52d981;
+      background: linear-gradient(135deg, #52d981, #38c06a);
+    }
+
+    /* добавим универсальный fallback, если label приходит динамически */
+    &--custom {
+      background-color: #ff9f43;
     }
   }
 
@@ -298,7 +307,6 @@
   }
 
   /* ====== ПАГИНАЦИЯ ====== */
-
   &__pagination {
     display: flex;
     justify-content: space-between;
@@ -339,5 +347,20 @@
   &__pagination-info {
     font-size: 14px;
     color: #6b6b6b;
+  }
+
+  /* ====== АДАПТИВ ====== */
+  @media (max-width: 992px) {
+    &__container {
+      grid-template-columns: 1fr;
+    }
+
+    &__filters {
+      order: 2;
+    }
+
+    &__content {
+      order: 1;
+    }
   }
 }
