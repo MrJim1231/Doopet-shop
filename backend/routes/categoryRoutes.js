@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
+
 const {
   getCategories,
   getCategoryById,
@@ -8,19 +11,25 @@ const {
   deleteCategory,
 } = require("../controllers/categoryController");
 
-// Получить все категории
-router.get("/", getCategories);
+// 🟢 Настройка multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
+  },
+});
+const upload = multer({ storage });
 
-// Получить категорию по ID
+// Роуты
+router.get("/", getCategories);
 router.get("/:id", getCategoryById);
 
-// Создать новую категорию
-router.post("/", createCategory);
+// 🟢 ВАЖНО: Multer ДО контроллера!
+router.post("/", upload.single("image"), createCategory);
+router.put("/:id", upload.single("image"), updateCategory);
 
-// Обновить категорию
-router.put("/:id", updateCategory);
-
-// Удалить категорию
 router.delete("/:id", deleteCategory);
 
 module.exports = router;

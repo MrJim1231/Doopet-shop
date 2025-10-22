@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+const path = require("path");
 
 // Получить все категории
 const getCategories = async (req, res) => {
@@ -25,43 +26,58 @@ const getCategoryById = async (req, res) => {
 
 // Создать новую категорию
 const createCategory = async (req, res) => {
-  const { name, description, image } = req.body;
-
-  // Проверяем только обязательное поле name
-  if (!name) {
-    return res.status(400).json({ message: "Введите имя категории" });
-  }
-
   try {
-    // Проверка, существует ли категория с таким именем
+    // 🟢 Проверка: если req.body пустой — создаём пустой объект
+    const body = req.body || {};
+    const { name, description, image } = body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Введите имя категории" });
+    }
+
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
       return res.status(400).json({ message: "Категория уже существует" });
     }
 
-    // Создаем категорию
+    let imagePath = null;
+    if (req.file) {
+      imagePath = `/uploads/${req.file.filename}`;
+    } else if (image && image.startsWith("http")) {
+      imagePath = image;
+    }
+
     const newCategory = new Category({
       name,
-      description, // описание может быть пустым
-      image,
+      description,
+      image: imagePath,
     });
 
     const createdCategory = await newCategory.save();
     res.status(201).json(createdCategory);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Ошибка при создании категории:", error);
+    res.status(500).json({ message: "Ошибка сервера при создании категории" });
   }
 };
 
 // Обновить категорию
 const updateCategory = async (req, res) => {
   try {
-    const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+    const updates = { ...req.body };
+
+    if (req.file) {
+      updates.image = `/uploads/${req.file.filename}`;
+    }
+
+    const category = await Category.findByIdAndUpdate(req.params.id, updates, {
       new: true,
     });
+
     if (!category) {
       return res.status(404).json({ message: "Категория не найдена" });
     }
+
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ message: error.message });

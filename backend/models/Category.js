@@ -11,22 +11,33 @@ const categorySchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: false, // Это поле не обязательно для заполнения
       trim: true, // Убирает лишние пробелы
+      default: "",
     },
     image: {
-      type: String, // Ссылка на изображение
-      required: false, // Это поле не обязательно для заполнения
-      trim: true, // Убирает лишние пробелы
+      type: String, // Может быть URL или локальный путь (например: /uploads/123.jpg)
+      trim: true,
+      default: "",
     },
   },
   {
-    timestamps: true, // Автоматически добавляет поля createdAt и updatedAt
+    timestamps: true, // createdAt и updatedAt
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
-// Экспортируем модель категории
-// const Category = mongoose.model("Category", categorySchema);
+// ✅ Виртуальное поле для полного URL изображения
+categorySchema.virtual("imageUrl").get(function () {
+  if (!this.image) return "";
+  if (this.image.startsWith("http")) return this.image; // Если это ссылка — возвращаем как есть
+
+  // Иначе формируем полный путь к локальному файлу
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+  return `${baseUrl}${this.image}`;
+});
+
+// ✅ Экспорт модели
 const Category =
   mongoose.models.Category || mongoose.model("Category", categorySchema);
 
