@@ -9,6 +9,7 @@ import Delivery from "./pages/Delivery";
 import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
+import CategoryProducts from "./pages/CategoryProducts";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/admin/add-category" element={<AddCategory />} />
           <Route path="/admin/add-product" element={<AddProduct />} />
+          <Route path="/category/:id" element={<CategoryProducts />} />
         </Routes>
       </div>
     </Router>

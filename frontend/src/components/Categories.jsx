@@ -1,24 +1,53 @@
-import dogImg from "../assets/images/dog.png";
-import catImg from "../assets/images/cat.png";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Categories() {
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate(); // хук для перехода
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/categories");
+      setCategories(res.data);
+    } catch (error) {
+      console.error("Ошибка при загрузке категорий:", error);
+    }
+  };
+
+  const handleClick = (id) => {
+    navigate(`/category/${id}`); // переход на страницу с конкретной категорией
+  };
+
   return (
     <section className="categories">
       <div className="categories__container">
         <div className="categories__items">
-          <div className="categories__item">
-            <div className="categories__image-wrapper">
-              <img src={dogImg} alt="Для собак" className="categories__image" />
-            </div>
-            <p className="categories__title">Для собак</p>
-          </div>
-
-          <div className="categories__item">
-            <div className="categories__image-wrapper">
-              <img src={catImg} alt="Для кошек" className="categories__image" />
-            </div>
-            <p className="categories__title">Для кошек</p>
-          </div>
+          {categories.length === 0 ? (
+            <p>Категории не найдены</p>
+          ) : (
+            categories.map((cat) => (
+              <div
+                key={cat._id}
+                className="categories__item"
+                onClick={() => handleClick(cat._id)}
+                style={{ cursor: "pointer" }} // курсор при наведении
+              >
+                <div className="categories__image-wrapper">
+                  <img
+                    src={cat.imageUrl || "https://via.placeholder.com/150"}
+                    alt={cat.name}
+                    className="categories__image"
+                  />
+                </div>
+                <p className="categories__title">{cat.name}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>
