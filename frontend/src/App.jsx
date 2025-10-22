@@ -8,6 +8,7 @@ import Blog from "./pages/Blog";
 import Delivery from "./pages/Delivery";
 import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
+import AddProduct from "./admin/AddProduct";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/admin/add-category" element={<AddCategory />} />
+          <Route path="/admin/add-product" element={<AddProduct />} />
         </Routes>
       </div>
     </Router>

@@ -29,18 +29,29 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      type: String, // Ссылка на изображение
-      required: false, // Это поле не обязательно для заполнения
-      trim: true, // Убирает лишние пробелы
+      type: String, // Может быть URL или локальный путь (/uploads/...)
+      trim: true,
+      default: "",
     },
   },
   {
-    timestamps: true, // Автоматически добавляет поля createdAt и updatedAt
+    timestamps: true, // createdAt и updatedAt
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
-// Экспортируем модель продукта
-// const Product = mongoose.model("Product", productSchema);
+// ✅ Виртуальное поле для полного URL изображения
+productSchema.virtual("imageUrl").get(function () {
+  if (!this.image) return "";
+  if (this.image.startsWith("http")) return this.image; // Если ссылка — возвращаем как есть
+
+  // Иначе формируем полный путь к локальному файлу
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+  return `${baseUrl}${this.image}`;
+});
+
+// ✅ Экспорт модели
 const Product =
   mongoose.models.Product || mongoose.model("Product", productSchema);
 
