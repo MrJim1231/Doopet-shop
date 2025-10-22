@@ -13,14 +13,16 @@ function AddProduct() {
     name: "",
     description: "",
     price: "",
+    oldPrice: "",
     stock: "",
     categoryId: "",
+    tag: "",
+    label: "",
     image: "",
   });
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // 🟢 Загружаем категории и продукты при монтировании
   useEffect(() => {
     fetchCategories();
     fetchProducts();
@@ -44,7 +46,6 @@ function AddProduct() {
     }
   };
 
-  // Изменение инпутов
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -53,7 +54,6 @@ function AddProduct() {
     setFile(e.target.files[0]);
   };
 
-  // 🟢 Добавление продукта
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -68,7 +68,6 @@ function AddProduct() {
       for (const key in form) {
         formData.append(key, form[key]);
       }
-
       if (file) formData.append("image", file);
 
       await axios.post("http://localhost:5000/api/products", formData, {
@@ -79,8 +78,11 @@ function AddProduct() {
         name: "",
         description: "",
         price: "",
+        oldPrice: "",
         stock: "",
         categoryId: "",
+        tag: "",
+        label: "",
         image: "",
       });
       setFile(null);
@@ -93,7 +95,6 @@ function AddProduct() {
     }
   };
 
-  // 🗑 Удаление продукта
   const handleDelete = async (id) => {
     if (!window.confirm("Удалить продукт?")) return;
 
@@ -143,6 +144,14 @@ function AddProduct() {
             />
             <input
               type="number"
+              name="oldPrice"
+              value={form.oldPrice}
+              onChange={handleInputChange}
+              placeholder="Старая цена (если есть)"
+              className="add-product__input"
+            />
+            <input
+              type="number"
               name="stock"
               value={form.stock}
               onChange={handleInputChange}
@@ -163,6 +172,23 @@ function AddProduct() {
                 </option>
               ))}
             </select>
+
+            <input
+              type="text"
+              name="tag"
+              value={form.tag}
+              onChange={handleInputChange}
+              placeholder="Тэг (например 'Хит')"
+              className="add-product__input"
+            />
+            <input
+              type="text"
+              name="label"
+              value={form.label}
+              onChange={handleInputChange}
+              placeholder="Лейбл (например 'Новинка')"
+              className="add-product__input"
+            />
 
             <div className="add-product__upload">
               <label>Изображение:</label>
@@ -214,7 +240,10 @@ function AddProduct() {
                     <div>
                       <h4>{p.name}</h4>
                       <p>Цена: {p.price} грн</p>
+                      {p.oldPrice && <p>Старая цена: {p.oldPrice} грн</p>}
                       <p>Остаток: {p.stock}</p>
+                      {p.tag && <p>Тэг: {p.tag}</p>}
+                      {p.label && <p>Лейбл: {p.label}</p>}
                       {p.categoryId && (
                         <p>
                           Категория:{" "}

@@ -37,22 +37,34 @@ const getProductById = async (req, res) => {
 // Создать новый продукт (с загрузкой изображения)
 const createProduct = async (req, res) => {
   try {
-    // console.log("req.body:", req.body);
-    // console.log("req.file:", req.file);
+    // Для дебага
+    console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
 
     const body = req.body || {};
-    const { name, description, price, stock, categoryId } = body;
+    const {
+      name,
+      description,
+      price,
+      stock,
+      categoryId,
+      oldPrice,
+      tag,
+      label,
+    } = body;
 
     if (!name || !description || !price || !stock || !categoryId) {
       return res
         .status(400)
-        .json({ message: "Пожалуйста, заполните все поля" });
+        .json({ message: "Пожалуйста, заполните все обязательные поля" });
     }
 
-    if (isNaN(price) || isNaN(stock)) {
+    if (isNaN(price) || isNaN(stock) || (oldPrice && isNaN(oldPrice))) {
       return res
         .status(400)
-        .json({ message: "Цена и количество должны быть числами" });
+        .json({
+          message: "Цена, старая цена и количество должны быть числами",
+        });
     }
 
     const category = await Category.findById(categoryId);
@@ -72,9 +84,12 @@ const createProduct = async (req, res) => {
       name,
       description,
       price,
+      oldPrice: oldPrice || 0,
       stock,
       categoryId,
       image: imagePath,
+      tag: tag || "",
+      label: label || "",
     });
 
     const createdProduct = await newProduct.save();
@@ -89,14 +104,26 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const body = req.body || {};
-    const { name, description, price, stock, categoryId } = body;
-
-    const updateData = {
+    const {
       name,
       description,
       price,
       stock,
       categoryId,
+      oldPrice,
+      tag,
+      label,
+    } = body;
+
+    const updateData = {
+      name,
+      description,
+      price,
+      oldPrice: oldPrice || 0,
+      stock,
+      categoryId,
+      tag: tag || "",
+      label: label || "",
     };
 
     // 🟢 Обновляем изображение, если загружено новое
@@ -109,9 +136,7 @@ const updateProduct = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       updateData,
-      {
-        new: true,
-      }
+      { new: true }
     );
 
     if (!updatedProduct) {

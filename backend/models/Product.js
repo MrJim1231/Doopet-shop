@@ -18,6 +18,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0, // Цена не может быть отрицательной
     },
+    oldPrice: {
+      type: Number,
+      min: 0,
+      default: 0, // 🟢 добавлено
+    },
     stock: {
       type: Number,
       required: true,
@@ -32,6 +37,16 @@ const productSchema = new mongoose.Schema(
       type: String, // Может быть URL или локальный путь (/uploads/...)
       trim: true,
       default: "",
+    },
+    tag: {
+      type: String,
+      trim: true,
+      default: "", // 🟢 добавлено
+    },
+    label: {
+      type: String,
+      trim: true,
+      default: "", // 🟢 добавлено
     },
   },
   {
