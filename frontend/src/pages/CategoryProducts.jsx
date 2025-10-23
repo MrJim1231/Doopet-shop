@@ -1,58 +1,72 @@
-import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import { Link, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-import HeaderTopBar from '../layout/HeaderTopBar'
-import Header from '../layout/Header'
-import CatalogBlock from '../layout/CatalogBlock'
-import Breadcrumbs from '../layout/Breadcrumbs'
-import SubscribeSection from '../components/SubscribeSection'
-import Footer from '../layout/Footer'
+import HeaderTopBar from "../layout/HeaderTopBar";
+import Header from "../layout/Header";
+import CatalogBlock from "../layout/CatalogBlock";
+import Breadcrumbs from "../layout/Breadcrumbs";
+import SubscribeSection from "../components/SubscribeSection";
+import Footer from "../layout/Footer";
 
 function CategoryProducts() {
-  const { id } = useParams() // id категории
-  const [minPrice, setMinPrice] = useState(15)
-  const [maxPrice, setMaxPrice] = useState(60)
-  const [packageSize, setPackageSize] = useState('2kg')
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [categoryName, setCategoryName] = useState('')
+  const { id } = useParams(); // id категории
+  const [minPrice, setMinPrice] = useState(15);
+  const [maxPrice, setMaxPrice] = useState(60);
+  const [packageSize, setPackageSize] = useState("2kg");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [categoryName, setCategoryName] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const limit = 12;
 
   useEffect(() => {
-    fetchProducts()
-    fetchCategoryName()
-    // Прокручиваем страницу вверх при переходе
-    window.scrollTo(0, 0)
-  }, [id])
+    fetchProducts(currentPage);
+    fetchCategoryName();
+    window.scrollTo(0, 0);
+  }, [id, currentPage]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 1) => {
     try {
-      setLoading(true)
-      const res = await axios.get(`http://localhost:5000/api/products?category=${id}`)
-      setProducts(res.data)
+      setLoading(true);
+      const res = await axios.get(
+        `http://localhost:5000/api/products?category=${id}&page=${page}&limit=${limit}`
+      );
+
+      setProducts(res.data.products);
+      setCurrentPage(res.data.currentPage);
+      setTotalPages(res.data.totalPages);
+      setTotalProducts(res.data.totalProducts);
     } catch (error) {
-      console.error('❌ Ошибка при загрузке продуктов:', error)
+      console.error("❌ Ошибка при загрузке продуктов:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fetchCategoryName = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/categories/${id}`)
-      setCategoryName(res.data.name)
+      const res = await axios.get(`http://localhost:5000/api/categories/${id}`);
+      setCategoryName(res.data.name);
     } catch (error) {
-      console.error('Ошибка при загрузке категории:', error)
+      console.error("Ошибка при загрузке категории:", error);
     }
-  }
+  };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="catalog-page">
       <HeaderTopBar />
       <Header />
       <CatalogBlock />
-      <Breadcrumbs items={[{ label: categoryName || 'Категория' }]} />
+      <Breadcrumbs items={[{ label: categoryName || "Категория" }]} />
 
       <section className="catalog">
         <div className="catalog__container">
@@ -61,8 +75,20 @@ function CategoryProducts() {
             <div className="catalog__filter">
               <h3 className="catalog__filter-title">Цена</h3>
               <div className="catalog__price-range">
-                <input type="range" min="0" max="100" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
-                <input type="range" min="0" max="100" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                />
                 <div className="catalog__price-values">
                   <span>{minPrice} €</span> — <span>{maxPrice} €</span>
                 </div>
@@ -72,7 +98,7 @@ function CategoryProducts() {
             <div className="catalog__filter">
               <h3 className="catalog__filter-title">Производители</h3>
               <ul className="catalog__checkbox-list">
-                {['VanCat', 'Beef', 'TunaFish'].map((brand) => (
+                {["VanCat", "Beef", "TunaFish"].map((brand) => (
                   <li key={brand}>
                     <label>
                       <input type="checkbox" /> {brand}
@@ -85,10 +111,15 @@ function CategoryProducts() {
             <div className="catalog__filter">
               <h3 className="catalog__filter-title">Размер упаковки</h3>
               <ul className="catalog__checkbox-list">
-                {['2 kg', '3 kg', '5 kg', '10 kg'].map((size) => (
+                {["2 kg", "3 kg", "5 kg", "10 kg"].map((size) => (
                   <li key={size}>
                     <label>
-                      <input type="checkbox" checked={packageSize === size} onChange={() => setPackageSize(size)} /> {size}
+                      <input
+                        type="checkbox"
+                        checked={packageSize === size}
+                        onChange={() => setPackageSize(size)}
+                      />{" "}
+                      {size}
                     </label>
                   </li>
                 ))}
@@ -128,24 +159,50 @@ function CategoryProducts() {
                 <p>Товары отсутствуют</p>
               ) : (
                 products.map((product) => (
-                  <Link key={product._id} to={`/product/${product._id}`} className="catalog__card" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Link
+                    key={product._id}
+                    to={`/product/${product._id}`}
+                    className="catalog__card"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <div className="catalog__card-image-wrapper">
-                      {/* ✅ Лейблы товара */}
                       {(product.tag?.trim() || product.label?.trim()) && (
                         <div className="catalog__card-labels">
-                          {product.tag?.trim() && <span className="catalog__label catalog__label--hit">{product.tag}</span>}
-                          {product.label?.trim() && <span className="catalog__label catalog__label--new">{product.label}</span>}
+                          {product.tag?.trim() && (
+                            <span className="catalog__label catalog__label--hit">
+                              {product.tag}
+                            </span>
+                          )}
+                          {product.label?.trim() && (
+                            <span className="catalog__label catalog__label--new">
+                              {product.label}
+                            </span>
+                          )}
                         </div>
                       )}
 
-                      <img src={product.image?.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.name} className="catalog__card-image" />
+                      <img
+                        src={
+                          product.image?.startsWith("http")
+                            ? product.image
+                            : `http://localhost:5000${product.image}`
+                        }
+                        alt={product.name}
+                        className="catalog__card-image"
+                      />
                     </div>
 
                     <h3 className="catalog__card-title">{product.name}</h3>
 
                     <div className="catalog__card-prices">
-                      <span className="catalog__price">{product.price} грн</span>
-                      {product.oldPrice > 0 && <span className="catalog__old-price">{product.oldPrice} грн</span>}
+                      <span className="catalog__price">
+                        {product.price} грн
+                      </span>
+                      {product.oldPrice > 0 && (
+                        <span className="catalog__old-price">
+                          {product.oldPrice} грн
+                        </span>
+                      )}
                     </div>
 
                     <div className="catalog__card-actions">
@@ -161,16 +218,39 @@ function CategoryProducts() {
               )}
             </div>
 
+            {/* ✅ Пагинация */}
             <div className="catalog__pagination">
               <div className="catalog__pagination-pages">
-                <button className="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>&lt;</button>
-                <button>&gt;</button>
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  &lt;
+                </button>
+
+                {[...Array(totalPages)].map((_, index) => {
+                  const page = index + 1;
+                  return (
+                    <button
+                      key={page}
+                      className={page === currentPage ? "active" : ""}
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  &gt;
+                </button>
               </div>
+
               <div className="catalog__pagination-info">
-                Показано с 1 по {products.length} из {products.length}
+                Показано {products.length} из {totalProducts}
               </div>
             </div>
           </div>
@@ -180,7 +260,7 @@ function CategoryProducts() {
       <SubscribeSection />
       <Footer />
     </div>
-  )
+  );
 }
 
-export default CategoryProducts
+export default CategoryProducts;
