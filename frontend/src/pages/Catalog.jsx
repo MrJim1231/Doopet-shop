@@ -18,6 +18,8 @@ function Catalog() {
 
   useEffect(() => {
     fetchProducts()
+    // Прокручиваем страницу вверх при переходе
+    window.scrollTo(0, 0)
   }, [])
 
   const fetchProducts = async () => {
