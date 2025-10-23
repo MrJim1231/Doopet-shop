@@ -1,85 +1,31 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useCart } from "../context/CartContext";
 import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
+import axios from "axios";
 
 function Cart() {
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { cart, loading, removeFromCart, clearCart, fetchCart } = useCart();
 
-  // Получаем или создаем sessionId (для гостей)
-  const sessionId =
-    localStorage.getItem("sessionId") ||
-    (() => {
-      const id = Math.random().toString(36).substring(2);
-      localStorage.setItem("sessionId", id);
-      return id;
-    })();
-
-  // Загрузка корзины
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const fetchCart = async () => {
+  // 🔹 Изменить количество
+  const handleQuantityChange = async (productId, newQty) => {
+    if (newQty < 1) return; // минимум 1
     try {
-      setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/cart", {
-        params: { sessionId },
-      });
-      setCart(res.data);
-    } catch (error) {
-      console.error("Ошибка при загрузке корзины:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Увеличить/уменьшить количество
-  const updateQuantity = async (productId, newQty) => {
-    if (newQty < 1) return;
-    try {
+      const sessionId = localStorage.getItem("sessionId");
       await axios.put("http://localhost:5000/api/cart/update", {
         sessionId,
         productId,
         quantity: newQty,
       });
-      fetchCart();
+      await fetchCart(); // обновляем корзину
     } catch (error) {
       console.error("Ошибка при обновлении количества:", error);
     }
   };
 
-  // Удалить товар
-  const removeFromCart = async (productId) => {
-    if (!window.confirm("Удалить товар из корзины?")) return;
-    try {
-      await axios.post("http://localhost:5000/api/cart/remove", {
-        sessionId,
-        productId,
-      });
-      fetchCart();
-    } catch (error) {
-      console.error("Ошибка при удалении товара:", error);
-    }
-  };
-
-  // Очистить корзину
-  const clearCart = async () => {
-    if (!window.confirm("Очистить корзину?")) return;
-    try {
-      await axios.post("http://localhost:5000/api/cart/clear", { sessionId });
-      fetchCart();
-    } catch (error) {
-      console.error("Ошибка при очистке корзины:", error);
-    }
-  };
-
-  // Подсчет итоговой суммы
   const total =
     cart?.items?.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
 
@@ -124,21 +70,32 @@ function Cart() {
                     </div>
 
                     <div className="cart__item-controls">
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.productId._id, item.quantity - 1)
-                        }
-                      >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.productId._id, item.quantity + 1)
-                        }
-                      >
-                        +
-                      </button>
+                      {/* 🔹 Кнопки изменения количества */}
+                      <div className="cart__quantity">
+                        <button
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.productId._id,
+                              item.quantity - 1
+                            )
+                          }
+                        >
+                          −
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.productId._id,
+                              item.quantity + 1
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      {/* 🔹 Кнопка удаления */}
                       <button
                         className="cart__remove"
                         onClick={() => removeFromCart(item.productId._id)}

@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-// Создаём контекст
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -44,20 +43,25 @@ export const CartProvider = ({ children }) => {
         productId,
         quantity,
       });
-      await fetchCart(); // обновляем данные
+      await fetchCart();
     } catch (error) {
       console.error("Ошибка при добавлении в корзину:", error);
     }
   };
 
-  // 🔹 Удалить товар
+  // 🔹 Удалить товар (через DELETE)
   const removeFromCart = async (productId) => {
     try {
-      await axios.post("http://localhost:5000/api/cart/remove", {
-        sessionId,
-        productId,
+      // DELETE должен передавать тело через data:
+      await axios.delete("http://localhost:5000/api/cart/remove", {
+        data: { sessionId, productId },
       });
-      await fetchCart();
+
+      // Локально убираем товар без перезагрузки:
+      setCart((prev) => ({
+        ...prev,
+        items: prev.items.filter((item) => item.productId._id !== productId),
+      }));
     } catch (error) {
       console.error("Ошибка при удалении из корзины:", error);
     }
@@ -66,7 +70,9 @@ export const CartProvider = ({ children }) => {
   // 🔹 Очистить корзину
   const clearCart = async () => {
     try {
-      await axios.post("http://localhost:5000/api/cart/clear", { sessionId });
+      await axios.delete("http://localhost:5000/api/cart/clear", {
+        data: { sessionId },
+      });
       setCart({ items: [], cartTotal: 0 });
     } catch (error) {
       console.error("Ошибка при очистке корзины:", error);
@@ -97,5 +103,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Хук для использования контекста
 export const useCart = () => useContext(CartContext);
