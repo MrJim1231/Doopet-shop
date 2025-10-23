@@ -26,19 +26,18 @@ export const useProducts = (categoryId, filters = {}) => {
     params.append("limit", limitValue);
     params.append("sort", sortValue);
 
-    // 🔹 Фильтры
-    if (filtersObj.minPrice) params.append("minPrice", filtersObj.minPrice);
-    if (filtersObj.maxPrice) params.append("maxPrice", filtersObj.maxPrice);
+    // 🔹 Фильтры по цене — передаём всегда, даже если 0
+    if (filtersObj.minPrice !== undefined)
+      params.append("minPrice", Number(filtersObj.minPrice));
+    if (filtersObj.maxPrice !== undefined)
+      params.append("maxPrice", Number(filtersObj.maxPrice));
 
     // 🔹 Размер упаковки — поддержка массива и нормализация
-    if (filtersObj.packageSize) {
-      const pkg = Array.isArray(filtersObj.packageSize)
-        ? filtersObj.packageSize
-            .map((s) => s.toString().replace(/\s+/g, "").toLowerCase())
-            .join(",")
-        : filtersObj.packageSize.toString().replace(/\s+/g, "").toLowerCase();
-
-      if (pkg.trim()) params.append("packageSize", pkg);
+    if (filtersObj.packageSize && filtersObj.packageSize.length > 0) {
+      const pkg = filtersObj.packageSize
+        .map((s) => s.toString().replace(/\s+/g, "").toLowerCase())
+        .join(",");
+      params.append("packageSize", pkg);
     }
 
     // 🔹 Производители

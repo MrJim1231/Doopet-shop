@@ -68,8 +68,8 @@ const getProducts = async (req, res) => {
         sortOption = { createdAt: -1 };
     }
 
-    console.log("📦 Активные фильтры:", filter);
-    console.log("🔹 Сортировка:", sortOption);
+    // console.log("📦 Активные фильтры:", filter);
+    // console.log("🔹 Сортировка:", sortOption);
 
     // 🔹 Получаем продукты
     const products = await Product.find(filter)

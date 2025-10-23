@@ -42,9 +42,9 @@ export default function ProductGrid({ products, loading }) {
           <h3 className="catalog__card-title">{product.name}</h3>
 
           <div className="catalog__card-prices">
-            <span className="catalog__price">{product.price} грн</span>
+            <span className="catalog__price">{product.price} €</span>
             {product.oldPrice > 0 && (
-              <span className="catalog__old-price">{product.oldPrice} грн</span>
+              <span className="catalog__old-price">{product.oldPrice} €</span>
             )}
           </div>
 

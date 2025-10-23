@@ -32,7 +32,7 @@ export default function Filters({
     fetchManufacturers();
   }, []);
 
-  // 🧩 Обработчик выбора производителя
+  // 🧩 Производители
   const handleManufacturerChange = (brand) => {
     const updated = selectedManufacturers.includes(brand)
       ? selectedManufacturers.filter((b) => b !== brand)
@@ -42,7 +42,7 @@ export default function Filters({
     onFilterChange({ manufacturer: updated });
   };
 
-  // 🧩 Обработчик выбора упаковки (множественный выбор)
+  // 🧩 Размер упаковки
   const handlePackageChange = (size) => {
     const normalized = size.replace(/\s+/g, "").toLowerCase();
     const updated = packageSize.includes(normalized)
@@ -53,40 +53,55 @@ export default function Filters({
     onFilterChange({ packageSize: updated });
   };
 
-  // 🧩 Обновление диапазона цены
-  const handlePriceChange = () => {
-    onFilterChange({ minPrice, maxPrice });
+  // 🧩 Цена (гарантируем корректный диапазон)
+  const handleMinPriceChange = (e) => {
+    const value = Number(e.target.value);
+    const safeValue = Math.min(value, maxPrice - 1); // не даём пересечь max
+    setMinPrice(safeValue);
+    onFilterChange({ minPrice: safeValue, maxPrice });
+  };
+
+  const handleMaxPriceChange = (e) => {
+    const value = Number(e.target.value);
+    const safeValue = Math.max(value, minPrice + 1); // не даём пересечь min
+    setMaxPrice(safeValue);
+    onFilterChange({ minPrice, maxPrice: safeValue });
   };
 
   return (
     <aside className="catalog__filters">
-      {/* Цена */}
+      {/* 🔹 Цена */}
       <div className="catalog__filter">
         <h3 className="catalog__filter-title">Цена</h3>
         <div className="catalog__price-range">
-          <input
-            type="range"
-            min="0"
-            max="1000"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            onMouseUp={handlePriceChange}
-          />
-          <input
-            type="range"
-            min="0"
-            max="1000"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            onMouseUp={handlePriceChange}
-          />
+          {/* Ползунки */}
+          <div className="catalog__sliders">
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              step="1"
+              value={minPrice}
+              onChange={handleMinPriceChange}
+            />
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              step="1"
+              value={maxPrice}
+              onChange={handleMaxPriceChange}
+            />
+          </div>
+
+          {/* Отображение значений */}
           <div className="catalog__price-values">
             <span>{minPrice} €</span> — <span>{maxPrice} €</span>
           </div>
         </div>
       </div>
 
-      {/* Производители */}
+      {/* 🔹 Производители */}
       <div className="catalog__filter">
         <h3 className="catalog__filter-title">Производители</h3>
         <ul className="catalog__checkbox-list">
@@ -109,7 +124,7 @@ export default function Filters({
         </ul>
       </div>
 
-      {/* Размер упаковки */}
+      {/* 🔹 Размер упаковки */}
       <div className="catalog__filter">
         <h3 className="catalog__filter-title">Размер упаковки</h3>
         <ul className="catalog__checkbox-list">
@@ -118,7 +133,7 @@ export default function Filters({
               <label>
                 <input
                   type="checkbox"
-                  checked={packageSize.includes(size)}
+                  checked={packageSize.includes(size.toLowerCase())}
                   onChange={() => handlePackageChange(size)}
                 />{" "}
                 {size}
