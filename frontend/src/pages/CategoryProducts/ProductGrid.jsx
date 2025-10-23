@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useCart } from "../../context/CartContext"; // 🟢 добавлено
 
 export default function ProductGrid({ products, loading }) {
   const [quantities, setQuantities] = useState({});
-  const [adding, setAdding] = useState({}); // состояние кнопки
+  const [adding, setAdding] = useState({});
+  const { fetchCart } = useCart(); // 🟢 получаем функцию обновления корзины
 
   // Изменение количества
   const handleQuantityChange = (id, delta) => {
@@ -21,7 +23,7 @@ export default function ProductGrid({ products, loading }) {
     try {
       setAdding((prev) => ({ ...prev, [productId]: true }));
 
-      // Для гостей можно использовать sessionId (например, localStorage)
+      // Для гостей используем sessionId
       const sessionId =
         localStorage.getItem("sessionId") ||
         (() => {
@@ -36,6 +38,9 @@ export default function ProductGrid({ products, loading }) {
         quantity,
       });
 
+      await fetchCart(); // 🟢 обновляем данные в контексте
+
+      // Всплывающее уведомление
       alert("✅ Товар добавлен в корзину!");
     } catch (error) {
       console.error("Ошибка при добавлении в корзину:", error);
@@ -45,7 +50,7 @@ export default function ProductGrid({ products, loading }) {
     }
   };
 
-  // Заглушки на загрузку и пустой каталог
+  // Заглушки
   if (loading) return <p>Загрузка...</p>;
   if (products.length === 0) return <p>Товары отсутствуют</p>;
 

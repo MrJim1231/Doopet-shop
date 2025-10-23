@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext"; // 🟢 импорт контекста
 import menuIcon from "../assets/icons/Menu.svg";
 import searchIcon from "../assets/icons/search.svg";
 import cartIcon from "../assets/icons/cart.svg";
 
 function CatalogBlock() {
+  const { totalCount, totalPrice } = useCart(); // получаем актуальные данные
+
   return (
     <div className="catalog-block">
       <div className="catalog-block__container">
@@ -39,7 +42,7 @@ function CatalogBlock() {
           </button>
         </div>
 
-        {/* Блок корзины */}
+        {/* Корзина */}
         <div className="catalog-block__cart">
           <Link
             to="/cart"
@@ -52,7 +55,9 @@ function CatalogBlock() {
               className="catalog-block__cart-icon"
             />
           </Link>
-          <span className="catalog-block__cart-text">Товаров 2 (600 грн)</span>
+          <span className="catalog-block__cart-text">
+            Товаров {totalCount} ({totalPrice.toFixed(2)} €)
+          </span>
         </div>
       </div>
     </div>
