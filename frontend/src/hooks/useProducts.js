@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function useProducts(categoryId) {
+export const useProducts = (categoryId) => {
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -9,19 +9,23 @@ export function useProducts(categoryId) {
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const [limit, setLimit] = useState(12);
+  const [sort, setSort] = useState("default"); // ✅ добавили
 
   useEffect(() => {
-    if (!categoryId) return;
-    fetchProducts(currentPage, limit);
+    fetchProducts(currentPage, limit, sort);
     fetchCategoryName();
     window.scrollTo(0, 0);
-  }, [categoryId, currentPage, limit]);
+  }, [categoryId, currentPage, limit, sort]);
 
-  const fetchProducts = async (page = 1, limitValue = limit) => {
+  const fetchProducts = async (
+    page = 1,
+    limitValue = limit,
+    sortValue = sort
+  ) => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/products?category=${categoryId}&page=${page}&limit=${limitValue}`
+        `http://localhost:5000/api/products?category=${categoryId}&page=${page}&limit=${limitValue}&sort=${sortValue}`
       );
 
       setProducts(res.data.products);
@@ -55,6 +59,8 @@ export function useProducts(categoryId) {
     totalProducts,
     limit,
     setLimit,
+    sort, // ✅ экспортируем
+    setSort, // ✅ экспортируем
     setCurrentPage,
   };
-}
+};

@@ -16,6 +16,8 @@ import Pagination from "./Pagination";
 
 function CategoryProducts() {
   const { id } = useParams();
+
+  // 🧩 получаем все данные и методы из хука
   const {
     products,
     categoryName,
@@ -26,6 +28,8 @@ function CategoryProducts() {
     limit,
     setLimit,
     setCurrentPage,
+    sort, // ✅ добавлено
+    setSort, // ✅ добавлено
   } = useProducts(id);
 
   const [minPrice, setMinPrice] = useState(15);
@@ -41,6 +45,7 @@ function CategoryProducts() {
 
       <section className="catalog">
         <div className="catalog__container">
+          {/* ---------- ФИЛЬТРЫ ---------- */}
           <Filters
             minPrice={minPrice}
             maxPrice={maxPrice}
@@ -50,13 +55,21 @@ function CategoryProducts() {
             setPackageSize={setPackageSize}
           />
 
+          {/* ---------- КОНТЕНТ (список товаров) ---------- */}
           <div className="catalog__content">
+            {/* Панель управления: сортировка + лимит */}
             <Controls
               limit={limit}
               setLimit={setLimit}
               setCurrentPage={setCurrentPage}
+              sort={sort} // ✅ добавлено
+              setSort={setSort} // ✅ добавлено
             />
+
+            {/* Сетка карточек товаров */}
             <ProductGrid products={products} loading={loading} />
+
+            {/* Пагинация */}
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

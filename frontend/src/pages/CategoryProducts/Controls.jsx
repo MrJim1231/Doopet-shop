@@ -1,4 +1,12 @@
-export default function Controls({ limit, setLimit, setCurrentPage }) {
+import SortSelect from "./SortSelect";
+
+export default function Controls({
+  limit,
+  setLimit,
+  setCurrentPage,
+  sort,
+  setSort,
+}) {
   const handleLimitChange = (e) => {
     setLimit(Number(e.target.value));
     setCurrentPage(1);
@@ -11,14 +19,8 @@ export default function Controls({ limit, setLimit, setCurrentPage }) {
         <button className="catalog__view-btn">☰</button>
       </div>
 
-      <div className="catalog__sort">
-        <label>Сортировка:</label>
-        <select>
-          <option>По умолчанию</option>
-          <option>По возрастанию цены</option>
-          <option>По убыванию цены</option>
-        </select>
-      </div>
+      {/* ✅ сортировка вынесена в отдельный компонент */}
+      <SortSelect sort={sort} setSort={setSort} />
 
       <div className="catalog__show-count">
         <label>Показать:</label>

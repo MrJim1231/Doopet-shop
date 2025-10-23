@@ -2,8 +2,7 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const path = require("path");
 
-// Получить все продукты (с фильтром по категории, если указан)
-// Получить все продукты (с фильтром и пагинацией)
+// Получить все продукты (с фильтром, пагинацией и сортировкой)
 const getProducts = async (req, res) => {
   try {
     const filter = {};
@@ -11,18 +10,46 @@ const getProducts = async (req, res) => {
       filter.categoryId = req.query.category;
     }
 
-    // 🟢 Параметры пагинации
+    // 🔹 Параметры пагинации
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const skip = (page - 1) * limit;
 
-    // 🟢 Получаем продукты с учётом пагинации
+    // 🔹 Параметр сортировки
+    const sortParam = req.query.sort || "default";
+    let sortOption = {};
+
+    switch (sortParam) {
+      case "price_asc":
+        sortOption = { price: 1 }; // по возрастанию
+        break;
+      case "price_desc":
+        sortOption = { price: -1 }; // по убыванию
+        break;
+      case "name_asc":
+        sortOption = { name: 1 }; // по названию (А–Я)
+        break;
+      case "name_desc":
+        sortOption = { name: -1 }; // по названию (Я–А)
+        break;
+      default:
+        sortOption = { createdAt: -1 }; // последние добавленные
+    }
+
+    // 🧩 Лог для отладки
+    // console.log("📦 Получение продуктов:");
+    // console.log("➡️ Категория:", req.query.category || "все");
+    // console.log("➡️ Страница:", page);
+    // console.log("➡️ Лимит:", limit);
+    // console.log("➡️ Сортировка:", sortParam, sortOption);
+
+    // 🔹 Запрос с сортировкой и пагинацией
     const products = await Product.find(filter)
       .populate("categoryId")
+      .sort(sortOption)
       .skip(skip)
       .limit(limit);
 
-    // 🟢 Считаем общее количество товаров
     const total = await Product.countDocuments(filter);
 
     res.status(200).json({
@@ -32,7 +59,7 @@ const getProducts = async (req, res) => {
       totalProducts: total,
     });
   } catch (error) {
-    console.error("Ошибка при получении продуктов:", error);
+    console.error("❌ Ошибка при получении продуктов:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -56,10 +83,6 @@ const getProductById = async (req, res) => {
 // Создать новый продукт (с загрузкой изображения)
 const createProduct = async (req, res) => {
   try {
-    // Для дебага
-    // console.log("req.body:", req.body);
-    // console.log("req.file:", req.file);
-
     const body = req.body || {};
     const {
       name,
