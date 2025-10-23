@@ -41,13 +41,17 @@ function CatalogBlock() {
 
         {/* Блок корзины */}
         <div className="catalog-block__cart">
-          <button className="catalog-block__cart-btn">
+          <Link
+            to="/cart"
+            className="catalog-block__cart-btn"
+            aria-label="Перейти в корзину"
+          >
             <img
               src={cartIcon}
               alt="Корзина"
               className="catalog-block__cart-icon"
             />
-          </button>
+          </Link>
           <span className="catalog-block__cart-text">Товаров 2 (600 грн)</span>
         </div>
       </div>

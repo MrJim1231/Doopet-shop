@@ -10,6 +10,7 @@ import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
+import Cart from "./pages/Cart"; // 🟢 добавляем импорт страницы корзины
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/admin/add-category" element={<AddCategory />} />
           <Route path="/admin/add-product" element={<AddProduct />} />
           <Route path="/category/:id" element={<CategoryProducts />} />
+          <Route path="/cart" element={<Cart />} /> {/* 🟢 маршрут корзины */}
         </Routes>
       </div>
     </Router>
