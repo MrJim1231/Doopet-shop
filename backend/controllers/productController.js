@@ -2,48 +2,76 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const path = require("path");
 
-// Получить все продукты (с фильтром, пагинацией и сортировкой)
+// Получить все продукты (с фильтрами, пагинацией и сортировкой)
 const getProducts = async (req, res) => {
   try {
     const filter = {};
+
+    // 🔹 Категория
     if (req.query.category) {
       filter.categoryId = req.query.category;
     }
 
-    // 🔹 Параметры пагинации
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const skip = (page - 1) * limit;
-
-    // 🔹 Параметр сортировки
-    const sortParam = req.query.sort || "default";
-    let sortOption = {};
-
-    switch (sortParam) {
-      case "price_asc":
-        sortOption = { price: 1 }; // по возрастанию
-        break;
-      case "price_desc":
-        sortOption = { price: -1 }; // по убыванию
-        break;
-      case "name_asc":
-        sortOption = { name: 1 }; // по названию (А–Я)
-        break;
-      case "name_desc":
-        sortOption = { name: -1 }; // по названию (Я–А)
-        break;
-      default:
-        sortOption = { createdAt: -1 }; // последние добавленные
+    // 🔹 Цена (гибкая обработка диапазона)
+    const minPrice = parseFloat(req.query.minPrice);
+    const maxPrice = parseFloat(req.query.maxPrice);
+    if (!isNaN(minPrice) || !isNaN(maxPrice)) {
+      filter.price = {};
+      if (!isNaN(minPrice)) filter.price.$gte = minPrice;
+      if (!isNaN(maxPrice)) filter.price.$lte = maxPrice;
     }
 
-    // 🧩 Лог для отладки
-    // console.log("📦 Получение продуктов:");
-    // console.log("➡️ Категория:", req.query.category || "все");
-    // console.log("➡️ Страница:", page);
-    // console.log("➡️ Лимит:", limit);
-    // console.log("➡️ Сортировка:", sortParam, sortOption);
+    // 🔹 Производитель (может быть несколько)
+    if (req.query.manufacturer) {
+      const manufacturers = req.query.manufacturer
+        .split(",")
+        .map((m) => m.trim())
+        .filter(Boolean);
+      if (manufacturers.length > 0) {
+        filter.manufacturer = { $in: manufacturers };
+      }
+    }
 
-    // 🔹 Запрос с сортировкой и пагинацией
+    // 🔹 Размер упаковки
+    if (req.query.packageSize) {
+      const sizes = req.query.packageSize
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (sizes.length > 0) {
+        filter.packageSize = { $in: sizes };
+      }
+    }
+
+    // 🔹 Пагинация
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit) || 12, 1);
+    const skip = (page - 1) * limit;
+
+    // 🔹 Сортировка
+    const sortParam = req.query.sort || "default";
+    let sortOption = {};
+    switch (sortParam) {
+      case "price_asc":
+        sortOption = { price: 1 };
+        break;
+      case "price_desc":
+        sortOption = { price: -1 };
+        break;
+      case "name_asc":
+        sortOption = { name: 1 };
+        break;
+      case "name_desc":
+        sortOption = { name: -1 };
+        break;
+      default:
+        sortOption = { createdAt: -1 };
+    }
+
+    console.log("📦 Активные фильтры:", filter);
+    console.log("🔹 Сортировка:", sortOption);
+
+    // 🔹 Получаем продукты
     const products = await Product.find(filter)
       .populate("categoryId")
       .sort(sortOption)
@@ -59,7 +87,7 @@ const getProducts = async (req, res) => {
       totalProducts: total,
     });
   } catch (error) {
-    console.error("❌ Ошибка при получении продуктов:", error);
+    console.error("Ошибка при получении продуктов:", error);
     res.status(500).json({ message: error.message });
   }
 };

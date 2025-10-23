@@ -17,7 +17,16 @@ import Pagination from "./Pagination";
 function CategoryProducts() {
   const { id } = useParams();
 
-  // 🧩 получаем все данные и методы из хука
+  // 🔹 Локальные состояния фильтров
+  const [minPrice, setMinPrice] = useState(15);
+  const [maxPrice, setMaxPrice] = useState(60);
+  const [packageSize, setPackageSize] = useState("");
+  const [selectedManufacturers, setSelectedManufacturers] = useState([]);
+
+  // 🔹 Объект фильтров
+  const [filters, setFilters] = useState({});
+
+  // 🧩 Данные из хука useProducts
   const {
     products,
     categoryName,
@@ -28,13 +37,15 @@ function CategoryProducts() {
     limit,
     setLimit,
     setCurrentPage,
-    sort, // ✅ добавлено
-    setSort, // ✅ добавлено
-  } = useProducts(id);
+    sort,
+    setSort,
+  } = useProducts(id, filters); // ✅ теперь передаём filters
 
-  const [minPrice, setMinPrice] = useState(15);
-  const [maxPrice, setMaxPrice] = useState(60);
-  const [packageSize, setPackageSize] = useState("2kg");
+  // 🔹 Обновление фильтров
+  const handleFilterChange = (newFilter) => {
+    setFilters((prev) => ({ ...prev, ...newFilter }));
+    setCurrentPage(1);
+  };
 
   return (
     <div className="catalog-page">
@@ -53,23 +64,23 @@ function CategoryProducts() {
             setMaxPrice={setMaxPrice}
             packageSize={packageSize}
             setPackageSize={setPackageSize}
+            selectedManufacturers={selectedManufacturers}
+            setSelectedManufacturers={setSelectedManufacturers}
+            onFilterChange={handleFilterChange}
           />
 
-          {/* ---------- КОНТЕНТ (список товаров) ---------- */}
+          {/* ---------- КОНТЕНТ ---------- */}
           <div className="catalog__content">
-            {/* Панель управления: сортировка + лимит */}
             <Controls
               limit={limit}
               setLimit={setLimit}
               setCurrentPage={setCurrentPage}
-              sort={sort} // ✅ добавлено
-              setSort={setSort} // ✅ добавлено
+              sort={sort}
+              setSort={setSort}
             />
 
-            {/* Сетка карточек товаров */}
             <ProductGrid products={products} loading={loading} />
 
-            {/* Пагинация */}
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
