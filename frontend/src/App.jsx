@@ -1,15 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Catalog from './pages/Catalog'
-import Product from './pages/Product'
-import Stock from './pages/Stock'
-import About from './pages/About'
-import Blog from './pages/Blog'
-import Delivery from './pages/Delivery'
-import Contacts from './pages/Contacts'
-import AddCategory from './admin/AddCategory'
-import AddProduct from './admin/AddProduct'
-import CategoryProducts from './pages/CategoryProducts'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
+import Product from "./pages/Product";
+import Stock from "./pages/Stock";
+import About from "./pages/About";
+import Blog from "./pages/Blog";
+import Delivery from "./pages/Delivery";
+import Contacts from "./pages/Contacts";
+import AddCategory from "./admin/AddCategory";
+import AddProduct from "./admin/AddProduct";
+import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 
 export default function App() {
   return (
@@ -30,5 +30,5 @@ export default function App() {
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
