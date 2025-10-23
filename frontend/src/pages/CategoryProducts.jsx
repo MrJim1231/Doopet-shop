@@ -20,19 +20,19 @@ function CategoryProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  const limit = 12;
+  const [limit, setLimit] = useState(12); // ✅ теперь это состояние
 
   useEffect(() => {
-    fetchProducts(currentPage);
+    fetchProducts(currentPage, limit);
     fetchCategoryName();
     window.scrollTo(0, 0);
-  }, [id, currentPage]);
+  }, [id, currentPage, limit]); // ✅ следим и за limit
 
-  const fetchProducts = async (page = 1) => {
+  const fetchProducts = async (page = 1, limitValue = limit) => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/products?category=${id}&page=${page}&limit=${limit}`
+        `http://localhost:5000/api/products?category=${id}&page=${page}&limit=${limitValue}`
       );
 
       setProducts(res.data.products);
@@ -59,6 +59,12 @@ function CategoryProducts() {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  // ✅ обработчик смены количества товаров
+  const handleLimitChange = (e) => {
+    setLimit(Number(e.target.value));
+    setCurrentPage(1); // сбрасываем на первую страницу
   };
 
   return (
@@ -142,12 +148,15 @@ function CategoryProducts() {
                   <option>По убыванию цены</option>
                 </select>
               </div>
+
+              {/* ✅ теперь select реально работает */}
               <div className="catalog__show-count">
                 <label>Показать:</label>
-                <select>
-                  <option>12</option>
-                  <option>24</option>
-                  <option>48</option>
+                <select value={limit} onChange={handleLimitChange}>
+                  <option value="6">6</option>
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="48">48</option>
                 </select>
               </div>
             </div>
