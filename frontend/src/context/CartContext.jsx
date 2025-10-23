@@ -46,15 +46,28 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // ✅ Удаляем товар сначала локально, потом отправляем запрос, но не перезагружаем корзину
   const removeFromCart = async (productId) => {
+    removeFromCartLocally(productId);
+
     try {
       await axios.delete("http://localhost:5000/api/cart/remove", {
         data: { sessionId, productId },
       });
-      await fetchCart();
+
+      // ❌ Убираем fetchCart(), чтобы избежать мерцания
+      // await fetchCart();
     } catch (error) {
       console.error("Ошибка при удалении из корзины:", error);
     }
+  };
+
+  // ✅ Локальное удаление
+  const removeFromCartLocally = (productId) => {
+    setCart((prev) => ({
+      ...prev,
+      items: prev.items.filter((item) => item.productId._id !== productId),
+    }));
   };
 
   const clearCart = async () => {
@@ -85,6 +98,7 @@ export const CartProvider = ({ children }) => {
 
   const totalCount =
     cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+
   const totalPrice =
     cart?.items?.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
 
@@ -97,6 +111,7 @@ export const CartProvider = ({ children }) => {
         totalPrice,
         addToCart,
         removeFromCart,
+        removeFromCartLocally,
         clearCart,
         fetchCart,
         updateQuantityLocally,

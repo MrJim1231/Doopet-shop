@@ -6,15 +6,37 @@ import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 function Cart() {
-  const { cart, loading, removeFromCart, clearCart, updateQuantityLocally } =
-    useCart();
+  const {
+    cart,
+    loading,
+    removeFromCart,
+    removeFromCartLocally,
+    updateQuantityLocally,
+  } = useCart();
+
+  const [displayItems, setDisplayItems] = useState([]);
+
+  useEffect(() => {
+    if (!loading && typeof cart.items !== "undefined") {
+      setDisplayItems(cart.items);
+    }
+  }, [cart.items, loading]);
 
   const handleQuantityChange = async (productId, newQty) => {
     if (newQty < 1) return;
 
+    // локально
     updateQuantityLocally(productId, newQty);
+    setDisplayItems((prev) =>
+      prev.map((item) =>
+        item.productId._id === productId
+          ? { ...item, quantity: newQty, totalPrice: item.price * newQty }
+          : item
+      )
+    );
 
     try {
       const sessionId = localStorage.getItem("sessionId");
@@ -28,8 +50,22 @@ function Cart() {
     }
   };
 
+  const handleRemove = async (productId) => {
+    // локально
+    removeFromCartLocally(productId);
+    setDisplayItems((prev) =>
+      prev.filter((item) => item.productId._id !== productId)
+    );
+
+    try {
+      await removeFromCart(productId);
+    } catch (err) {
+      console.error("Ошибка при удалении:", err);
+    }
+  };
+
   const subtotal =
-    cart?.items?.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
+    displayItems.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
   const delivery = 1.2;
   const vat = subtotal * 0.21;
   const total = subtotal + delivery + vat;
@@ -45,9 +81,9 @@ function Cart() {
         <div className="container">
           <h2 className="cart__title">🦴 Корзина</h2>
 
-          {loading || typeof cart.items === "undefined" ? (
+          {loading ? (
             <p>Загрузка...</p>
-          ) : cart.items.length > 0 ? (
+          ) : displayItems.length > 0 ? (
             <>
               <table className="cart__table">
                 <thead>
@@ -61,7 +97,7 @@ function Cart() {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.items.map((item) => (
+                  {displayItems.map((item) => (
                     <tr key={item.productId._id}>
                       <td>
                         <img
@@ -104,7 +140,7 @@ function Cart() {
                       <td>{item.totalPrice.toFixed(2)}€</td>
                       <td>
                         <button
-                          onClick={() => removeFromCart(item.productId._id)}
+                          onClick={() => handleRemove(item.productId._id)}
                           className="delete-btn"
                           title="Удалить"
                         >
@@ -152,8 +188,8 @@ function Cart() {
           )}
         </div>
       </section>
-      {/* Показываем футер после полной загрузки, даже если корзина пуста */}
-      {!loading && typeof cart.items !== "undefined" && (
+
+      {!loading && (
         <>
           <SubscribeSection />
           <Footer />
