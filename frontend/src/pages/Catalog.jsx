@@ -1,54 +1,54 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-import HeaderTopBar from "../layout/HeaderTopBar";
-import Header from "../layout/Header";
-import Breadcrumbs from "../layout/Breadcrumbs";
-import CatalogBlock from "../layout/CatalogBlock";
-import SubscribeSection from "../components/SubscribeSection";
-import Footer from "../layout/Footer";
+import HeaderTopBar from '../layout/HeaderTopBar'
+import Header from '../layout/Header'
+import Breadcrumbs from '../layout/Breadcrumbs'
+import CatalogBlock from '../layout/CatalogBlock'
+import SubscribeSection from '../components/SubscribeSection'
+import Footer from '../layout/Footer'
 
 function Catalog() {
-  const [minPrice, setMinPrice] = useState(15);
-  const [maxPrice, setMaxPrice] = useState(60);
-  const [packageSize, setPackageSize] = useState("2kg");
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [minPrice, setMinPrice] = useState(15)
+  const [maxPrice, setMaxPrice] = useState(60)
+  const [packageSize, setPackageSize] = useState('2kg')
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts()
+  }, [])
 
   const fetchProducts = async () => {
     try {
-      setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/products");
+      setLoading(true)
+      const res = await axios.get('http://localhost:5000/api/products')
 
-      console.log("📦 Ответ сервера (всё):", res); // Полный ответ (заголовки, статус и т.д.)
-      console.log("📦 Полученные продукты:", res.data); // Только массив продуктов
+      console.log('📦 Ответ сервера (всё):', res) // Полный ответ (заголовки, статус и т.д.)
+      console.log('📦 Полученные продукты:', res.data) // Только массив продуктов
 
       // Если хочешь посмотреть каждый продукт по отдельности:
       if (Array.isArray(res.data)) {
         res.data.forEach((item, index) => {
-          console.log(`🧩 Продукт #${index + 1}:`, item);
-        });
+          console.log(`🧩 Продукт #${index + 1}:`, item)
+        })
       }
 
-      setProducts(res.data);
+      setProducts(res.data)
     } catch (error) {
-      console.error("❌ Ошибка при загрузке продуктов:", error);
+      console.error('❌ Ошибка при загрузке продуктов:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="catalog-page">
       <HeaderTopBar />
       <Header />
       <CatalogBlock />
-      <Breadcrumbs items={[{ label: "Корм для собак" }]} />
+      <Breadcrumbs items={[{ label: 'Корм для собак' }]} />
 
       <section className="catalog">
         <div className="catalog__container">
@@ -57,20 +57,8 @@ function Catalog() {
             <div className="catalog__filter">
               <h3 className="catalog__filter-title">Цена</h3>
               <div className="catalog__price-range">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                />
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                />
+                <input type="range" min="0" max="100" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
+                <input type="range" min="0" max="100" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
                 <div className="catalog__price-values">
                   <span>{minPrice} €</span> — <span>{maxPrice} €</span>
                 </div>
@@ -80,7 +68,7 @@ function Catalog() {
             <div className="catalog__filter">
               <h3 className="catalog__filter-title">Производители</h3>
               <ul className="catalog__checkbox-list">
-                {["VanCat", "Beef", "TunaFish"].map((brand) => (
+                {['VanCat', 'Beef', 'TunaFish'].map((brand) => (
                   <li key={brand}>
                     <label>
                       <input type="checkbox" /> {brand}
@@ -93,15 +81,10 @@ function Catalog() {
             <div className="catalog__filter">
               <h3 className="catalog__filter-title">Размер упаковки</h3>
               <ul className="catalog__checkbox-list">
-                {["2 kg", "3 kg", "5 kg", "10 kg"].map((size) => (
+                {['2 kg', '3 kg', '5 kg', '10 kg'].map((size) => (
                   <li key={size}>
                     <label>
-                      <input
-                        type="checkbox"
-                        checked={packageSize === size}
-                        onChange={() => setPackageSize(size)}
-                      />{" "}
-                      {size}
+                      <input type="checkbox" checked={packageSize === size} onChange={() => setPackageSize(size)} /> {size}
                     </label>
                   </li>
                 ))}
@@ -141,51 +124,24 @@ function Catalog() {
                 <p>Товары отсутствуют</p>
               ) : (
                 products.map((product) => (
-                  <Link
-                    key={product._id}
-                    to={`/product/${product._id}`}
-                    className="catalog__card"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
+                  <Link key={product._id} to={`/product/${product._id}`} className="catalog__card" style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div className="catalog__card-image-wrapper">
                       {/* ✅ Лейблы товара */}
                       {(product.tag?.trim() || product.label?.trim()) && (
                         <div className="catalog__card-labels">
-                          {product.tag?.trim() && (
-                            <span className="catalog__label catalog__label--hit">
-                              {product.tag}
-                            </span>
-                          )}
-                          {product.label?.trim() && (
-                            <span className="catalog__label catalog__label--new">
-                              {product.label}
-                            </span>
-                          )}
+                          {product.tag?.trim() && <span className="catalog__label catalog__label--hit">{product.tag}</span>}
+                          {product.label?.trim() && <span className="catalog__label catalog__label--new">{product.label}</span>}
                         </div>
                       )}
 
-                      <img
-                        src={
-                          product.image?.startsWith("http")
-                            ? product.image
-                            : `http://localhost:5000${product.image}`
-                        }
-                        alt={product.name}
-                        className="catalog__card-image"
-                      />
+                      <img src={product.image?.startsWith('http') ? product.image : `http://localhost:5000${product.image}`} alt={product.name} className="catalog__card-image" />
                     </div>
 
                     <h3 className="catalog__card-title">{product.name}</h3>
 
                     <div className="catalog__card-prices">
-                      <span className="catalog__price">
-                        {product.price} грн
-                      </span>
-                      {product.oldPrice > 0 && (
-                        <span className="catalog__old-price">
-                          {product.oldPrice} грн
-                        </span>
-                      )}
+                      <span className="catalog__price">{product.price} грн</span>
+                      {product.oldPrice > 0 && <span className="catalog__old-price">{product.oldPrice} грн</span>}
                     </div>
 
                     <div className="catalog__card-actions">
@@ -220,7 +176,7 @@ function Catalog() {
       <SubscribeSection />
       <Footer />
     </div>
-  );
+  )
 }
 
-export default Catalog;
+export default Catalog

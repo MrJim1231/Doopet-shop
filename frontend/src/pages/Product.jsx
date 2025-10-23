@@ -1,12 +1,12 @@
-import HeaderTopBar from "../layout/HeaderTopBar";
-import Header from "../layout/Header";
-import Breadcrumbs from "../layout/Breadcrumbs";
-import CatalogBlock from "../layout/CatalogBlock";
-import productImage from "../assets/images/product.png";
-import { useState } from "react";
+import HeaderTopBar from '../layout/HeaderTopBar'
+import Header from '../layout/Header'
+import Breadcrumbs from '../layout/Breadcrumbs'
+import CatalogBlock from '../layout/CatalogBlock'
+import productImage from '../assets/images/product.png'
+import { useState } from 'react'
 
 function Product() {
-  const [activeTab, setActiveTab] = useState("description");
+  const [activeTab, setActiveTab] = useState('description')
 
   return (
     <div>
@@ -14,7 +14,7 @@ function Product() {
       <Header />
       <CatalogBlock />
 
-      <Breadcrumbs items={[{ label: "Корм для собак" }]} />
+      <Breadcrumbs items={[{ label: 'Корм для собак' }]} />
 
       <section className="product__page">
         <div className="product__page-container">
@@ -32,9 +32,7 @@ function Product() {
 
             {/* Правая часть — информация */}
             <div className="product__page-info">
-              <h1 className="product__page-title">
-                Корм для собак Good Dog Reward
-              </h1>
+              <h1 className="product__page-title">Корм для собак Good Dog Reward</h1>
 
               <div className="product__page-price-block">
                 <span className="product__page-price">3.12€</span>
@@ -47,9 +45,7 @@ function Product() {
                 <button>+</button>
               </div>
 
-              <button className="product__page-add-btn">
-                Добавить в корзину
-              </button>
+              <button className="product__page-add-btn">Добавить в корзину</button>
 
               <ul className="product__page-details">
                 <li>
@@ -67,9 +63,7 @@ function Product() {
               </ul>
 
               <div className="product__page-actions">
-                <button className="product__page-question-btn">
-                  Задать вопрос
-                </button>
+                <button className="product__page-question-btn">Задать вопрос</button>
                 <a href="#" className="product__page-delivery-info">
                   Информация о доставке
                 </a>
@@ -80,54 +74,34 @@ function Product() {
           {/* Блок вкладок */}
           <div className="product__tabs">
             <div className="product__tabs-header">
-              <button
-                className={`product__tabs-btn ${
-                  activeTab === "description" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("description")}
-              >
+              <button className={`product__tabs-btn ${activeTab === 'description' ? 'active' : ''}`} onClick={() => setActiveTab('description')}>
                 Описание
               </button>
-              <button
-                className={`product__tabs-btn ${
-                  activeTab === "reviews" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("reviews")}
-              >
+              <button className={`product__tabs-btn ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>
                 Отзывы (2)
               </button>
             </div>
 
             <div className="product__tabs-content">
-              {activeTab === "description" && (
+              {activeTab === 'description' && (
                 <div className="product__tab-description">
                   <p>
-                    Наш корм для собак — это забота о вашем верном спутнике,
-                    выраженная в каждой грануле. Мы создаем уникальные рецепты,
-                    богатые натуральными ингредиентами, которые специально
-                    разработаны для удовлетворения потребностей вашей собаки в
-                    питательных веществах и вкусе.
+                    Наш корм для собак — это забота о вашем верном спутнике, выраженная в каждой грануле. Мы создаем уникальные рецепты, богатые натуральными ингредиентами, которые специально
+                    разработаны для удовлетворения потребностей вашей собаки в питательных веществах и вкусе.
                   </p>
-                  <p>
-                    Наши продукты вдохновлены природой и разработаны с учетом
-                    здоровья и благополучия вашего пушистого друга. Каждая
-                    упаковка — это обещание качества и заботы.
-                  </p>
+                  <p>Наши продукты вдохновлены природой и разработаны с учетом здоровья и благополучия вашего пушистого друга. Каждая упаковка — это обещание качества и заботы.</p>
                   <ul>
                     <li>
-                      <strong>Натуральные ингредиенты:</strong> Наш корм не
-                      содержит искусственных красителей и консервантов.
+                      <strong>Натуральные ингредиенты:</strong> Наш корм не содержит искусственных красителей и консервантов.
                     </li>
                     <li>
-                      <strong>Баланс питательных веществ:</strong> Разработан с
-                      учетом баланса белков, жиров, углеводов, витаминов и
-                      минералов.
+                      <strong>Баланс питательных веществ:</strong> Разработан с учетом баланса белков, жиров, углеводов, витаминов и минералов.
                     </li>
                   </ul>
                 </div>
               )}
 
-              {activeTab === "reviews" && (
+              {activeTab === 'reviews' && (
                 <div className="product__tab-reviews">
                   <p>Здесь будут отзывы покупателей (2).</p>
                 </div>
@@ -137,7 +111,7 @@ function Product() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default Product;
+export default Product
