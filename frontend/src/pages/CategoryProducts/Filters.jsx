@@ -42,11 +42,15 @@ export default function Filters({
     onFilterChange({ manufacturer: updated });
   };
 
-  // 🧩 Обработчик упаковки
+  // 🧩 Обработчик выбора упаковки (множественный выбор)
   const handlePackageChange = (size) => {
-    const newSize = packageSize === size ? "" : size;
-    setPackageSize(newSize);
-    onFilterChange({ packageSize: newSize });
+    const normalized = size.replace(/\s+/g, "").toLowerCase();
+    const updated = packageSize.includes(normalized)
+      ? packageSize.filter((s) => s !== normalized)
+      : [...packageSize, normalized];
+
+    setPackageSize(updated);
+    onFilterChange({ packageSize: updated });
   };
 
   // 🧩 Обновление диапазона цены
@@ -114,7 +118,7 @@ export default function Filters({
               <label>
                 <input
                   type="checkbox"
-                  checked={packageSize === size}
+                  checked={packageSize.includes(size)}
                   onChange={() => handlePackageChange(size)}
                 />{" "}
                 {size}

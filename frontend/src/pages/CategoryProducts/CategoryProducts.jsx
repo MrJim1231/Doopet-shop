@@ -20,10 +20,13 @@ function CategoryProducts() {
   // 🔹 Локальные состояния фильтров
   const [minPrice, setMinPrice] = useState(15);
   const [maxPrice, setMaxPrice] = useState(60);
-  const [packageSize, setPackageSize] = useState("");
+
+  // 🟢 Исправлено — теперь это массив, а не строка
+  const [packageSize, setPackageSize] = useState([]);
+
   const [selectedManufacturers, setSelectedManufacturers] = useState([]);
 
-  // 🔹 Объект фильтров
+  // 🔹 Объект фильтров (для useProducts)
   const [filters, setFilters] = useState({});
 
   // 🧩 Данные из хука useProducts
@@ -39,7 +42,7 @@ function CategoryProducts() {
     setCurrentPage,
     sort,
     setSort,
-  } = useProducts(id, filters); // ✅ теперь передаём filters
+  } = useProducts(id, filters);
 
   // 🔹 Обновление фильтров
   const handleFilterChange = (newFilter) => {

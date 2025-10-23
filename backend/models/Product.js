@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // Модель продукта
 const productSchema = new mongoose.Schema(
@@ -30,33 +30,35 @@ const productSchema = new mongoose.Schema(
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category', // Связь с моделью Category
+      ref: "Category", // Связь с моделью Category
       required: true,
     },
     image: {
       type: String, // Может быть URL или локальный путь (/uploads/...)
       trim: true,
-      default: '',
+      default: "",
     },
     tag: {
       type: String,
       trim: true,
-      default: '', // 🟢 добавлено
+      default: "", // 🟢 добавлено
     },
     label: {
       type: String,
       trim: true,
-      default: '', // 🟢 добавлено
+      default: "", // 🟢 добавлено
     },
     manufacturer: {
       type: String,
       trim: true,
-      default: '', // Производитель
+      set: (v) => (v ? v.trim() : ""), // нормализуем пробелы
+      default: "", // Производитель
     },
     packageSize: {
       type: String,
       trim: true,
-      default: '', // Размер упаковки
+      default: "", // Размер упаковки
+      set: (v) => (v ? v.toString().replace(/\s+/g, "").toLowerCase() : ""), // приведение к виду "2kg"
     },
   },
   {
@@ -64,19 +66,20 @@ const productSchema = new mongoose.Schema(
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
-)
+);
 
 // ✅ Виртуальное поле для полного URL изображения
-productSchema.virtual('imageUrl').get(function () {
-  if (!this.image) return ''
-  if (this.image.startsWith('http')) return this.image // Если ссылка — возвращаем как есть
+productSchema.virtual("imageUrl").get(function () {
+  if (!this.image) return "";
+  if (this.image.startsWith("http")) return this.image; // Если ссылка — возвращаем как есть
 
   // Иначе формируем полный путь к локальному файлу
-  const baseUrl = process.env.BASE_URL || 'http://localhost:5000'
-  return `${baseUrl}${this.image}`
-})
+  const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+  return `${baseUrl}${this.image}`;
+});
 
 // ✅ Экспорт модели
-const Product = mongoose.models.Product || mongoose.model('Product', productSchema)
+const Product =
+  mongoose.models.Product || mongoose.model("Product", productSchema);
 
-module.exports = Product
+module.exports = Product;

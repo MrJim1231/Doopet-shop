@@ -26,12 +26,29 @@ export const useProducts = (categoryId, filters = {}) => {
     params.append("limit", limitValue);
     params.append("sort", sortValue);
 
+    // 🔹 Фильтры
     if (filtersObj.minPrice) params.append("minPrice", filtersObj.minPrice);
     if (filtersObj.maxPrice) params.append("maxPrice", filtersObj.maxPrice);
-    if (filtersObj.packageSize)
-      params.append("packageSize", filtersObj.packageSize);
-    if (filtersObj.manufacturer && filtersObj.manufacturer.length)
-      params.append("manufacturer", filtersObj.manufacturer.join(","));
+
+    // 🔹 Размер упаковки — поддержка массива и нормализация
+    if (filtersObj.packageSize) {
+      const pkg = Array.isArray(filtersObj.packageSize)
+        ? filtersObj.packageSize
+            .map((s) => s.toString().replace(/\s+/g, "").toLowerCase())
+            .join(",")
+        : filtersObj.packageSize.toString().replace(/\s+/g, "").toLowerCase();
+
+      if (pkg.trim()) params.append("packageSize", pkg);
+    }
+
+    // 🔹 Производители
+    if (filtersObj.manufacturer && filtersObj.manufacturer.length) {
+      const mf = filtersObj.manufacturer
+        .map((m) => m.trim())
+        .filter(Boolean)
+        .join(",");
+      params.append("manufacturer", mf);
+    }
 
     return params.toString();
   };
@@ -55,7 +72,7 @@ export const useProducts = (categoryId, filters = {}) => {
       setTotalPages(res.data.totalPages);
       setTotalProducts(res.data.totalProducts);
     } catch (error) {
-      console.error("Ошибка при загрузке продуктов:", error);
+      console.error("❌ Ошибка при загрузке продуктов:", error);
     } finally {
       setLoading(false);
     }
