@@ -45,11 +45,9 @@ function Cart() {
         <div className="container">
           <h2 className="cart__title">🦴 Корзина</h2>
 
-          {loading ? (
+          {loading || typeof cart.items === "undefined" ? (
             <p>Загрузка...</p>
-          ) : !cart?.items?.length ? (
-            <p className="cart__empty">Корзина пуста</p>
-          ) : (
+          ) : cart.items.length > 0 ? (
             <>
               <table className="cart__table">
                 <thead>
@@ -149,12 +147,18 @@ function Cart() {
                 </button>
               </div>
             </>
+          ) : (
+            <p className="cart__empty">Корзина пуста</p>
           )}
         </div>
       </section>
-
-      <SubscribeSection />
-      <Footer />
+      {/* Показываем футер после полной загрузки, даже если корзина пуста */}
+      {!loading && typeof cart.items !== "undefined" && (
+        <>
+          <SubscribeSection />
+          <Footer />
+        </>
+      )}
     </div>
   );
 }
