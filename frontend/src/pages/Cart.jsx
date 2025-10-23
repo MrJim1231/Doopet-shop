@@ -8,11 +8,14 @@ import Footer from "../layout/Footer";
 import axios from "axios";
 
 function Cart() {
-  const { cart, loading, removeFromCart, clearCart, fetchCart } = useCart();
+  const { cart, loading, removeFromCart, clearCart, updateQuantityLocally } =
+    useCart();
 
-  // 🔹 Изменить количество
   const handleQuantityChange = async (productId, newQty) => {
-    if (newQty < 1) return; // минимум 1
+    if (newQty < 1) return;
+
+    updateQuantityLocally(productId, newQty);
+
     try {
       const sessionId = localStorage.getItem("sessionId");
       await axios.put("http://localhost:5000/api/cart/update", {
@@ -20,14 +23,16 @@ function Cart() {
         productId,
         quantity: newQty,
       });
-      await fetchCart(); // обновляем корзину
-    } catch (error) {
-      console.error("Ошибка при обновлении количества:", error);
+    } catch (err) {
+      console.error("Ошибка при обновлении:", err);
     }
   };
 
-  const total =
+  const subtotal =
     cart?.items?.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
+  const delivery = 1.2;
+  const vat = subtotal * 0.21;
+  const total = subtotal + delivery + vat;
 
   return (
     <div className="cart-page">
@@ -37,8 +42,8 @@ function Cart() {
       <Breadcrumbs items={[{ label: "Корзина" }]} />
 
       <section className="cart">
-        <div className="cart__container">
-          <h2 className="cart__title">Ваша корзина</h2>
+        <div className="container">
+          <h2 className="cart__title">🦴 Корзина</h2>
 
           {loading ? (
             <p>Загрузка...</p>
@@ -46,75 +51,102 @@ function Cart() {
             <p className="cart__empty">Корзина пуста</p>
           ) : (
             <>
-              <div className="cart__items">
-                {cart.items.map((item) => (
-                  <div key={item.productId._id} className="cart__item">
-                    <div className="cart__item-info">
-                      <img
-                        src={
-                          item.productId.image?.startsWith("http")
-                            ? item.productId.image
-                            : `http://localhost:5000${item.productId.image}`
-                        }
-                        alt={item.productId.name}
-                        className="cart__item-image"
-                      />
-                      <div>
-                        <h3 className="cart__item-name">
-                          {item.productId.name}
-                        </h3>
-                        <p className="cart__item-price">
-                          {item.price} € × {item.quantity}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="cart__item-controls">
-                      {/* 🔹 Кнопки изменения количества */}
-                      <div className="cart__quantity">
-                        <button
-                          onClick={() =>
-                            handleQuantityChange(
-                              item.productId._id,
-                              item.quantity - 1
-                            )
+              <table className="cart__table">
+                <thead>
+                  <tr>
+                    <th>Изображение</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Итоговая цена</th>
+                    <th>Удалить</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cart.items.map((item) => (
+                    <tr key={item.productId._id}>
+                      <td>
+                        <img
+                          src={
+                            item.productId.image?.startsWith("http")
+                              ? item.productId.image
+                              : `http://localhost:5000${item.productId.image}`
                           }
-                        >
-                          −
-                        </button>
-                        <span>{item.quantity}</span>
+                          alt={item.productId.name}
+                          style={{ width: "60px" }}
+                        />
+                      </td>
+                      <td>{item.productId.name}</td>
+                      <td>{item.price.toFixed(2)}€</td>
+                      <td>
+                        <div className="quantity-control">
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.productId._id,
+                                item.quantity - 1
+                              )
+                            }
+                          >
+                            −
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.productId._id,
+                                item.quantity + 1
+                              )
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+                      <td>{item.totalPrice.toFixed(2)}€</td>
+                      <td>
                         <button
-                          onClick={() =>
-                            handleQuantityChange(
-                              item.productId._id,
-                              item.quantity + 1
-                            )
-                          }
+                          onClick={() => removeFromCart(item.productId._id)}
+                          className="delete-btn"
+                          title="Удалить"
                         >
-                          +
+                          🗑️
                         </button>
-                      </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-                      {/* 🔹 Кнопка удаления */}
-                      <button
-                        className="cart__remove"
-                        onClick={() => removeFromCart(item.productId._id)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="cart__summary-box">
+                <table className="cart__summary">
+                  <tbody>
+                    <tr>
+                      <td>Промежуточный итог</td>
+                      <td>{subtotal.toFixed(2)}€</td>
+                    </tr>
+                    <tr>
+                      <td>Доставка</td>
+                      <td>{delivery.toFixed(2)}€</td>
+                    </tr>
+                    <tr>
+                      <td>НДС (21%)</td>
+                      <td>{vat.toFixed(2)}€</td>
+                    </tr>
+                    <tr className="cart__summary-total">
+                      <td>
+                        <strong>Итого</strong>
+                      </td>
+                      <td>
+                        <strong>{total.toFixed(2)}€</strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-              <div className="cart__summary">
-                <h3>
-                  Итого: <span>{total.toFixed(2)} €</span>
-                </h3>
-                <button className="cart__clear" onClick={clearCart}>
-                  Очистить корзину
+                <button className="cart__checkout-btn">
+                  Перейти к оформлению заказа
                 </button>
-                <button className="cart__checkout">Перейти к оформлению</button>
               </div>
             </>
           )}

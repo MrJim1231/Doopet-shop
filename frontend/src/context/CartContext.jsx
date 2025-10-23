@@ -7,7 +7,6 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [], cartTotal: 0 });
   const [loading, setLoading] = useState(false);
 
-  // Получаем или создаём sessionId (для гостей)
   const sessionId =
     localStorage.getItem("sessionId") ||
     (() => {
@@ -16,7 +15,6 @@ export const CartProvider = ({ children }) => {
       return id;
     })();
 
-  // 🔹 Загрузка корзины при старте
   useEffect(() => {
     fetchCart();
   }, []);
@@ -35,7 +33,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Добавить товар в корзину
   const addToCart = async (productId, quantity = 1) => {
     try {
       await axios.post("http://localhost:5000/api/cart/add", {
@@ -49,25 +46,17 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Удалить товар (через DELETE)
   const removeFromCart = async (productId) => {
     try {
-      // DELETE должен передавать тело через data:
       await axios.delete("http://localhost:5000/api/cart/remove", {
         data: { sessionId, productId },
       });
-
-      // Локально убираем товар без перезагрузки:
-      setCart((prev) => ({
-        ...prev,
-        items: prev.items.filter((item) => item.productId._id !== productId),
-      }));
+      await fetchCart();
     } catch (error) {
       console.error("Ошибка при удалении из корзины:", error);
     }
   };
 
-  // 🔹 Очистить корзину
   const clearCart = async () => {
     try {
       await axios.delete("http://localhost:5000/api/cart/clear", {
@@ -79,7 +68,21 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Подсчёт количества и суммы
+  const updateQuantityLocally = (productId, newQty) => {
+    setCart((prev) => {
+      const updatedItems = prev.items.map((item) =>
+        item.productId._id === productId
+          ? {
+              ...item,
+              quantity: newQty,
+              totalPrice: item.price * newQty,
+            }
+          : item
+      );
+      return { ...prev, items: updatedItems };
+    });
+  };
+
   const totalCount =
     cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
   const totalPrice =
@@ -96,6 +99,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         clearCart,
         fetchCart,
+        updateQuantityLocally,
       }}
     >
       {children}

@@ -1,11 +1,11 @@
 @use "../abstracts" as *;
 
 .cart {
-  background-color: $color-bg-gray;
+  background-color: #f4f4f4;
   padding: 60px 0;
 
   &__container {
-    width: min(100% - 20px, $container-size);
+    width: min(100% - 20px, 1200px);
     margin-inline: auto;
   }
 
@@ -66,7 +66,7 @@
 
   &__item-price {
     font-size: 16px;
-    color: $color-accent;
+    color: #1c2d5a;
     font-weight: 500;
   }
 
@@ -85,7 +85,7 @@
       transition: background 0.2s ease;
 
       &:hover {
-        background: $color-accent;
+        background: #1c2d5a;
         color: #fff;
       }
     }
@@ -124,14 +124,14 @@
       font-weight: 600;
 
       span {
-        color: $color-accent;
+        color: #1c2d5a;
         font-weight: 700;
       }
     }
 
     .cart__clear,
     .cart__checkout {
-      background: $color-accent;
+      background: #1c2d5a;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -140,18 +140,120 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s ease;
-
-      // &:hover {
-      //   background: darken($color-accent, 8%);
-      // }
     }
 
     .cart__clear {
       background: #f44336;
+    }
+  }
 
-      // &:hover {
-      //   background: darken(#f44336, 10%);
-      // }
+  // 🔹 Табличная корзина
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+
+    th,
+    td {
+      border: 1px solid #e0e0e0;
+      padding: 14px 12px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #f9f9f9;
+      font-weight: 600;
+      color: #333;
+    }
+
+    td img {
+      width: 60px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      button {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: #1c2d5a;
+          color: #fff;
+        }
+      }
+
+      span {
+        min-width: 26px;
+        text-align: center;
+        font-weight: 500;
+      }
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: red;
+      }
+    }
+  }
+
+  &__summary-box {
+    max-width: 400px;
+    margin-left: auto;
+    text-align: right;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      td {
+        padding: 10px 6px;
+        font-size: 16px;
+        border-bottom: 1px solid #eee;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &__checkout-btn {
+    margin-top: 1rem;
+    background-color: #1c2d5a;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s;
+
+    &:hover {
+      background-color: #16224a;
     }
   }
 
@@ -179,6 +281,16 @@
       button {
         width: 100%;
       }
+    }
+
+    &__table th,
+    &__table td {
+      font-size: 14px;
+      padding: 10px 8px;
+    }
+
+    &__summary-box {
+      width: 100%;
     }
   }
 }
