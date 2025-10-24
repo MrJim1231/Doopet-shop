@@ -1,0 +1,93 @@
+@use "../abstracts" as *;
+
+.auth {
+  background-color: #fff;
+  padding: 60px 0 80px;
+
+  &__container {
+    width: min(100% - 20px, 450px);
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  &__tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+  }
+
+  &__tab {
+    flex: 1;
+    padding: 12px 0;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 6px;
+
+    &.active {
+      background: $color-accent;
+      color: #fff;
+      border-color: $color-accent;
+    }
+
+    &:hover:not(.active) {
+      background: #efefef;
+    }
+  }
+
+  &__content {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 30px;
+    border: 1px solid #e5e5e5;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: 0.3s;
+
+    &:focus {
+      border-color: $color-accent;
+      outline: none;
+    }
+  }
+
+  &__btn {
+    background-color: $color-accent;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+
+    // &:hover {
+    //   background-color: darken($color-accent, 8%);
+    // }
+  }
+
+  &__error {
+    color: #e53935;
+    font-size: 14px;
+  }
+
+  &__message {
+    color: #43a047;
+    font-size: 14px;
+  }
+}

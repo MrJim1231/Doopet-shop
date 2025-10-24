@@ -10,27 +10,33 @@ import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
-import Cart from "./pages/Cart"; // 🟢 добавляем импорт страницы корзины
+import Cart from "./pages/Cart"; // 🟢 корзина
+import Account from "./pages/Account"; // 🟢 личный кабинет
+import { AuthProvider } from "./context/AuthContext"; // 🟢 контекст авторизации
 
 export default function App() {
   return (
-    <Router>
-      <div className="app">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/promotions" element={<Stock />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/delivery" element={<Delivery />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/admin/add-category" element={<AddCategory />} />
-          <Route path="/admin/add-product" element={<AddProduct />} />
-          <Route path="/category/:id" element={<CategoryProducts />} />
-          <Route path="/cart" element={<Cart />} /> {/* 🟢 маршрут корзины */}
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="app">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/promotions" element={<Stock />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/delivery" element={<Delivery />} />
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/admin/add-category" element={<AddCategory />} />
+            <Route path="/admin/add-product" element={<AddProduct />} />
+            <Route path="/category/:id" element={<CategoryProducts />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/account" element={<Account />} />{" "}
+            {/* 🟢 личный кабинет */}
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }

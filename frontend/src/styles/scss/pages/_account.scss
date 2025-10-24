@@ -1,0 +1,126 @@
+@use "../abstracts" as *;
+
+.account {
+  background: #fff;
+  padding: 40px 0 80px;
+
+  &__container {
+    width: min(100% - 20px, $container-size);
+    margin-inline: auto;
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #222;
+
+    &-icon {
+      color: $color-accent;
+      font-size: 26px;
+      margin-right: 8px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    gap: 40px;
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+    }
+  }
+
+  &__main {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  &__section {
+    background: #fff;
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s;
+    background-color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $color-accent;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    p {
+      margin-top: 10px;
+      color: #333;
+      font-size: 15px;
+    }
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    color: $color-accent;
+  }
+
+  &__sidebar {
+    flex: 1;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 20px;
+    background: #fafafa;
+    height: fit-content;
+  }
+
+  &__menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+      padding: 8px 0;
+      border-bottom: 1px solid #e2e2e2;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+  }
+
+  &__logout {
+    color: red;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none !important;
+  }
+
+  &__logout-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
