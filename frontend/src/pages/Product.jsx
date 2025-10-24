@@ -1,40 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import axios from "axios";
+import { useProduct } from "../hooks/useProduct"; // 🟢 импортируем наш хук
 
 import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import CatalogBlock from "../layout/CatalogBlock";
 import heartIcon from "../assets/icons/heart1.svg";
-// import placeholderImg from "../assets/images/no-image.png";
+import placeholderImg from "../assets/images/no-image.png";
 
 function Product() {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { product, loading, error } = useProduct(id); // 🟢 используем хук
 
-  const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
-
-  // 🔹 Загрузка продукта
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
-        setProduct(res.data);
-      } catch (err) {
-        console.error("Ошибка при загрузке товара:", err);
-      } finally {
-        setLoading(false);
-        window.scrollTo(0, 0);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
 
   const handleAddToCart = () => {
     if (product) addToCart(product._id, quantity);
@@ -45,6 +27,7 @@ function Product() {
   const toggleFavorite = () => setIsFavorite((prev) => !prev);
 
   if (loading) return <p className="loading">Загрузка...</p>;
+  if (error) return <p>{error}</p>;
   if (!product) return <p>Товар не найден</p>;
 
   const mainImage = product.imageUrl || placeholderImg;
@@ -166,7 +149,6 @@ function Product() {
                   </span>
                 </li>
 
-                {/* 🔹 Вместо "Размер упаковки" теперь "Цена" */}
                 <li className="product__page-detail">
                   <strong className="product__page-detail-label">Цена:</strong>
                   <span className="product__page-detail-value">
