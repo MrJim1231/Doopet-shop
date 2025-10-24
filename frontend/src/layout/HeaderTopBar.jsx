@@ -1,3 +1,5 @@
+import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import locationIcon from "../assets/icons/location.svg";
 import emailIcon from "../assets/icons/email.svg";
 import phoneIcon from "../assets/icons/phone.svg";
@@ -6,6 +8,21 @@ import accountIcon from "../assets/icons/account.svg";
 import sortIcon from "../assets/icons/sort.svg";
 
 function HeaderTopBar() {
+  const { user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // 🔹 Закрытие меню при клике вне блока
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   return (
     <div className="header__topbar-container">
       <div className="header__topbar">
@@ -32,14 +49,52 @@ function HeaderTopBar() {
             </a>
           </li>
 
-          <li className="header__topbar-item header__topbar-item--account">
+          {/* 🔹 Личный кабинет с выпадающим меню */}
+          <li
+            className="header__topbar-item header__topbar-item--account"
+            ref={menuRef}
+          >
             <img src={accountIcon} alt="Аккаунт" className="header__icon" />
             <a className="header__link header__link--sm" href="/account">
-              Личный кабинет
+              {user ? user.name || "Профиль" : "Личный кабинет"}
             </a>
-            <button className="header__topbar-item-btn">
-              <img src={sortIcon} alt="Открыть меню" className="header__icon" />
+            <button
+              className="header__topbar-item-btn"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <img
+                src={sortIcon}
+                alt="Открыть меню"
+                className={`header__icon ${menuOpen ? "rotated" : ""}`}
+              />
             </button>
+
+            {menuOpen && (
+              <div className="header__account-menu">
+                {user ? (
+                  <>
+                    <a href="/account" className="header__account-item">
+                      Мой профиль
+                    </a>
+                    <button
+                      onClick={logout}
+                      className="header__account-item header__account-item--logout"
+                    >
+                      Выйти
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a href="/account" className="header__account-item">
+                      Войти
+                    </a>
+                    <a href="/account" className="header__account-item">
+                      Регистрация
+                    </a>
+                  </>
+                )}
+              </div>
+            )}
           </li>
 
           <li className="header__topbar-item">
