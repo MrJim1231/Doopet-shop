@@ -12,7 +12,7 @@ const getProducts = async (req, res) => {
       filter.categoryId = req.query.category;
     }
 
-    // 🔹 Цена (гибкая обработка диапазона)
+    // 🔹 Цена (диапазон)
     const minPrice = parseFloat(req.query.minPrice);
     const maxPrice = parseFloat(req.query.maxPrice);
     if (!isNaN(minPrice) || !isNaN(maxPrice)) {
@@ -21,7 +21,7 @@ const getProducts = async (req, res) => {
       if (!isNaN(maxPrice)) filter.price.$lte = maxPrice;
     }
 
-    // 🔹 Производитель (может быть несколько)
+    // 🔹 Производитель
     if (req.query.manufacturer) {
       const manufacturers = req.query.manufacturer
         .split(",")
@@ -67,9 +67,6 @@ const getProducts = async (req, res) => {
       default:
         sortOption = { createdAt: -1 };
     }
-
-    // console.log("📦 Активные фильтры:", filter);
-    // console.log("🔹 Сортировка:", sortOption);
 
     // 🔹 Получаем продукты
     const products = await Product.find(filter)
@@ -123,6 +120,7 @@ const createProduct = async (req, res) => {
       label,
       manufacturer,
       packageSize,
+      article, // 🆕 Артикул
     } = body;
 
     if (!name || !description || !price || !stock || !categoryId) {
@@ -150,6 +148,7 @@ const createProduct = async (req, res) => {
       imagePath = body.image;
     }
 
+    // 🆕 Создание продукта с артикулом (если не указан, генерируется автоматически в модели)
     const newProduct = new Product({
       name,
       description,
@@ -162,6 +161,7 @@ const createProduct = async (req, res) => {
       label: label ?? "",
       manufacturer: manufacturer ?? "",
       packageSize: packageSize ?? "",
+      article: article ?? undefined, // если не указали — модель создаст автоматически
     });
 
     const createdProduct = await newProduct.save();
@@ -187,6 +187,7 @@ const updateProduct = async (req, res) => {
       label,
       manufacturer,
       packageSize,
+      article, // 🆕 Артикул
     } = body;
 
     const updateData = {
@@ -200,6 +201,7 @@ const updateProduct = async (req, res) => {
       label: label || "",
       manufacturer: manufacturer || "",
       packageSize: packageSize || "",
+      article: article || undefined, // 🆕 добавлено
     };
 
     // 🟢 Обновляем изображение, если загружено новое
