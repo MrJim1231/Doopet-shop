@@ -64,6 +64,26 @@
     &--sm {
       font-size: 14px;
     }
+
+    /* 🔹 Кнопка-ссылка для Email (поведение кнопки, стиль как ссылка) */
+    &--btn {
+      background: none;
+      border: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $color-accent;
+      }
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
   }
 
   /* 🔹 Меню аккаунта (выпадающее при нажатии на стрелку) */

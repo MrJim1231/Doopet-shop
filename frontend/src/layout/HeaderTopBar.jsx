@@ -29,12 +29,25 @@ function HeaderTopBar() {
         <ul className="header__topbar-list">
           <li className="header__topbar-item">
             <img src={locationIcon} alt="Адрес" className="header__icon" />
-            <a className="header__link">Madonas novads, LV-4877, Латвия</a>
+            <a
+              className="header__link"
+              href="https://www.google.com/maps?q=Madonas+novads,+LV-4877,+Latvia"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Madonas novads, LV-4877, Латвия
+            </a>
           </li>
 
           <li className="header__topbar-item">
             <img src={emailIcon} alt="Емейл" className="header__icon" />
-            <a className="header__link" href="mailto:info@doopet.com">
+            <a
+              className="header__link header__link--btn"
+              onClick={() => {
+                navigator.clipboard.writeText("info@doopet.com");
+                alert("Email скопирован в буфер обмена!");
+              }}
+            >
               info@doopet.com
             </a>
           </li>
