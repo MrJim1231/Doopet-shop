@@ -1,105 +1,146 @@
 @use "../abstracts" as *;
 
-/* -----------------------
-   🔹 Сайдбар категорий
------------------------ */
+/* ============================
+   🔹 Сайдбар категорий (улучшенный)
+============================ */
 .catalog-sidebar {
   position: fixed;
   top: 0;
-  left: 0; // если нужно справа — можно заменить на right: 0
-  width: 300px;
+  left: 0;
+  width: 340px;
   height: 100vh;
   background: #fff;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
   z-index: 1001;
-  padding: 25px 20px;
+  padding: 28px 22px 40px;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.3s ease forwards;
+  transform: translateX(-100%);
+  animation: slideIn 0.35s cubic-bezier(0.25, 1, 0.3, 1) forwards;
 
+  border-radius: 0 12px 12px 0;
+
+  @media (max-width: 480px) {
+    width: 85%;
+    padding: 22px 18px;
+  }
+
+  /* 🔹 Шапка сайдбара */
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #eee;
 
     h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #222;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1c1c1c;
+      letter-spacing: 0.3px;
     }
 
     & > button {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
       color: #444;
       line-height: 1;
-      transition: color 0.2s;
+      transition: all 0.25s ease;
 
       &:hover {
-        color: #000;
+        color: $color-accent;
+        transform: rotate(90deg);
       }
     }
   }
 
+  /* 🔹 Список категорий */
   &__list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 12px;
     overflow-y: auto;
-    padding-right: 5px;
+    padding-right: 6px;
+    scrollbar-width: thin;
 
-    /* Стилизация скролла */
     &::-webkit-scrollbar {
       width: 6px;
     }
+
     &::-webkit-scrollbar-thumb {
       background: #ccc;
       border-radius: 6px;
     }
   }
 
+  /* 🔹 Элемент категории */
   &__item {
     .catalog-sidebar__link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       color: #222;
       text-decoration: none;
       font-size: 1rem;
       font-weight: 500;
-      transition: 0.2s ease;
+      background: #f9f9f9;
+      border-radius: 6px;
+      padding: 10px 14px;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 
       &:hover {
-        color: $color-accent;
-        padding-left: 4px;
+        background-color: $color-accent;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba($color-accent, 0.4);
+        transform: translateX(4px);
       }
     }
   }
 
+  /* 🔹 Если нет категорий */
   &__empty {
     color: #777;
     font-size: 0.95rem;
     margin-top: 10px;
+    text-align: center;
   }
 }
 
-/* Затемнение фона при открытии */
+/* 🔹 Затемнение фона */
 .catalog-sidebar__overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
   z-index: 1000;
-  animation: fadeIn 0.3s ease forwards;
+  animation: fadeIn 0.35s ease forwards;
 }
 
 /* ---------- Анимации ---------- */
 @keyframes slideIn {
   from {
     transform: translateX(-100%);
+    opacity: 0.6;
   }
   to {
     transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0.6;
   }
 }
 
