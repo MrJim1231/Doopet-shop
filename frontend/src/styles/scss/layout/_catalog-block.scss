@@ -6,10 +6,9 @@
     margin-inline: auto;
     display: flex;
     justify-content: space-between;
-    // padding-top: 15px;
     margin-top: 21px;
-    position: relative; // обязательно, чтобы z-index работал
-    z-index: 2; // выше баннера
+    position: relative;
+    z-index: 2;
   }
 
   &__menu {
@@ -20,11 +19,14 @@
     display: flex;
     align-items: center;
     gap: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
   }
 
   &__menu-btn {
     border: none;
-    background-color: $color-accent;
+    background-color: transparent;
+    cursor: pointer;
   }
 
   &__menu-icon {
@@ -34,6 +36,7 @@
 
   &__menu-text {
     font-size: 20px;
+    font-weight: 500;
   }
 
   &__search {
@@ -44,20 +47,30 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+
+    @media (max-width: 992px) {
+      width: 100%;
+      margin: 0 20px;
+    }
   }
 
   &__search-input {
     border: none;
     background-color: transparent;
     font-size: 16px;
+    width: 100%;
+    outline: none;
+    color: #222;
   }
 
   &__search-btn {
     border: none;
-    // background-color: $color-accent;
-  }
+    background: none;
+    cursor: pointer;
 
-  &__search-icon {
+    &:hover img {
+      opacity: 0.8;
+    }
   }
 
   &__cart {
@@ -68,19 +81,21 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
   }
 
   &__cart-btn {
     border: none;
     background: transparent;
+    cursor: pointer;
   }
 
   &__cart-icon {
-    background-color: $color-accent;
-    // display: block;
-    // vertical-align: middle;
+    display: block;
   }
 
   &__cart-text {
+    font-size: 15px;
   }
 }

@@ -1,0 +1,113 @@
+@use "../abstracts" as *;
+
+/* -----------------------
+   🔹 Сайдбар категорий
+----------------------- */
+.catalog-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0; // если нужно справа — можно заменить на right: 0
+  width: 300px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease forwards;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    & > button {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #444;
+      line-height: 1;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    padding-right: 5px;
+
+    /* Стилизация скролла */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 6px;
+    }
+  }
+
+  &__item {
+    .catalog-sidebar__link {
+      color: #222;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: 0.2s ease;
+
+      &:hover {
+        color: $color-accent;
+        padding-left: 4px;
+      }
+    }
+  }
+
+  &__empty {
+    color: #777;
+    font-size: 0.95rem;
+    margin-top: 10px;
+  }
+}
+
+/* Затемнение фона при открытии */
+.catalog-sidebar__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* ---------- Анимации ---------- */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
