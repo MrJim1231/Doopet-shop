@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { useProduct } from "../hooks/useProduct"; // 🟢 импортируем наш хук
+import { useProduct } from "../hooks/useProduct";
 
 import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
@@ -13,7 +13,7 @@ import placeholderImg from "../assets/images/no-image.png";
 function Product() {
   const { id } = useParams();
   const { addToCart } = useCart();
-  const { product, loading, error } = useProduct(id); // 🟢 используем хук
+  const { product, loading, error } = useProduct(id);
 
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -32,12 +32,20 @@ function Product() {
 
   const mainImage = product.imageUrl || placeholderImg;
 
+  // 🟢 Формируем крошки
+  const breadcrumbs = [
+    {
+      label: product.categoryId?.name || "Категория",
+      path: `/category/${product.categoryId?._id}`,
+    },
+    { label: product.name },
+  ];
   return (
     <div className="product__wrapper">
       <HeaderTopBar />
       <Header />
       <CatalogBlock />
-      <Breadcrumbs items={[{ label: product.category?.name || "Каталог" }]} />
+      <Breadcrumbs items={breadcrumbs} />
 
       <section className="product__page">
         <div className="product__page-container">
