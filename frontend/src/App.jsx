@@ -12,6 +12,7 @@ import AddProduct from "./admin/AddProduct";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import Cart from "./pages/Cart"; // 🟢 корзина
 import Account from "./pages/Account"; // 🟢 личный кабинет
+import Favorites from "./pages/Favorites";
 import { AuthProvider } from "./context/AuthContext"; // 🟢 контекст авторизации
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/category/:id" element={<CategoryProducts />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/account" element={<Account />} />{" "}
+            <Route path="/favorites" element={<Favorites />} /> {/* 🩷 */}
             {/* 🟢 личный кабинет */}
           </Routes>
         </div>

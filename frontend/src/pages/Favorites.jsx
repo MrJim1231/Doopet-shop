@@ -1,0 +1,127 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
+import HeaderTopBar from "../layout/HeaderTopBar";
+import Header from "../layout/Header";
+import CatalogBlock from "../layout/CatalogBlock";
+import Breadcrumbs from "../layout/Breadcrumbs";
+import SubscribeSection from "../components/SubscribeSection";
+import Footer from "../layout/Footer";
+
+import placeholderImg from "../assets/images/no-image.png";
+import { Link } from "react-router-dom";
+
+function Favorites() {
+  const { user } = useAuth();
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 🟢 Загрузка избранных товаров
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!user?._id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/favorites/${user._id}`
+        );
+        setFavorites(res.data || []);
+      } catch (err) {
+        console.error("Ошибка при загрузке избранного:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFavorites();
+  }, [user]);
+
+  // 🟢 Удаление из избранного
+  const handleRemoveFavorite = async (productId) => {
+    if (!user) return;
+
+    try {
+      await axios.post("http://localhost:5000/api/favorites", {
+        userId: user._id,
+        productId,
+      });
+      setFavorites((prev) =>
+        prev.filter((item) => item.productId._id !== productId)
+      );
+    } catch (err) {
+      console.error("Ошибка при удалении из избранного:", err);
+    }
+  };
+
+  return (
+    <div className="favorites-page">
+      <HeaderTopBar />
+      <Header />
+      <CatalogBlock />
+      <Breadcrumbs items={[{ label: "Закладки" }]} />
+
+      <section className="favorites">
+        <div className="favorites__container">
+          <h1 className="favorites__title">Мои закладки</h1>
+
+          {loading ? (
+            <p>Загрузка...</p>
+          ) : !user ? (
+            <p className="favorites__auth-message">
+              Чтобы просмотреть закладки, пожалуйста, авторизуйтесь.
+            </p>
+          ) : favorites.length === 0 ? (
+            <p className="favorites__empty">
+              У вас пока нет избранных товаров 💔
+            </p>
+          ) : (
+            <div className="favorites__grid">
+              {favorites.map((item) => {
+                const product = item.productId;
+                if (!product) return null;
+
+                return (
+                  <div key={product._id} className="favorites__item">
+                    <Link to={`/product/${product._id}`}>
+                      <img
+                        src={
+                          product.image?.startsWith("http")
+                            ? product.image
+                            : `http://localhost:5000${product.image}`
+                        }
+                        alt={product.name}
+                        onError={(e) => (e.target.src = placeholderImg)}
+                        className="favorites__img"
+                      />
+                    </Link>
+                    <div className="favorites__info">
+                      <Link to={`/product/${product._id}`}>
+                        <h3 className="favorites__name">{product.name}</h3>
+                      </Link>
+                      <p className="favorites__price">{product.price} €</p>
+                      <button
+                        onClick={() => handleRemoveFavorite(product._id)}
+                        className="favorites__remove-btn"
+                      >
+                        Удалить
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <SubscribeSection />
+      <Footer />
+    </div>
+  );
+}
+
+export default Favorites;

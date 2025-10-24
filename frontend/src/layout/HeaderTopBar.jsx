@@ -112,7 +112,7 @@ function HeaderTopBar() {
 
           <li className="header__topbar-item">
             <img src={heartIcon} alt="Закладки" className="header__icon" />
-            <a className="header__link header__link--sm" href="/bookmarks">
+            <a className="header__link header__link--sm" href="/favorites">
               Закладки
             </a>
           </li>
