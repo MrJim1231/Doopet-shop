@@ -55,24 +55,24 @@ export default function ProductGrid({ products, loading }) {
   if (products.length === 0) return <p>Товары отсутствуют</p>;
 
   return (
-    <div className="catalog__grid">
+    <div className="category__grid">
       {products.map((product) => (
         <div
           key={product._id}
-          className="catalog__card"
+          className="category__card"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <Link to={`/product/${product._id}`}>
-            <div className="catalog__card-image-wrapper">
+            <div className="category__card-image-wrapper">
               {(product.tag?.trim() || product.label?.trim()) && (
-                <div className="catalog__card-labels">
+                <div className="category__card-labels">
                   {product.tag?.trim() && (
-                    <span className="catalog__label catalog__label--hit">
+                    <span className="category__label category__label--hit">
                       {product.tag}
                     </span>
                   )}
                   {product.label?.trim() && (
-                    <span className="catalog__label catalog__label--new">
+                    <span className="category__label category__label--new">
                       {product.label}
                     </span>
                   )}
@@ -85,22 +85,22 @@ export default function ProductGrid({ products, loading }) {
                     : `http://localhost:5000${product.image}`
                 }
                 alt={product.name}
-                className="catalog__card-image"
+                className="category__card-image"
               />
             </div>
           </Link>
 
-          <h3 className="catalog__card-title">{product.name}</h3>
+          <h3 className="category__card-title">{product.name}</h3>
 
-          <div className="catalog__card-prices">
-            <span className="catalog__price">{product.price} €</span>
+          <div className="category__card-prices">
+            <span className="category__price">{product.price} €</span>
             {product.oldPrice > 0 && (
-              <span className="catalog__old-price">{product.oldPrice} €</span>
+              <span className="category__old-price">{product.oldPrice} €</span>
             )}
           </div>
 
-          <div className="catalog__card-actions">
-            <div className="catalog__quantity">
+          <div className="category__card-actions">
+            <div className="category__quantity">
               <button onClick={() => handleQuantityChange(product._id, -1)}>
                 -
               </button>
@@ -111,7 +111,7 @@ export default function ProductGrid({ products, loading }) {
             </div>
 
             <button
-              className="catalog__cart-btn"
+              className="category__cart-btn"
               onClick={() => handleAddToCart(product._id)}
               disabled={adding[product._id]}
             >

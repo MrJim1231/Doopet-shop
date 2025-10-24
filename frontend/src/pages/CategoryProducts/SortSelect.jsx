@@ -4,7 +4,7 @@ function SortSelect({ sort, setSort }) {
   };
 
   return (
-    <div className="catalog__sort">
+    <div className="category__sort">
       <label>Сортировка:</label>
       <select value={sort} onChange={handleSortChange}>
         <option value="default">По умолчанию</option>

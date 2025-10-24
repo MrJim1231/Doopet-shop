@@ -13,16 +13,16 @@ export default function Controls({
   };
 
   return (
-    <div className="catalog__controls">
-      <div className="catalog__view-buttons">
-        <button className="catalog__view-btn active">▦</button>
-        <button className="catalog__view-btn">☰</button>
+    <div className="category__controls">
+      <div className="category__view-buttons">
+        <button className="category__view-btn active">▦</button>
+        <button className="category__view-btn">☰</button>
       </div>
 
       {/* ✅ сортировка вынесена в отдельный компонент */}
       <SortSelect sort={sort} setSort={setSort} />
 
-      <div className="catalog__show-count">
+      <div className="category__show-count">
         <label>Показать:</label>
         <select value={limit} onChange={handleLimitChange}>
           <option value="6">6</option>

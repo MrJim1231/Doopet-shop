@@ -69,13 +69,13 @@ export default function Filters({
   };
 
   return (
-    <aside className="catalog__filters">
+    <aside className="category__filters">
       {/* 🔹 Цена */}
-      <div className="catalog__filter">
-        <h3 className="catalog__filter-title">Цена</h3>
-        <div className="catalog__price-range">
+      <div className="category__filter">
+        <h3 className="category__filter-title">Цена</h3>
+        <div className="category__price-range">
           {/* Ползунки */}
-          <div className="catalog__sliders">
+          <div className="category__sliders">
             <input
               type="range"
               min="0"
@@ -95,16 +95,16 @@ export default function Filters({
           </div>
 
           {/* Отображение значений */}
-          <div className="catalog__price-values">
+          <div className="category__price-values">
             <span>{minPrice} €</span> — <span>{maxPrice} €</span>
           </div>
         </div>
       </div>
 
       {/* 🔹 Производители */}
-      <div className="catalog__filter">
-        <h3 className="catalog__filter-title">Производители</h3>
-        <ul className="catalog__checkbox-list">
+      <div className="category__filter">
+        <h3 className="category__filter-title">Производители</h3>
+        <ul className="category__checkbox-list">
           {manufacturers.length > 0 ? (
             manufacturers.map((brand) => (
               <li key={brand}>
@@ -125,9 +125,9 @@ export default function Filters({
       </div>
 
       {/* 🔹 Размер упаковки */}
-      <div className="catalog__filter">
-        <h3 className="catalog__filter-title">Размер упаковки</h3>
-        <ul className="catalog__checkbox-list">
+      <div className="category__filter">
+        <h3 className="category__filter-title">Размер упаковки</h3>
+        <ul className="category__checkbox-list">
           {["2kg", "3kg", "5kg", "10kg"].map((size) => (
             <li key={size}>
               <label>

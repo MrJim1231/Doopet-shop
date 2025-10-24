@@ -51,14 +51,14 @@ function CategoryProducts() {
   };
 
   return (
-    <div className="catalog-page">
+    <div className="category-page">
       <HeaderTopBar />
       <Header />
       <CatalogBlock />
       <Breadcrumbs items={[{ label: categoryName || "Категория" }]} />
 
-      <section className="catalog">
-        <div className="catalog__container">
+      <section className="category">
+        <div className="category__container">
           {/* ---------- ФИЛЬТРЫ ---------- */}
           <Filters
             minPrice={minPrice}
@@ -73,7 +73,7 @@ function CategoryProducts() {
           />
 
           {/* ---------- КОНТЕНТ ---------- */}
-          <div className="catalog__content">
+          <div className="category__content">
             <Controls
               limit={limit}
               setLimit={setLimit}

@@ -5,8 +5,8 @@ export default function Pagination({
   onPageChange,
 }) {
   return (
-    <div className="catalog__pagination">
-      <div className="catalog__pagination-pages">
+    <div className="category__pagination">
+      <div className="category__pagination-pages">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -35,7 +35,7 @@ export default function Pagination({
         </button>
       </div>
 
-      <div className="catalog__pagination-info">
+      <div className="category__pagination-info">
         Показано {currentPage} из {totalProducts}
       </div>
     </div>
