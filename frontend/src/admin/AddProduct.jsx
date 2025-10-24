@@ -4,7 +4,6 @@ import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
-// import "../styles/AddProduct.scss";
 
 function AddProduct() {
   const [products, setProducts] = useState([]);
@@ -21,6 +20,7 @@ function AddProduct() {
     manufacturer: "",
     packageSize: "",
     image: "",
+    article: "", // 🟢 добавлено поле
   });
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ function AddProduct() {
   const fetchProducts = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/products");
-      setProducts(res.data.products || []); // <-- вот тут исправление
+      setProducts(res.data.products || []);
     } catch (error) {
       console.error("Ошибка при загрузке продуктов:", error);
     }
@@ -56,6 +56,10 @@ function AddProduct() {
     setFile(e.target.files[0]);
   };
 
+  const generateArticle = () => {
+    return "PRD-" + Math.floor(100000 + Math.random() * 900000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -67,9 +71,15 @@ function AddProduct() {
 
     try {
       const formData = new FormData();
+
+      // 🟢 если пользователь не ввёл артикул — создаём автоматически
+      const articleValue = form.article.trim() || generateArticle();
+
       for (const key in form) {
-        formData.append(key, form[key]);
+        if (key !== "article") formData.append(key, form[key]);
       }
+      formData.append("article", articleValue);
+
       if (file) formData.append("image", file);
 
       await axios.post("http://localhost:5000/api/products", formData, {
@@ -88,6 +98,7 @@ function AddProduct() {
         manufacturer: "",
         packageSize: "",
         image: "",
+        article: "", // сбрасываем
       });
       setFile(null);
       fetchProducts();
@@ -160,6 +171,16 @@ function AddProduct() {
               value={form.stock}
               onChange={handleInputChange}
               placeholder="Количество на складе"
+              className="add-product__input"
+            />
+
+            {/* 🟢 Артикул */}
+            <input
+              type="text"
+              name="article"
+              value={form.article}
+              onChange={handleInputChange}
+              placeholder="Артикул (оставьте пустым для автогенерации)"
               className="add-product__input"
             />
 
@@ -262,6 +283,7 @@ function AddProduct() {
                       <p>Цена: {p.price} грн</p>
                       {p.oldPrice && <p>Старая цена: {p.oldPrice} грн</p>}
                       <p>Остаток: {p.stock}</p>
+                      {p.article && <p>Артикул: {p.article}</p>} {/* 🟢 */}
                       {p.tag && <p>Тэг: {p.tag}</p>}
                       {p.label && <p>Лейбл: {p.label}</p>}
                       {p.manufacturer && (
