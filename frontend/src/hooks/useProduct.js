@@ -15,11 +15,20 @@ export const useProduct = (productId) => {
         const res = await axios.get(
           `http://localhost:5000/api/products/${productId}`
         );
-        setProduct(res.data);
+
+        // 🟢 Защита от пустого ответа или некорректной структуры
+        const data = res?.data || {};
+
+        // 🟢 Нормализуем описание — убираем лишние пробелы, если есть
+        if (typeof data.description === "string") {
+          data.description = data.description.trim();
+        }
+
+        setProduct(data);
         setError(null);
       } catch (err) {
-        console.error("Ошибка при загрузке товара:", err);
-        setError("Не удалось загрузить товар");
+        console.error("❌ Ошибка при загрузке товара:", err);
+        setError("Не удалось загрузить товар. Попробуйте позже.");
       } finally {
         setLoading(false);
         window.scrollTo(0, 0);

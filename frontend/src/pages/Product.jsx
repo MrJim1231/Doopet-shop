@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useProduct } from "../hooks/useProduct";
 
 import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
+import SubscribeSection from "../components/SubscribeSection";
+import Footer from "../layout/Footer";
 import CatalogBlock from "../layout/CatalogBlock";
 import heartIcon from "../assets/icons/heart1.svg";
 import placeholderImg from "../assets/images/no-image.png";
@@ -17,6 +19,7 @@ function Product() {
 
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [activeTab, setActiveTab] = useState("description");
 
   const handleAddToCart = () => {
     if (product) addToCart(product._id, quantity);
@@ -32,7 +35,7 @@ function Product() {
 
   const mainImage = product.imageUrl || placeholderImg;
 
-  // 🟢 Формируем крошки
+  // 🟢 Хлебные крошки
   const breadcrumbs = [
     {
       label: product.categoryId?.name || "Категория",
@@ -40,6 +43,7 @@ function Product() {
     },
     { label: product.name },
   ];
+
   return (
     <div className="product__wrapper">
       <HeaderTopBar />
@@ -175,8 +179,48 @@ function Product() {
               </div>
             </div>
           </div>
+
+          {/* ---------- Вкладки: Описание / Отзывы ---------- */}
+          <div className="product__page-tabs">
+            <div className="product__page-tabs-header">
+              <button
+                className={`product__tab-btn ${
+                  activeTab === "description" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("description")}
+              >
+                Описание
+              </button>
+              <button
+                className={`product__tab-btn ${
+                  activeTab === "reviews" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("reviews")}
+              >
+                Отзывы (2)
+              </button>
+            </div>
+
+            <div className="product__page-tabs-content">
+              {activeTab === "description" ? (
+                <div className="product__tab-description">
+                  <p className="product__description-text">
+                    {product.description || "Описание отсутствует."}
+                  </p>
+                </div>
+              ) : (
+                <div className="product__tab-reviews">
+                  <p>
+                    Пока нет отзывов. Будьте первым, кто оставит отзыв о товаре!
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
+      <SubscribeSection />
+      <Footer />
     </div>
   );
 }
