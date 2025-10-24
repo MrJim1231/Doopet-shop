@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
 import locationIcon from "../assets/icons/location.svg";
 import emailIcon from "../assets/icons/email.svg";
 import phoneIcon from "../assets/icons/phone.svg";
@@ -23,10 +25,17 @@ function HeaderTopBar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  // 🔹 Копирование email с уведомлением
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("info@doopet.com");
+    alert("📧 Email скопирован в буфер обмена!");
+  };
+
   return (
     <div className="header__topbar-container">
       <div className="header__topbar">
         <ul className="header__topbar-list">
+          {/* ---------- Адрес ---------- */}
           <li className="header__topbar-item">
             <img src={locationIcon} alt="Адрес" className="header__icon" />
             <a
@@ -39,19 +48,18 @@ function HeaderTopBar() {
             </a>
           </li>
 
+          {/* ---------- Email ---------- */}
           <li className="header__topbar-item">
             <img src={emailIcon} alt="Емейл" className="header__icon" />
-            <a
+            <button
               className="header__link header__link--btn"
-              onClick={() => {
-                navigator.clipboard.writeText("info@doopet.com");
-                alert("Email скопирован в буфер обмена!");
-              }}
+              onClick={handleCopyEmail}
             >
               info@doopet.com
-            </a>
+            </button>
           </li>
 
+          {/* ---------- Телефон ---------- */}
           <li className="header__topbar-item">
             <img src={phoneIcon} alt="Телефон" className="header__icon" />
             <a
@@ -62,18 +70,19 @@ function HeaderTopBar() {
             </a>
           </li>
 
-          {/* 🔹 Личный кабинет с выпадающим меню */}
+          {/* ---------- Аккаунт ---------- */}
           <li
             className="header__topbar-item header__topbar-item--account"
             ref={menuRef}
           >
             <img src={accountIcon} alt="Аккаунт" className="header__icon" />
-            <a className="header__link header__link--sm" href="/account">
+            <Link className="header__link header__link--sm" to="/account">
               {user ? user.name || "Профиль" : "Личный кабинет"}
-            </a>
+            </Link>
             <button
               className="header__topbar-item-btn"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label="Открыть меню аккаунта"
             >
               <img
                 src={sortIcon}
@@ -86,9 +95,9 @@ function HeaderTopBar() {
               <div className="header__account-menu">
                 {user ? (
                   <>
-                    <a href="/account" className="header__account-item">
+                    <Link to="/account" className="header__account-item">
                       Мой профиль
-                    </a>
+                    </Link>
                     <button
                       onClick={logout}
                       className="header__account-item header__account-item--logout"
@@ -98,23 +107,24 @@ function HeaderTopBar() {
                   </>
                 ) : (
                   <>
-                    <a href="/account" className="header__account-item">
+                    <Link to="/account" className="header__account-item">
                       Войти
-                    </a>
-                    <a href="/account" className="header__account-item">
+                    </Link>
+                    <Link to="/account" className="header__account-item">
                       Регистрация
-                    </a>
+                    </Link>
                   </>
                 )}
               </div>
             )}
           </li>
 
+          {/* ---------- Закладки ---------- */}
           <li className="header__topbar-item">
             <img src={heartIcon} alt="Закладки" className="header__icon" />
-            <a className="header__link header__link--sm" href="/favorites">
+            <Link to="/favorites" className="header__link header__link--sm">
               Закладки
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
