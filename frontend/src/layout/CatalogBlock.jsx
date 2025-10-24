@@ -49,22 +49,20 @@ function CatalogBlock() {
           </div>
 
           {/* Корзина */}
-          <div className="catalog-block__cart">
-            <Link
-              to="/cart"
-              className="catalog-block__cart-btn"
-              aria-label="Перейти в корзину"
-            >
-              <img
-                src={cartIcon}
-                alt="Корзина"
-                className="catalog-block__cart-icon"
-              />
-            </Link>
+          <Link
+            to="/cart"
+            className="catalog-block__cart" // теперь ссылка на всю область
+            aria-label="Перейти в корзину"
+          >
+            <img
+              src={cartIcon}
+              alt="Корзина"
+              className="catalog-block__cart-icon"
+            />
             <span className="catalog-block__cart-text">
               Товаров {totalCount} ({totalPrice.toFixed(2)} €)
             </span>
-          </div>
+          </Link>
         </div>
       </div>
 
