@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { useProduct } from "../hooks/useProduct";
+import { useAuth } from "../context/AuthContext"; // 🟢 используем контекст авторизации
 
 import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
@@ -10,16 +12,52 @@ import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
 import CatalogBlock from "../layout/CatalogBlock";
 import heartIcon from "../assets/icons/heart1.svg";
+import heartFilled from "../assets/icons/heart1.svg";
 import placeholderImg from "../assets/images/no-image.png";
 
 function Product() {
   const { id } = useParams();
   const { addToCart } = useCart();
   const { product, loading, error } = useProduct(id);
+  const { user } = useAuth(); // 🟢 получаем текущего пользователя
 
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
+
+  // 🟢 Проверка, в избранном ли товар
+  useEffect(() => {
+    const checkFavorite = async () => {
+      if (!user?._id || !product?._id) return;
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/favorites/check/${user._id}/${product._id}`
+        );
+        setIsFavorite(res.data.isFavorite);
+      } catch (err) {
+        console.error("Ошибка при проверке избранного:", err);
+      }
+    };
+    checkFavorite();
+  }, [product, user]);
+
+  // 🟢 Добавить / удалить из избранного
+  const handleToggleFavorite = async () => {
+    if (!user) {
+      alert("Чтобы добавить товар в закладки, пожалуйста, авторизуйтесь 😊");
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/favorites", {
+        userId: user._id,
+        productId: product._id,
+      });
+      setIsFavorite(res.data.isFavorite);
+    } catch (err) {
+      console.error("Ошибка при изменении избранного:", err);
+    }
+  };
 
   const handleAddToCart = () => {
     if (product) addToCart(product._id, quantity);
@@ -27,7 +65,6 @@ function Product() {
 
   const increaseQty = () => setQuantity((q) => q + 1);
   const decreaseQty = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
-  const toggleFavorite = () => setIsFavorite((prev) => !prev);
 
   if (loading) return <p className="loading">Загрузка...</p>;
   if (error) return <p>{error}</p>;
@@ -35,7 +72,6 @@ function Product() {
 
   const mainImage = product.imageUrl || placeholderImg;
 
-  // 🟢 Хлебные крошки
   const breadcrumbs = [
     {
       label: product.categoryId?.name || "Категория",
@@ -122,13 +158,14 @@ function Product() {
                   Добавить в корзину
                 </button>
 
+                {/* ❤️ Кнопка избранного */}
                 <img
-                  src={heartIcon}
+                  src={isFavorite ? heartFilled : heartIcon}
                   alt="Закладки"
                   className={`product__page-fav ${
                     isFavorite ? "product__page-fav--active" : ""
                   }`}
-                  onClick={toggleFavorite}
+                  onClick={handleToggleFavorite}
                 />
               </div>
 
@@ -219,6 +256,7 @@ function Product() {
           </div>
         </div>
       </section>
+
       <SubscribeSection />
       <Footer />
     </div>
