@@ -1,0 +1,21 @@
+.section-header,
+.cart__header,
+.about__header,
+.delivery__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-size: 44px;
+    font-weight: 700;
+    color: #323030;
+  }
+}
