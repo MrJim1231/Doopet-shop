@@ -1,78 +1,45 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useCart } from "../context/CartContext";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
-import product1 from "../assets/images/products/product.png";
-import product2 from "../assets/images/products/product2.png";
-import product3 from "../assets/images/products/product3.png";
-import product4 from "../assets/images/products/product4.png";
-import product5 from "../assets/images/products/product5.png";
-import product6 from "../assets/images/products/product6.png";
-import product7 from "../assets/images/products/product7.png";
-import product8 from "../assets/images/products/product8.png";
 
 function RecommendedProducts() {
-  const products = [
-    {
-      id: 1,
-      title: "Корм для собак Organic egg layer pellets",
-      price: "2.55€",
-      oldPrice: "2.55€",
-      image: product1,
-      tag: "Хит",
-      label: "Новинка",
-    },
-    {
-      id: 2,
-      title: "Корм для кошек KMR Pwdr 12oz",
-      price: "2.45€",
-      oldPrice: "3.45€",
-      image: product2,
-      tag: "Хит",
-      label: "Новинка",
-    },
-    {
-      id: 3,
-      title: "Корм для собак tripett Single animal protein",
-      price: "3€",
-      oldPrice: "3.22€",
-      image: product3,
-      tag: "Хит",
-    },
-    {
-      id: 4,
-      title: "Корм для собак Green Papaya Fruit",
-      price: "3.12€",
-      image: product4,
-      tag: "Хит",
-    },
-    {
-      id: 5,
-      title: "Корм для собак James Wellbeloved",
-      price: "2.55€",
-      oldPrice: "2.55€",
-      image: product5,
-    },
-    {
-      id: 6,
-      title: "Корм для собак purina beyond",
-      price: "2.55€",
-      oldPrice: "2.55€",
-      image: product6,
-    },
-    {
-      id: 7,
-      title: "Корм для кошек Norwegian Tuna Fish",
-      price: "2.55€",
-      image: product7,
-      label: "Новинка",
-    },
-    {
-      id: 8,
-      title: "Корм для кошек Catfish Natural ingredients",
-      price: "2.55€",
-      oldPrice: "2.55€",
-      image: product8,
-      tag: "Хит",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    const fetchRecommended = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/products/recommended"
+        );
+        setProducts(res.data || []);
+      } catch (error) {
+        console.error("Ошибка при загрузке рекомендуемых:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecommended();
+  }, []);
+
+  const handleQtyChange = (id, delta) => {
+    setQuantities((prev) => {
+      const current = prev[id] || 1;
+      const newQty = Math.max(1, current + delta);
+      return { ...prev, [id]: newQty };
+    });
+  };
+
+  const handleAddToCart = async (productId) => {
+    const qty = quantities[productId] || 1;
+    await addToCart(productId, qty);
+  };
+
+  if (loading) return <p>Загрузка...</p>;
 
   return (
     <section className="recommended">
@@ -83,51 +50,75 @@ function RecommendedProducts() {
         </div>
 
         <div className="recommended__products">
-          {products.map((product) => (
-            <div key={product.id} className="recommended__card">
-              <div className="recommended__image-wrapper">
-                <div className="recommended__labels">
-                  {product.tag && (
-                    <span className="recommended__label recommended__label--hit">
-                      {product.tag}
-                    </span>
-                  )}
-                  {product.label && (
-                    <span className="recommended__label recommended__label--new">
-                      {product.label}
-                    </span>
-                  )}
-                </div>
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="recommended__image"
-                />
-              </div>
-
-              <div className="recommended__info">
-                <h3 className="recommended__name">{product.title}</h3>
-
-                <div className="recommended__prices">
-                  <span className="recommended__price">{product.price}</span>
-                  {product.oldPrice && (
-                    <span className="recommended__old-price">
-                      {product.oldPrice}
-                    </span>
-                  )}
-                </div>
-
-                <div className="recommended__actions">
-                  <div className="recommended__quantity">
-                    <button className="recommended__btn">-</button>
-                    <span className="recommended__count">2</span>
-                    <button className="recommended__btn">+</button>
+          {products.length > 0 ? (
+            products.map((product) => (
+              <div key={product._id} className="recommended__card">
+                <Link
+                  to={`/product/${product._id}`}
+                  className="recommended__image-wrapper"
+                >
+                  <div className="recommended__labels">
+                    {product.tag && (
+                      <span className="recommended__label recommended__label--hit">
+                        {product.tag}
+                      </span>
+                    )}
+                    {product.label && (
+                      <span className="recommended__label recommended__label--new">
+                        {product.label}
+                      </span>
+                    )}
                   </div>
-                  <button className="recommended__cart-btn">В корзину</button>
+                  <img
+                    src={product.imageUrl || product.image}
+                    alt={product.name}
+                    className="recommended__image"
+                  />
+                </Link>
+
+                <div className="recommended__info">
+                  <h3 className="recommended__name">{product.name}</h3>
+
+                  <div className="recommended__prices">
+                    <span className="recommended__price">{product.price}€</span>
+                    {product.oldPrice > 0 && (
+                      <span className="recommended__old-price">
+                        {product.oldPrice}€
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="recommended__actions">
+                    <div className="recommended__quantity">
+                      <button
+                        className="recommended__btn"
+                        onClick={() => handleQtyChange(product._id, -1)}
+                      >
+                        –
+                      </button>
+                      <span className="recommended__count">
+                        {quantities[product._id] || 1}
+                      </span>
+                      <button
+                        className="recommended__btn"
+                        onClick={() => handleQtyChange(product._id, +1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      className="recommended__cart-btn"
+                      onClick={() => handleAddToCart(product._id)}
+                    >
+                      В корзину
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>Нет рекомендуемых товаров</p>
+          )}
         </div>
       </div>
     </section>

@@ -259,6 +259,19 @@ const getHitProducts = async (req, res) => {
   }
 };
 
+// 🔹 Рекомендуемые товары (последние 8, например с label: "Новинка")
+const getRecommendedProducts = async (req, res) => {
+  try {
+    const recommended = await Product.find({ label: "Новинка" })
+      .sort({ createdAt: -1 })
+      .limit(8);
+    res.status(200).json(recommended);
+  } catch (error) {
+    console.error("Ошибка при получении рекомендуемых товаров:", error);
+    res.status(500).json({ message: "Ошибка при получении рекомендуемых" });
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
@@ -266,4 +279,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getHitProducts, // ✅ экспортируем новую функцию
+  getRecommendedProducts, // ✅
 };
