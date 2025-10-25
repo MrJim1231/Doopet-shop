@@ -1,71 +1,58 @@
 @use "../abstracts" as *;
 
 .header {
-  &__container {
+  width: 100%;
+  z-index: 1000;
+  transition: all 0.3s ease;
+
+  /* ===============================
+     🔹 1️⃣ Верхняя часть — TopBar
+     исчезает при скролле
+  =============================== */
+  &__topbar-container {
+    background-color: $color-light-gray;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 20;
+
+    &--hidden {
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+  }
+
+  /* ===============================
+     🔹 2️⃣ Основная часть — HeaderMain
+     фиксируется при скролле
+  =============================== */
+  &__main-container {
     background-color: $color-accent;
-    position: relative; // чтобы бургер позиционировался относительно контейнера
-  }
-
-  &__inner {
-    width: min(100% - 20px, $container-size);
-    padding: 15px 0;
-    margin-inline: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  &__logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &__nav {
-    display: flex;
-    align-items: center;
-    gap: 35px;
     position: relative;
+    z-index: 19;
+    transition: all 0.3s ease;
+
+    &--fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      animation: headerSlideIn 0.35s ease forwards;
+    }
   }
 
-  &__nav-list {
-    display: flex;
-    align-items: center;
-    gap: 42px;
-  }
-
-  &__nav-link {
-    color: $color-white;
-    line-height: 0.5px;
-    font-weight: 400;
-    // font-family: "Open Sans", sans-serif;
-  }
-
-  &__menu-btn {
-    position: absolute;
-    right: -70px; // бургер выходит за контейнер
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
+  /* ===============================
+     🔹 Анимация плавного появления
+  =============================== */
+  @keyframes headerSlideIn {
+    0% {
+      transform: translateY(-20px);
       opacity: 0.8;
     }
-
-    @media (max-width: 768px) {
-      right: -40px; // можно немного ближе на мобильных
+    100% {
+      transform: translateY(0);
+      opacity: 1;
     }
-  }
-
-  &__menu-icon {
-    width: 28px;
-    height: 28px;
   }
 }

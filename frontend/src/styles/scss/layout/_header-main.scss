@@ -1,0 +1,140 @@
+@use "../abstracts" as *;
+
+.header {
+  &__container {
+    background-color: $color-accent;
+    position: relative;
+    z-index: 100;
+  }
+
+  &__inner {
+    width: min(100% - 20px, $container-size);
+    padding: 15px 0;
+    margin-inline: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* 🔹 Навигация */
+  &__nav {
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 992px) {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 260px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 25px;
+      background-color: $color-accent;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+
+    &.open {
+      @media (max-width: 992px) {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  &__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 42px;
+
+    @media (max-width: 992px) {
+      flex-direction: column;
+      gap: 25px;
+    }
+  }
+
+  &__nav-link {
+    color: $color-white;
+    font-weight: 400;
+    text-decoration: none;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @media (max-width: 992px) {
+      font-size: 20px;
+    }
+  }
+
+  /* 🔹 Кнопка бургер */
+  &__menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none;
+    padding: 8px;
+
+    @media (max-width: 992px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__menu-icon {
+    width: 28px;
+    height: 28px;
+    filter: invert(100%);
+  }
+
+  /* 🔹 Кнопка закрытия "X" */
+  &__close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 32px;
+    background: none;
+    border: none;
+    color: $color-white;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @media (max-width: 992px) {
+      display: block;
+    }
+  }
+
+  /* 🔹 Затемнение фона */
+  &__overlay {
+    @media (max-width: 992px) {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      animation: fadeIn 0.3s ease forwards;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
