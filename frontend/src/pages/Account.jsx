@@ -1,9 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import Auth from "./auth/Auth";
-
-import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
-import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SectionHeader from "../components/SectionHeader"; // ✅ добавлено
 import graphicIcon from "../assets/icons/graphic-elements.svg"; // ✅ добавлено
@@ -31,9 +28,7 @@ function Account() {
 
   return (
     <>
-      <HeaderTopBar />
       <Header />
-      <CatalogBlock />
       <Breadcrumbs items={[{ label: "Личный кабинет" }]} />
 
       <section className="account">

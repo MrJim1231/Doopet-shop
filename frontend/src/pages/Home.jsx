@@ -1,6 +1,4 @@
-import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
-import CatalogBlock from "../layout/CatalogBlock";
 import Banner from "../components/Banner";
 import Advantages from "../components/Advantages";
 import Categories from "../components/Categories";
@@ -14,21 +12,21 @@ import Footer from "../layout/Footer";
 
 const Home = () => {
   return (
-    <div>
-      <HeaderTopBar />
-      <Header />
-      <CatalogBlock />
-      <Banner />
-      <Advantages />
-      <Categories />
-      <PopularProducts />
-      <RecommendedProducts />
-      <Discounts />
-      <BlogSection />
-      <Partners />
-      <SubscribeSection />
-      <Footer />
-    </div>
+    <>
+      <Header /> {/* шапка сайта */}
+      <main className="main">
+        <Banner />
+        <Advantages />
+        <Categories />
+        <PopularProducts />
+        <RecommendedProducts />
+        <Discounts />
+        <BlogSection />
+        <Partners />
+        <SubscribeSection />
+      </main>
+      <Footer /> {/* подвал */}
+    </>
   );
 };
 

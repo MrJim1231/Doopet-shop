@@ -4,13 +4,10 @@ import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { useProduct } from "../hooks/useProduct";
 import { useAuth } from "../context/AuthContext"; // 🟢 используем контекст авторизации
-
-import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
-import CatalogBlock from "../layout/CatalogBlock";
 import heartIcon from "../assets/icons/heart1.svg";
 import heartFilled from "../assets/icons/heart1.svg";
 import placeholderImg from "../assets/images/no-image.png";
@@ -82,9 +79,7 @@ function Product() {
 
   return (
     <div className="product__wrapper">
-      <HeaderTopBar />
       <Header />
-      <CatalogBlock />
       <Breadcrumbs items={breadcrumbs} />
 
       <section className="product__page">

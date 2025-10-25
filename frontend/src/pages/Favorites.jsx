@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-
-import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
-import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
@@ -59,9 +56,7 @@ function Favorites() {
 
   return (
     <div className="favorites-page">
-      <HeaderTopBar />
       <Header />
-      <CatalogBlock />
       <Breadcrumbs items={[{ label: "Закладки" }]} />
 
       <section className="favorites">

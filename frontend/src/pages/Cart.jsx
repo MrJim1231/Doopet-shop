@@ -1,14 +1,12 @@
 import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import HeaderTopBar from "../layout/HeaderTopBar";
+import graphicIcon from "../assets/icons/graphic-elements.svg";
 import Header from "../layout/Header";
-import CatalogBlock from "../layout/CatalogBlock";
+import SectionHeader from "../components/SectionHeader";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
-import graphicIcon from "../assets/icons/graphic-elements.svg";
-import SectionHeader from "../components/SectionHeader";
 
 function Cart() {
   const {
@@ -74,9 +72,7 @@ function Cart() {
 
   return (
     <div className="cart-page">
-      <HeaderTopBar />
       <Header />
-      <CatalogBlock />
       <Breadcrumbs items={[{ label: "Корзина" }]} />
 
       <section className="cart">

@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../../hooks/useProducts";
-
-import HeaderTopBar from "../../layout/HeaderTopBar";
 import Header from "../../layout/Header";
-import CatalogBlock from "../../layout/CatalogBlock";
 import Breadcrumbs from "../../layout/Breadcrumbs";
 import SubscribeSection from "../../components/SubscribeSection";
 import Footer from "../../layout/Footer";
-
 import Filters from "./Filters";
 import Controls from "./Controls";
 import ProductGrid from "./ProductGrid";
@@ -52,9 +48,7 @@ function CategoryProducts() {
 
   return (
     <div className="category-page">
-      <HeaderTopBar />
       <Header />
-      <CatalogBlock />
       <Breadcrumbs items={[{ label: categoryName || "Категория" }]} />
 
       <section className="category">
