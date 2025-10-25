@@ -1,12 +1,13 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { useCart } from "../../context/CartContext"; // 🟢 добавлено
+import axios from "axios";
+import { useCart } from "../../context/CartContext";
+import { toast } from "react-toastify"; // 🟢 добавлено
 
 export default function ProductGrid({ products, loading }) {
   const [quantities, setQuantities] = useState({});
   const [adding, setAdding] = useState({});
-  const { fetchCart } = useCart(); // 🟢 получаем функцию обновления корзины
+  const { fetchCart } = useCart();
 
   // Изменение количества
   const handleQuantityChange = (id, delta) => {
@@ -38,13 +39,21 @@ export default function ProductGrid({ products, loading }) {
         quantity,
       });
 
-      await fetchCart(); // 🟢 обновляем данные в контексте
+      await fetchCart();
 
-      // Всплывающее уведомление
-      alert("✅ Товар добавлен в корзину!");
+      // ✅ toast вместо alert
+      toast.success("🛒 Товар добавлен в корзину!", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     } catch (error) {
       console.error("Ошибка при добавлении в корзину:", error);
-      alert("❌ Не удалось добавить товар в корзину");
+      toast.error("❌ Не удалось добавить товар в корзину", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     } finally {
       setAdding((prev) => ({ ...prev, [productId]: false }));
     }

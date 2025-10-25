@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify"; // ✅ подключаем уведомления
 
 const CartContext = createContext();
 
@@ -19,6 +20,7 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, []);
 
+  // 🟢 Загрузка корзины
   const fetchCart = async () => {
     try {
       setLoading(true);
@@ -33,6 +35,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // 🟢 Добавление товара в корзину
   const addToCart = async (productId, quantity = 1) => {
     try {
       await axios.post("http://localhost:5000/api/cart/add", {
@@ -40,13 +43,25 @@ export const CartProvider = ({ children }) => {
         productId,
         quantity,
       });
+
       await fetchCart();
+
+      toast.success("🛒 Товар добавлен в корзину!", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     } catch (error) {
       console.error("Ошибка при добавлении в корзину:", error);
+      toast.error("❌ Не удалось добавить товар", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     }
   };
 
-  // ✅ Удаляем товар сначала локально, потом отправляем запрос, но не перезагружаем корзину
+  // 🟡 Удаление товара
   const removeFromCart = async (productId) => {
     removeFromCartLocally(productId);
 
@@ -55,14 +70,22 @@ export const CartProvider = ({ children }) => {
         data: { sessionId, productId },
       });
 
-      // ❌ Убираем fetchCart(), чтобы избежать мерцания
-      // await fetchCart();
+      toast.info("🗑️ Товар удалён из корзины", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     } catch (error) {
       console.error("Ошибка при удалении из корзины:", error);
+      toast.error("❌ Ошибка при удалении товара", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     }
   };
 
-  // ✅ Локальное удаление
+  // 🟢 Локальное удаление
   const removeFromCartLocally = (productId) => {
     setCart((prev) => ({
       ...prev,
@@ -70,17 +93,30 @@ export const CartProvider = ({ children }) => {
     }));
   };
 
+  // 🔴 Очистка корзины
   const clearCart = async () => {
     try {
       await axios.delete("http://localhost:5000/api/cart/clear", {
         data: { sessionId },
       });
       setCart({ items: [], cartTotal: 0 });
+
+      toast.warn("🚫 Корзина очищена", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     } catch (error) {
       console.error("Ошибка при очистке корзины:", error);
+      toast.error("❌ Ошибка при очистке корзины", {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
     }
   };
 
+  // 🟡 Локальное обновление количества
   const updateQuantityLocally = (productId, newQty) => {
     setCart((prev) => {
       const updatedItems = prev.items.map((item) =>
@@ -96,6 +132,7 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // 🔹 Подсчёты
   const totalCount =
     cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 

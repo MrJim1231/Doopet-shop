@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ToastProvider from "./components/ToastProvider"; // ✅ импортируем
+
 import Home from "./pages/Home";
 import Catalog from "./components/Catalog";
 import Product from "./pages/Product";
@@ -14,14 +17,16 @@ import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import Cart from "./pages/Cart";
 import Account from "./pages/Account";
 import Favorites from "./pages/Favorites";
-import Post from "./pages/Post"; // ✅ страница одной статьи
-import { AuthProvider } from "./context/AuthContext";
+import Post from "./pages/Post";
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
         <div className="app">
+          {/* ✅ Вынесено в отдельный компонент */}
+          <ToastProvider />
+
           <Routes>
             {/* Основные страницы */}
             <Route path="/" element={<Home />} />
@@ -30,13 +35,15 @@ export default function App() {
             <Route path="/promotions" element={<Stock />} />
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<Post />} /> {/* ✅ исправлено */}
+            <Route path="/blog/:id" element={<Post />} />
             <Route path="/delivery" element={<Delivery />} />
             <Route path="/contacts" element={<Contacts />} />
+
             {/* Админка */}
             <Route path="/admin/add-category" element={<AddCategory />} />
             <Route path="/admin/add-product" element={<AddProduct />} />
             <Route path="/admin/add-post" element={<AddPost />} />
+
             {/* Прочее */}
             <Route path="/category/:id" element={<CategoryProducts />} />
             <Route path="/cart" element={<Cart />} />
