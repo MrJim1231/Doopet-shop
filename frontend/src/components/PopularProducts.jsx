@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import { useCart } from "../context/CartContext"; // 🔹 импорт контекста корзины
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 
 function PopularProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({}); // 🔹 локальное хранение количества
+  const { addToCart } = useCart(); // 🔹 получаем функцию из контекста
 
   useEffect(() => {
     const fetchHits = async () => {
@@ -21,6 +25,19 @@ function PopularProducts() {
     fetchHits();
   }, []);
 
+  const handleQtyChange = (id, delta) => {
+    setQuantities((prev) => {
+      const current = prev[id] || 1;
+      const newQty = Math.max(1, current + delta);
+      return { ...prev, [id]: newQty };
+    });
+  };
+
+  const handleAddToCart = async (productId) => {
+    const qty = quantities[productId] || 1;
+    await addToCart(productId, qty);
+  };
+
   if (loading) return <p>Загрузка...</p>;
 
   return (
@@ -35,25 +52,31 @@ function PopularProducts() {
           {products.length > 0 ? (
             products.map((product) => (
               <div key={product._id} className="popular__products-card">
-                <div className="popular__products-image-wrapper">
-                  <div className="popular__products-labels">
-                    {product.tag && (
-                      <span className="popular__products-label popular__products-label--hit">
-                        {product.tag}
-                      </span>
-                    )}
-                    {product.label && (
-                      <span className="popular__products-label popular__products-label--new">
-                        {product.label}
-                      </span>
-                    )}
+                {/* ✅ Клик по изображению или названию → страница продукта */}
+                <Link
+                  to={`/product/${product._id}`}
+                  className="popular__products-link"
+                >
+                  <div className="popular__products-image-wrapper">
+                    <div className="popular__products-labels">
+                      {product.tag && (
+                        <span className="popular__products-label popular__products-label--hit">
+                          {product.tag}
+                        </span>
+                      )}
+                      {product.label && (
+                        <span className="popular__products-label popular__products-label--new">
+                          {product.label}
+                        </span>
+                      )}
+                    </div>
+                    <img
+                      src={product.imageUrl || product.image}
+                      alt={product.name}
+                      className="popular__products-image"
+                    />
                   </div>
-                  <img
-                    src={product.imageUrl || product.image}
-                    alt={product.name}
-                    className="popular__products-image"
-                  />
-                </div>
+                </Link>
 
                 <div className="popular__products-info">
                   <h3 className="popular__products-name">{product.name}</h3>
@@ -70,12 +93,39 @@ function PopularProducts() {
                   </div>
 
                   <div className="popular__products-actions">
+                    {/* 🔹 Управление количеством */}
                     <div className="popular__products-quantity">
-                      <button className="popular__products-btn">-</button>
-                      <span className="popular__products-count">1</span>
-                      <button className="popular__products-btn">+</button>
+                      <button
+                        className="popular__products-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleQtyChange(product._id, -1);
+                        }}
+                      >
+                        –
+                      </button>
+                      <span className="popular__products-count">
+                        {quantities[product._id] || 1}
+                      </span>
+                      <button
+                        className="popular__products-btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleQtyChange(product._id, +1);
+                        }}
+                      >
+                        +
+                      </button>
                     </div>
-                    <button className="popular__products-cart-btn">
+
+                    {/* 🔹 Добавление в корзину */}
+                    <button
+                      className="popular__products-cart-btn"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAddToCart(product._id);
+                      }}
+                    >
                       В корзину
                     </button>
                   </div>
