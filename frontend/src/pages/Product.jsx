@@ -9,7 +9,7 @@ import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
 import heartIcon from "../assets/icons/heart1.svg";
-import heartFilled from "../assets/icons/heart1.svg";
+import heartFilled from "../assets/icons/heart.svg";
 import placeholderImg from "../assets/images/no-image.png";
 
 function Product() {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
@@ -13,6 +13,21 @@ function AddPost() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [blogs, setBlogs] = useState([]); // 🟢 список статей
+
+  // 🟢 Загрузка всех статей при старте
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/blogs");
+      setBlogs(res.data);
+    } catch (err) {
+      console.error("Ошибка при загрузке статей:", err);
+    }
+  };
 
   // 🟢 изменение текстовых полей
   const handleChange = (e) => {
@@ -56,10 +71,23 @@ function AddPost() {
       setStatus("✅ Статья успешно добавлена!");
       setForm({ title: "", description: "", date: "", imageUrl: "" });
       setFile(null);
+      fetchBlogs(); // 🟢 обновляем список после добавления
     } catch (err) {
       setStatus("Ошибка при добавлении статьи.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 🗑️ Удаление статьи
+  const handleDelete = async (id) => {
+    if (!window.confirm("Удалить эту статью?")) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/blogs/${id}`);
+      setBlogs((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      console.error("Ошибка при удалении:", err);
     }
   };
 
@@ -128,6 +156,36 @@ function AddPost() {
 
             {status && <p className="add-post__status">{status}</p>}
           </form>
+
+          {/* 🟢 Отображение всех статей */}
+          <h3 className="add-post__subtitle">Список статей</h3>
+          <div className="add-post__list">
+            {blogs.length === 0 ? (
+              <p>Пока нет статей</p>
+            ) : (
+              blogs.map((post) => (
+                <div className="add-post__item" key={post._id}>
+                  <div className="add-post__item-left">
+                    <img
+                      src={post.imageUrl || post.image}
+                      alt={post.title}
+                      className="add-post__item-img"
+                    />
+                    <div>
+                      <h4>{post.title}</h4>
+                      <p>{post.date}</p>
+                    </div>
+                  </div>
+                  <button
+                    className="add-post__delete-btn"
+                    onClick={() => handleDelete(post._id)}
+                  >
+                    Удалить
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </>

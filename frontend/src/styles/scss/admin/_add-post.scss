@@ -70,4 +70,75 @@
     color: #333;
     font-size: 15px;
   }
+
+  /* 🟢 Список статей */
+  &__subtitle {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 30px 0 15px;
+    text-align: center;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__item-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    h4 {
+      font-size: 17px;
+      margin: 0;
+    }
+
+    p {
+      margin: 2px 0 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  &__item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background-color: #f7f7f7;
+  }
+
+  &__delete-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.1s;
+
+    &:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+    }
+  }
 }
