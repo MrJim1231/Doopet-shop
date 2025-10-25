@@ -10,4 +10,41 @@
   }
 
   @include section-header(".delivery__header");
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+    @media (min-width: 992px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    border-radius: 5px;
+    object-fit: cover;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  &__text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    strong {
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      text-align: justify;
+    }
+  }
 }

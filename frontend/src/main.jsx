@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
+import "./index.scss";
 import "./styles/scss/main.scss";
 import App from "./App.jsx";
 import { CartProvider } from "./context/CartContext.jsx"; // 🟢 импорт контекста корзины
