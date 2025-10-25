@@ -9,11 +9,12 @@ import Delivery from "./pages/Delivery";
 import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
+import AddPost from "./admin/AddPost"; // ✅ добавлен импорт
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
-import Cart from "./pages/Cart"; // 🟢 корзина
-import Account from "./pages/Account"; // 🟢 личный кабинет
+import Cart from "./pages/Cart";
+import Account from "./pages/Account";
 import Favorites from "./pages/Favorites";
-import { AuthProvider } from "./context/AuthContext"; // 🟢 контекст авторизации
+import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
@@ -31,11 +32,12 @@ export default function App() {
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/admin/add-category" element={<AddCategory />} />
             <Route path="/admin/add-product" element={<AddProduct />} />
+            <Route path="/admin/add-post" element={<AddPost />} />{" "}
+            {/* ✅ новый маршрут */}
             <Route path="/category/:id" element={<CategoryProducts />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/account" element={<Account />} />{" "}
-            <Route path="/favorites" element={<Favorites />} /> {/* 🩷 */}
-            {/* 🟢 личный кабинет */}
+            <Route path="/account" element={<Account />} />
+            <Route path="/favorites" element={<Favorites />} />
           </Routes>
         </div>
       </Router>

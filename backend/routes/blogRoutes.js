@@ -1,7 +1,9 @@
 import express from "express";
+import multer from "multer";
+import path from "path";
 import {
   getAllBlogs,
-  getBlog,
+  getBlogById,
   createBlog,
   updateBlog,
   deleteBlog,
@@ -9,10 +11,31 @@ import {
 
 const router = express.Router();
 
+// 📂 Настраиваем хранилище для загрузок
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Папка для сохранения
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname)); // имя файла
+  },
+});
+
+// Проверка типа файла (опционально)
+const fileFilter = (req, file, cb) => {
+  const allowed = ["image/jpeg", "image/png", "image/webp"];
+  if (allowed.includes(file.mimetype)) cb(null, true);
+  else cb(new Error("Недопустимый формат файла"), false);
+};
+
+const upload = multer({ storage, fileFilter });
+
+// 🟢 Маршруты
 router.get("/", getAllBlogs);
-router.get("/:id", getBlog);
-router.post("/", createBlog);
-router.put("/:id", updateBlog);
+router.get("/:id", getBlogById);
+router.post("/", upload.single("image"), createBlog); // ← с загрузкой
+router.put("/:id", upload.single("image"), updateBlog); // ← с заменой изображения
 router.delete("/:id", deleteBlog);
 
 export default router;

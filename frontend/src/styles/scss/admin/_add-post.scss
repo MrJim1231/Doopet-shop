@@ -1,0 +1,32 @@
+.add-post {
+  max-width: 600px;
+  margin: 40px auto;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    input,
+    textarea {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+
+  &__status {
+    margin-top: 10px;
+    color: #333;
+  }
+}
