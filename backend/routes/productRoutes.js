@@ -9,6 +9,7 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  getHitProducts, // ✅ добавили импорт
 } = require("../controllers/productController");
 
 // 🟢 Настройка хранения изображений (uploads/)
@@ -36,7 +37,8 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // максимум 5 МБ
 });
 
-// Маршруты
+// 🔹 Маршруты
+router.get("/hits", getHitProducts); // ✅ новый маршрут (должен идти ДО :id)
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.post("/", upload.single("image"), createProduct);

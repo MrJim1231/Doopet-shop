@@ -43,6 +43,11 @@ const getProducts = async (req, res) => {
       }
     }
 
+    // 🔹 Фильтр по тегу (например, ?tag=Хит)
+    if (req.query.tag) {
+      filter.tag = req.query.tag.trim();
+    }
+
     // 🔹 Пагинация
     const page = Math.max(parseInt(req.query.page) || 1, 1);
     const limit = Math.max(parseInt(req.query.limit) || 12, 1);
@@ -120,7 +125,7 @@ const createProduct = async (req, res) => {
       label,
       manufacturer,
       packageSize,
-      article, // 🆕 Артикул
+      article,
     } = body;
 
     if (!name || !description || !price || !stock || !categoryId) {
@@ -140,7 +145,7 @@ const createProduct = async (req, res) => {
       return res.status(400).json({ message: "Категория не найдена" });
     }
 
-    // 🟢 Определяем путь к изображению
+    // 🟢 Путь к изображению
     let imagePath = null;
     if (req.file) {
       imagePath = `/uploads/${req.file.filename}`;
@@ -148,7 +153,6 @@ const createProduct = async (req, res) => {
       imagePath = body.image;
     }
 
-    // 🆕 Создание продукта с артикулом (если не указан, генерируется автоматически в модели)
     const newProduct = new Product({
       name,
       description,
@@ -161,7 +165,7 @@ const createProduct = async (req, res) => {
       label: label ?? "",
       manufacturer: manufacturer ?? "",
       packageSize: packageSize ?? "",
-      article: article ?? undefined, // если не указали — модель создаст автоматически
+      article: article ?? undefined,
     });
 
     const createdProduct = await newProduct.save();
@@ -187,7 +191,7 @@ const updateProduct = async (req, res) => {
       label,
       manufacturer,
       packageSize,
-      article, // 🆕 Артикул
+      article,
     } = body;
 
     const updateData = {
@@ -201,10 +205,9 @@ const updateProduct = async (req, res) => {
       label: label || "",
       manufacturer: manufacturer || "",
       packageSize: packageSize || "",
-      article: article || undefined, // 🆕 добавлено
+      article: article || undefined,
     };
 
-    // 🟢 Обновляем изображение, если загружено новое
     if (req.file) {
       updateData.image = `/uploads/${req.file.filename}`;
     } else if (body.image && body.image.startsWith("http")) {
@@ -242,10 +245,25 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// 🔹 Получить последние 8 товаров с тегом "Хит"
+const getHitProducts = async (req, res) => {
+  try {
+    const hits = await Product.find({ tag: "Хит" })
+      .sort({ createdAt: -1 })
+      .limit(8);
+
+    res.status(200).json(hits);
+  } catch (error) {
+    console.error("Ошибка при получении хитов:", error);
+    res.status(500).json({ message: "Ошибка при получении хитов" });
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  getHitProducts, // ✅ экспортируем новую функцию
 };
