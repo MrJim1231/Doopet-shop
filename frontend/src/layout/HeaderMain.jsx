@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logoIcon from "../assets/icons/logo.svg";
 import logoText from "../assets/icons/DooPet.svg";
 import menuIcon from "../assets/icons/Menu.svg";
@@ -11,62 +11,73 @@ function HeaderMain() {
     <div className="header__container">
       <div className="header__inner">
         {/* 🔹 Логотип */}
-        <Link to="/" className="header__logo">
+        <NavLink to="/" className="header__logo">
           <img src={logoIcon} alt="Логотип" className="header__logo-icon" />
           <img src={logoText} alt="DooPet" className="header__logo-text" />
-        </Link>
+        </NavLink>
 
         {/* 🔹 Навигация */}
         <nav className={`header__nav ${menuOpen ? "open" : ""}`}>
           <ul className="header__nav-list">
             <li>
-              <Link
-                to="/promotions"
-                className="header__nav-link"
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  `header__nav-link ${isActive ? "active" : ""}`
+                }
                 onClick={() => setMenuOpen(false)}
               >
-                Акции
-              </Link>
+                Главная
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/about"
-                className="header__nav-link"
+                className={({ isActive }) =>
+                  `header__nav-link ${isActive ? "active" : ""}`
+                }
                 onClick={() => setMenuOpen(false)}
               >
                 О нас
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/blog"
-                className="header__nav-link"
+                className={({ isActive }) =>
+                  `header__nav-link ${isActive ? "active" : ""}`
+                }
                 onClick={() => setMenuOpen(false)}
               >
                 Блог
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/delivery"
-                className="header__nav-link"
+                className={({ isActive }) =>
+                  `header__nav-link ${isActive ? "active" : ""}`
+                }
                 onClick={() => setMenuOpen(false)}
               >
                 Доставка и оплата
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/contacts"
-                className="header__nav-link"
+                className={({ isActive }) =>
+                  `header__nav-link ${isActive ? "active" : ""}`
+                }
                 onClick={() => setMenuOpen(false)}
               >
                 Контакты
-              </Link>
+              </NavLink>
             </li>
           </ul>
 
-          {/* Кнопка закрытия X (появляется только на мобилке) */}
+          {/* Кнопка закрытия X */}
           <button
             className="header__close-btn"
             aria-label="Закрыть меню"
@@ -85,7 +96,7 @@ function HeaderMain() {
           <img src={menuIcon} alt="Меню" className="header__menu-icon" />
         </button>
 
-        {/* 🔹 Затемнение фона при открытом меню */}
+        {/* 🔹 Затемнение фона */}
         {menuOpen && (
           <div
             className="header__overlay"
