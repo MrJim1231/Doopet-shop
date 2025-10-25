@@ -4,9 +4,8 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  position: relative;
   z-index: 1; // ниже .catalog
-  margin-top: -10px; // чтобы наехать вверх
+  margin-top: -10px;
 
   &__container {
     width: min(100% - 20px, $container-size);
@@ -15,12 +14,15 @@
 
   &__image-wrapper {
     width: 100%;
+    position: relative;
   }
 
   &__image {
     width: 100%;
     display: block;
     border-radius: 10px;
+    object-fit: cover;
+    transition: opacity 0.4s ease-in-out;
   }
 
   &__arrow {
@@ -46,11 +48,33 @@
     }
 
     &--left {
-      left: calc(50% - 650px - 20px); // 1260px/2 + отступ за контейнер
+      left: calc(50% - 650px - 20px);
     }
 
     &--right {
       right: calc(50% - 650px - 20px);
+    }
+  }
+
+  /* Навигационные точки */
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+
+    button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background-color: #ccc;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &.active {
+        background-color: $color-accent;
+      }
     }
   }
 }
