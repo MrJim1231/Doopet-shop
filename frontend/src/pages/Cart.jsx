@@ -80,7 +80,7 @@ function Cart() {
       <Breadcrumbs items={[{ label: "Корзина" }]} />
 
       <section className="cart">
-        <div className="container">
+        <div className="cart__container">
           <SectionHeader
             icon={graphicIcon}
             title="Корзина"
