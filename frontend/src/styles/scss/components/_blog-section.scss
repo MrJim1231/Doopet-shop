@@ -1,7 +1,6 @@
 @use "../abstracts" as *;
 
-.blog {
-  // padding: 60px 0;
+.blog-section {
   margin: 74px 0 60px 0;
 
   &__container {
@@ -16,7 +15,7 @@
     align-items: center;
     margin-bottom: 62px;
 
-    .blog__icon {
+    .blog-section__icon {
       width: 30px;
       height: 30px;
       margin-bottom: 12px;
@@ -46,7 +45,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    flex: 1 1 300px; // минимальная ширина 300px, карточка растёт
+    flex: 1 1 300px;
     max-width: 100%;
     box-sizing: border-box;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -107,7 +106,7 @@
       font-weight: 400;
       color: #27ae60;
       text-decoration: none;
-      padding: 34px 0px;
+      padding: 34px 0;
 
       &:hover {
         text-decoration: underline;
@@ -120,12 +119,11 @@
     margin-top: 40px;
     text-align: center;
 
-    .blog__button {
+    .blog-section__button {
       padding: 16px 55px;
       background-color: $color-accent;
       color: hsl(0, 0%, 100%);
       border: none;
-      // border-radius: 6px;
       font-size: 18px;
       font-weight: 400;
       transition: background-color 0.3s ease;

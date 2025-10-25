@@ -1,7 +1,7 @@
 @use "../abstracts" as *;
+@use "../mixins" as *;
 
 .cart {
-  // background-color: #f4f4f4;
   padding: 60px 0;
 
   &__container {
@@ -9,12 +9,7 @@
     margin-inline: auto;
   }
 
-  &__title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-align: center;
-  }
+  @include section-header(".cart__header");
 
   &__empty {
     text-align: center;

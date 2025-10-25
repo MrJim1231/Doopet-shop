@@ -7,7 +7,7 @@ import Categories from "../components/Categories";
 import PopularProducts from "../components/PopularProducts";
 import RecommendedProducts from "../components/RecommendedProducts";
 import Discounts from "../components/Discounts";
-import Blog from "../components/Blog";
+import BlogSection from "../components/BlogSection";
 import Partners from "../components/Partners";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
@@ -24,7 +24,7 @@ const Home = () => {
       <PopularProducts />
       <RecommendedProducts />
       <Discounts />
-      <Blog />
+      <BlogSection />
       <Partners />
       <SubscribeSection />
       <Footer />

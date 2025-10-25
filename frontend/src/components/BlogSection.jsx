@@ -30,30 +30,31 @@ function Blog() {
   ];
 
   return (
-    <section className="blog">
-      <div className="blog__container">
-        <div className="blog__header">
-          <img src={graphicIcon} alt="icon" className="blog__icon" />
-          <h2 className="blog__title">Блог</h2>
+    <section className="blog-section">
+      <div className="blog-section__container">
+        <div className="blog-section__header">
+          <img src={graphicIcon} alt="icon" className="blog-section__icon" />
+          <h2 className="blog-section__title">Блог</h2>
         </div>
 
-        <div className="blog__items">
+        <div className="blog-section__items">
           {blogPosts.map((post, index) => (
-            <div className="blog__item" key={index}>
-              <div className="blog__item-image-wrapper">
+            <div className="blog-section__item" key={index}>
+              <div className="blog-section__item-image-wrapper">
                 <img
                   src={post.img}
                   alt={post.title}
-                  className="blog__item-image"
+                  className="blog-section__item-image"
                 />
-                <div className="blog__item-date">{post.date}</div>
+                <div className="blog-section__item-date">{post.date}</div>
               </div>
 
-              {/* ✅ Новая обертка для контента */}
-              <div className="blog__item-content">
-                <h3 className="blog__item-title">{post.title}</h3>
-                <p className="blog__item-description">{post.description}</p>
-                <a href="#" className="blog__item-link">
+              <div className="blog-section__item-content">
+                <h3 className="blog-section__item-title">{post.title}</h3>
+                <p className="blog-section__item-description">
+                  {post.description}
+                </p>
+                <a href="#" className="blog-section__item-link">
                   Читать дальше ...
                 </a>
               </div>
@@ -61,8 +62,8 @@ function Blog() {
           ))}
         </div>
 
-        <div className="blog__footer">
-          <button className="blog__button">Все статьи</button>
+        <div className="blog-section__footer">
+          <button className="blog-section__button">Все статьи</button>
         </div>
       </div>
     </section>
