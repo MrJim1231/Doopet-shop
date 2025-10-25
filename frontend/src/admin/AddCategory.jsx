@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
-import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
 // import "./AddCategory.scss";
 
@@ -87,9 +85,7 @@ function AddCategory() {
 
   return (
     <>
-      <HeaderTopBar />
       <Header />
-      <CatalogBlock />
       <Breadcrumbs items={[{ label: "Добавить категорию" }]} />
 
       <div className="add-category">

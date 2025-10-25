@@ -1,107 +1,136 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
+import Header from "../layout/Header";
+import Breadcrumbs from "../layout/Breadcrumbs";
 
 function AddPost() {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     title: "",
     description: "",
     date: "",
-    image: "",
+    imageUrl: "",
   });
-
+  const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  // 🟢 изменение текстовых полей
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
     setStatus("");
   };
 
+  // 🟢 выбор файла
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setStatus("");
+  };
+
+  // 🟢 отправка формы
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.title ||
-      !formData.description ||
-      !formData.date ||
-      !formData.image
-    ) {
+    if (!form.title || !form.description || !form.date) {
       setStatus("Пожалуйста, заполните все поля.");
       return;
     }
 
+    setLoading(true);
+
     try {
-      const res = await fetch("http://localhost:5000/api/blogs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const data = new FormData();
+      data.append("title", form.title);
+      data.append("description", form.description);
+      data.append("date", form.date);
+
+      if (file) {
+        data.append("image", file);
+      } else if (form.imageUrl) {
+        data.append("image", form.imageUrl);
+      }
+
+      await axios.post("http://localhost:5000/api/blogs", data, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (res.ok) {
-        setStatus("Статья успешно добавлена!");
-        setFormData({ title: "", description: "", date: "", image: "" });
-      } else {
-        setStatus("Ошибка при добавлении статьи.");
-      }
+      setStatus("✅ Статья успешно добавлена!");
+      setForm({ title: "", description: "", date: "", imageUrl: "" });
+      setFile(null);
     } catch (err) {
-      setStatus("Сервер недоступен.");
+      setStatus("Ошибка при добавлении статьи.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="add-post">
-      <h2>Добавить статью</h2>
-      <form onSubmit={handleSubmit} className="add-post__form">
-        <label>
-          Заголовок:
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <>
+      <Header />
+      <Breadcrumbs items={[{ label: "Добавить статью" }]} />
 
-        <label>
-          Краткое описание:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="4"
-            required
-          />
-        </label>
+      <div className="add-post">
+        <div className="add-post__container">
+          <h2 className="add-post__title">Добавить статью</h2>
 
-        <label>
-          Дата:
-          <input
-            type="text"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            placeholder="например, 25 окт, 2025"
-            required
-          />
-        </label>
+          <form
+            className="add-post__form"
+            onSubmit={handleSubmit}
+            encType="multipart/form-data"
+          >
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Заголовок статьи"
+              className="add-post__input"
+            />
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              placeholder="Краткое описание"
+              rows="4"
+              className="add-post__input"
+            />
+            <input
+              type="text"
+              name="date"
+              value={form.date}
+              onChange={handleChange}
+              placeholder="Например: 25 окт, 2025"
+              className="add-post__input"
+            />
 
-        <label>
-          Ссылка на изображение:
-          <input
-            type="text"
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-            required
-          />
-        </label>
+            <div className="add-post__upload">
+              <label className="add-post__label">
+                <span>Загрузить изображение (файл или URL):</span>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="add-post__input"
+              />
+              <input
+                type="text"
+                name="imageUrl"
+                value={form.imageUrl}
+                onChange={handleChange}
+                placeholder="URL изображения (если не загружаете файл)"
+                className="add-post__input"
+              />
+            </div>
 
-        <button type="submit">Добавить</button>
+            <button type="submit" className="add-post__btn" disabled={loading}>
+              {loading ? "Добавление..." : "Добавить"}
+            </button>
 
-        {status && <p className="add-post__status">{status}</p>}
-      </form>
-    </div>
+            {status && <p className="add-post__status">{status}</p>}
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
 
