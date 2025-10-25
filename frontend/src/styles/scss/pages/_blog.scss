@@ -1,0 +1,13 @@
+@use "../abstracts" as *;
+@use "../mixins" as *;
+
+.blog {
+  padding: 60px 0;
+
+  &__container {
+    width: min(100% - 20px, 1200px);
+    margin-inline: auto;
+  }
+
+  @include section-header(".blog__header");
+}

@@ -2,6 +2,8 @@ import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
+import SectionHeader from "../components/SectionHeader";
+import graphicIcon from "../assets/icons/graphic-elements.svg";
 
 function Blog() {
   return (
@@ -10,6 +12,16 @@ function Blog() {
       <Header />
       <CatalogBlock />
       <Breadcrumbs items={[{ label: "Блог" }]} />
+
+      <section className="blog">
+        <div className="container">
+          <SectionHeader
+            icon={graphicIcon}
+            title="Блог"
+            baseClass="blog__header"
+          />
+        </div>
+      </section>
     </div>
   );
 }
