@@ -11,6 +11,7 @@
     z-index: 2;
   }
 
+  /* 🔹 Кнопка "Каталог" */
   &__menu {
     background-color: $color-accent;
     border-radius: 5px;
@@ -21,6 +22,11 @@
     gap: 18px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
+
+    // &:hover {
+    //   background-color: darken($color-accent, 5%);
+    // }
   }
 
   &__menu-btn {
@@ -39,6 +45,7 @@
     font-weight: 500;
   }
 
+  /* 🔹 Поле поиска */
   &__search {
     width: 745px;
     background-color: $color-gray;
@@ -73,6 +80,11 @@
     }
   }
 
+  /* 🔹 Корзина */
+  &__cart-wrapper {
+    position: relative; // ⬅ чтобы мини-корзина позиционировалась от неё
+  }
+
   &__cart {
     background-color: $color-accent;
     border-radius: 5px;
@@ -83,6 +95,11 @@
     gap: 10px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
+
+    // &:hover {
+    //   background-color: darken($color-accent, 5%);
+    // }
   }
 
   &__cart-btn {
@@ -97,5 +114,38 @@
 
   &__cart-text {
     font-size: 15px;
+  }
+
+  /* 🔸 Мини-корзина при наведении */
+  .cart-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    z-index: 15;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    width: 340px;
+    padding: 15px;
+    animation: fadeIn 0.2s ease forwards;
+    overflow: hidden;
+
+    @media (max-width: 480px) {
+      width: 300px;
+      right: -20px;
+    }
+  }
+
+  /* 🔹 Анимация появления */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
