@@ -1,7 +1,5 @@
 import { useState } from "react";
 import bannerImg from "../assets/images/banner-desktop.png";
-import bannerImg2 from "../assets/images/banner-desktop.png";
-import bannerImg3 from "../assets/images/banner-desktop.png";
 import arrowLeft from "../assets/icons/arrow-left.svg";
 import arrowRight from "../assets/icons/arrow-right.svg";
 
@@ -37,17 +35,26 @@ function Banner() {
         <img src={arrowLeft} alt="Назад" />
       </button>
 
-      {/* Контейнер с изображением */}
       <div className="banner__container">
-        <div className="banner__image-wrapper">
-          <img
-            src={slides[currentIndex].img}
-            alt={`Слайд ${currentIndex + 1}`}
-            className="banner__image"
-          />
+        {/* Слайдер-трек */}
+        <div
+          className="banner__track"
+          style={{
+            transform: `translateX(-${currentIndex * 100}%)`,
+          }}
+        >
+          {slides.map((slide) => (
+            <div className="banner__slide" key={slide.id}>
+              <img
+                src={slide.img}
+                alt={`Слайд ${slide.id}`}
+                className="banner__image"
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Точки-переключатели */}
+        {/* Навигационные точки */}
         <div className="banner__dots">
           {slides.map((_, index) => (
             <button
