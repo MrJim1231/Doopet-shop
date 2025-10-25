@@ -1,93 +1,140 @@
 @use "../abstracts" as *;
 
 .auth {
-  background-color: #fff;
-  padding: 60px 0 80px;
+  background: linear-gradient(135deg, #f8fafc, #eef1f6);
+  padding: 70px 0 100px;
+  font-family: "Inter", sans-serif;
 
   &__container {
-    width: min(100% - 20px, 450px);
+    width: min(100% - 20px, 460px);
     margin-inline: auto;
     text-align: center;
   }
 
+  /* 🔹 Вкладки */
   &__tabs {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
     gap: 10px;
+    margin-bottom: 35px;
   }
 
   &__tab {
     flex: 1;
     padding: 12px 0;
-    border: 1px solid #ddd;
-    background: #f9f9f9;
     font-size: 16px;
     font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s;
-    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
     &.active {
       background: $color-accent;
       color: #fff;
       border-color: $color-accent;
+      box-shadow: 0 4px 10px rgba($color-accent, 0.3);
+      transform: translateY(-1px);
     }
 
     &:hover:not(.active) {
-      background: #efefef;
+      background: #f2f4f7;
     }
   }
 
+  /* 🔹 Контейнер формы */
   &__content {
-    background: #fafafa;
-    border-radius: 10px;
-    padding: 30px;
-    border: 1px solid #e5e5e5;
+    background: #fff;
+    border-radius: 14px;
+    padding: 40px 35px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+    border: 1px solid #f0f0f0;
   }
 
+  /* 🔹 Форма */
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-  }
+    gap: 20px;
 
-  &__input {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-    transition: 0.3s;
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #dcdfe6;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fafbfc;
+      transition: 0.25s ease;
 
-    &:focus {
-      border-color: $color-accent;
-      outline: none;
+      &:focus {
+        border-color: $color-accent;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba($color-accent, 0.15);
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #aaa;
+      }
+    }
+
+    button {
+      background: $color-accent;
+      color: #fff;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba($color-accent, 0.25);
+      transition: all 0.25s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba($color-accent, 0.35);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 8px rgba($color-accent, 0.25);
+      }
     }
   }
 
-  &__btn {
-    background-color: $color-accent;
-    color: #fff;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-
-    // &:hover {
-    //   background-color: darken($color-accent, 8%);
-    // }
-  }
-
+  /* 🔹 Ошибки и уведомления */
   &__error {
-    color: #e53935;
+    color: #e74c3c;
+    background: #fdecea;
+    border: 1px solid #f5b7b1;
+    border-radius: 6px;
+    padding: 8px 12px;
     font-size: 14px;
+    text-align: left;
   }
 
   &__message {
-    color: #43a047;
+    color: #2ecc71;
+    background: #eafaf0;
+    border: 1px solid #b8e8c6;
+    border-radius: 6px;
+    padding: 8px 12px;
     font-size: 14px;
+    text-align: left;
+  }
+
+  /* 🔹 Адаптив */
+  @media (max-width: 480px) {
+    &__content {
+      padding: 28px 22px;
+    }
+
+    &__tab {
+      font-size: 15px;
+      padding: 10px 0;
+    }
   }
 }
