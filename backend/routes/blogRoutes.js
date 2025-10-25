@@ -1,17 +1,17 @@
-import express from "express";
-import multer from "multer";
-import path from "path";
-import {
+const express = require("express");
+const router = express.Router();
+const multer = require("multer");
+const path = require("path");
+
+const {
   getAllBlogs,
   getBlogById,
   createBlog,
   updateBlog,
   deleteBlog,
-} from "../controllers/blogController.js";
+} = require("../controllers/blogController");
 
-const router = express.Router();
-
-// 📂 Настраиваем хранилище для загрузок
+// 📂 Настройка хранилища для загрузок
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/"); // Папка для сохранения
@@ -34,8 +34,8 @@ const upload = multer({ storage, fileFilter });
 // 🟢 Маршруты
 router.get("/", getAllBlogs);
 router.get("/:id", getBlogById);
-router.post("/", upload.single("image"), createBlog); // ← с загрузкой
-router.put("/:id", upload.single("image"), updateBlog); // ← с заменой изображения
-router.delete("/:id", deleteBlog);
+router.post("/", upload.single("image"), createBlog); // загрузка нового поста
+router.put("/:id", upload.single("image"), updateBlog); // обновление поста
+router.delete("/:id", deleteBlog); // удаление поста
 
-export default router;
+module.exports = router;

@@ -1,18 +1,26 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-require("dotenv").config();
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import cors from "cors";
+import path from "path";
+import fs from "fs";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 
-const categoryRoutes = require("./routes/categoryRoutes");
-const productRoutes = require("./routes/productRoutes");
-const userRoutes = require("./routes/userRoutes");
-const cartRoutes = require("./routes/cartRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const favoriteRoutes = require("./routes/favoriteRoutes");
+// Импорт роутов
+import categoryRoutes from "./routes/categoryRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import favoriteRoutes from "./routes/favoriteRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
+
+dotenv.config();
+
+// 📁 Получаем __dirname (в ES-модулях его нет)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,7 +35,7 @@ app.use(bodyParser.json());
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
-  console.log("Папка uploads создана");
+  console.log("📂 Папка uploads создана");
 }
 
 // ✅ Раздаём папку uploads как статическую
@@ -36,10 +44,12 @@ app.use("/uploads", express.static(uploadDir));
 // ✅ Подключение к MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("Подключение к базе данных успешно"))
-  .catch((error) => console.log("Ошибка подключения к базе данных:", error));
+  .then(() => console.log("✅ Подключение к базе данных успешно"))
+  .catch((error) =>
+    console.error("❌ Ошибка подключения к базе данных:", error)
+  );
 
-// ✅ Основные маршруты
+// ✅ Подключение маршрутов
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);

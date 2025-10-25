@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
+// Модель блога
 const blogSchema = new mongoose.Schema(
   {
     title: {
@@ -33,13 +34,12 @@ const blogSchema = new mongoose.Schema(
 // ✅ Виртуальное поле для полного URL изображения
 blogSchema.virtual("imageUrl").get(function () {
   if (!this.image) return "";
-  if (this.image.startsWith("http")) return this.image; // если это внешний URL — вернуть как есть
+  if (this.image.startsWith("http")) return this.image;
 
-  // иначе формируем полный путь к локальному файлу
   const baseUrl = process.env.BASE_URL || "http://localhost:5000";
-  return `${baseUrl}${this.image.startsWith("/") ? "" : "/"}${this.image}`;
+  return `${baseUrl}${this.image}`;
 });
 
 // ✅ Экспорт модели
 const Blog = mongoose.models.Blog || mongoose.model("Blog", blogSchema);
-export default Blog;
+module.exports = Blog;

@@ -1,23 +1,21 @@
-import Blog from "../models/Blog.js";
-import path from "path";
+const Blog = require("../models/blog");
+const path = require("path");
 
 // 🟢 Получить все записи блога
-export const getAllBlogs = async (req, res) => {
+const getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
     res.status(200).json(blogs);
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Ошибка при получении списка блогов",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Ошибка при получении списка блогов",
+      error: error.message,
+    });
   }
 };
 
 // 🟢 Получить запись по ID
-export const getBlogById = async (req, res) => {
+const getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) {
@@ -25,14 +23,15 @@ export const getBlogById = async (req, res) => {
     }
     res.status(200).json(blog);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Ошибка при получении блога", error: error.message });
+    res.status(500).json({
+      message: "Ошибка при получении блога",
+      error: error.message,
+    });
   }
 };
 
 // 🟢 Создать новую запись блога
-export const createBlog = async (req, res) => {
+const createBlog = async (req, res) => {
   try {
     const body = req.body || {};
     const { title, description, date, image } = body;
@@ -42,13 +41,9 @@ export const createBlog = async (req, res) => {
     }
 
     let imagePath = null;
-
-    // если загрузили файл — сохраняем локальный путь
     if (req.file) {
       imagePath = `/uploads/${req.file.filename}`;
-    }
-    // если передали внешний URL
-    else if (image && image.startsWith("http")) {
+    } else if (image && image.startsWith("http")) {
       imagePath = image;
     }
 
@@ -59,8 +54,8 @@ export const createBlog = async (req, res) => {
       image: imagePath,
     });
 
-    const created = await newBlog.save();
-    res.status(201).json(created);
+    const createdBlog = await newBlog.save();
+    res.status(201).json(createdBlog);
   } catch (error) {
     console.error("Ошибка при создании блога:", error);
     res.status(500).json({ message: "Ошибка сервера при создании блога" });
@@ -68,11 +63,9 @@ export const createBlog = async (req, res) => {
 };
 
 // 🟢 Обновить блог
-export const updateBlog = async (req, res) => {
+const updateBlog = async (req, res) => {
   try {
     const updates = { ...req.body };
-
-    // если загружают новое изображение
     if (req.file) {
       updates.image = `/uploads/${req.file.filename}`;
     }
@@ -87,23 +80,33 @@ export const updateBlog = async (req, res) => {
 
     res.status(200).json(updatedBlog);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Ошибка при обновлении блога", error: error.message });
+    res.status(500).json({
+      message: "Ошибка при обновлении блога",
+      error: error.message,
+    });
   }
 };
 
 // 🟢 Удалить блог
-export const deleteBlog = async (req, res) => {
+const deleteBlog = async (req, res) => {
   try {
-    const deleted = await Blog.findByIdAndDelete(req.params.id);
-    if (!deleted) {
+    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    if (!deletedBlog) {
       return res.status(404).json({ message: "Блог не найден" });
     }
     res.status(200).json({ message: "Блог успешно удалён" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Ошибка при удалении блога", error: error.message });
+    res.status(500).json({
+      message: "Ошибка при удалении блога",
+      error: error.message,
+    });
   }
+};
+
+module.exports = {
+  getAllBlogs,
+  getBlogById,
+  createBlog,
+  updateBlog,
+  deleteBlog,
 };
