@@ -1,73 +1,84 @@
-import React from "react";
-import catDogImg1 from "../assets/images/cat-dog.jpg";
-import catDogImg2 from "../assets/images/cat-dog2.jpg";
-import catDogImg3 from "../assets/images/cat-dog3.jpg";
+// src/components/BlogSection.jsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import SectionHeader from "./SectionHeader";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 
-function Blog() {
-  const blogPosts = [
-    {
-      img: catDogImg1,
-      date: "30 сен, 2022",
-      title: "Уход за кошками и собаками",
-      description:
-        "Советы и рекомендации от опытных владельцев питомцев и экспертов в области ветеринарии...",
-    },
-    {
-      img: catDogImg2,
-      date: "30 сен, 2022",
-      title: "Хвостатые Друзья",
-      description:
-        "Наши хвостатые друзья — искренние спутники, которые приносят радость и тепло в наши жизни...",
-    },
-    {
-      img: catDogImg3,
-      date: "30 сен, 2022",
-      title: "Как выгуливать собак?",
-      description:
-        "Узнайте секреты успешного выгула вашей собаки. В нашем блоге мы предоставляем практические...",
-    },
-  ];
+function BlogSection() {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/blogs");
+        setBlogs(res.data);
+      } catch (error) {
+        console.error("Ошибка при загрузке блога:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   return (
-    <section className="blog-section">
-      <div className="blog-section__container">
-        <div className="blog-section__header">
-          <img src={graphicIcon} alt="icon" className="blog-section__icon" />
-          <h2 className="blog-section__title">Блог</h2>
+    <>
+      <section className="blog">
+        <div className="container">
+          <SectionHeader
+            icon={graphicIcon}
+            title="Блог"
+            baseClass="blog__header"
+          />
         </div>
+      </section>
 
-        <div className="blog-section__items">
-          {blogPosts.map((post, index) => (
-            <div className="blog-section__item" key={index}>
-              <div className="blog-section__item-image-wrapper">
-                <img
-                  src={post.img}
-                  alt={post.title}
-                  className="blog-section__item-image"
-                />
-                <div className="blog-section__item-date">{post.date}</div>
-              </div>
+      <section className="blog__content">
+        <div className="blog__container">
+          {loading ? (
+            <p>Загрузка...</p>
+          ) : blogs.length === 0 ? (
+            <p>Пока нет статей</p>
+          ) : (
+            <div className="blog__items">
+              {blogs.map((post) => (
+                <div className="blog__item" key={post._id}>
+                  <div className="blog__item-image-wrapper">
+                    <img
+                      src={post.imageUrl || post.image || "/no-image.jpg"}
+                      alt={post.title}
+                      className="blog__item-image"
+                    />
+                    {post.date && (
+                      <div className="blog__item-date">{post.date}</div>
+                    )}
+                  </div>
 
-              <div className="blog-section__item-content">
-                <h3 className="blog-section__item-title">{post.title}</h3>
-                <p className="blog-section__item-description">
-                  {post.description}
-                </p>
-                <a href="#" className="blog-section__item-link">
-                  Читать дальше ...
-                </a>
-              </div>
+                  <div className="blog__item-content">
+                    <h3 className="blog__item-title">{post.title}</h3>
+                    <p className="blog__item-description">
+                      {post.description?.slice(0, 140)}...
+                    </p>
+                    {/* ✅ заменили a на Link */}
+                    <Link to={`/blog/${post._id}`} className="blog__item-link">
+                      Читать дальше ...
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          )}
 
-        <div className="blog-section__footer">
-          <button className="blog-section__button">Все статьи</button>
+          <div className="blog__footer">
+            <button className="blog__button">Все статьи</button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
-export default Blog;
+export default BlogSection;

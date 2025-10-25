@@ -9,11 +9,12 @@ import Delivery from "./pages/Delivery";
 import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
-import AddPost from "./admin/AddPost"; // ✅ добавлен импорт
+import AddPost from "./admin/AddPost";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import Cart from "./pages/Cart";
 import Account from "./pages/Account";
 import Favorites from "./pages/Favorites";
+import Post from "./pages/Post"; // ✅ страница одной статьи
 import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
@@ -22,18 +23,21 @@ export default function App() {
       <Router>
         <div className="app">
           <Routes>
+            {/* Основные страницы */}
             <Route path="/" element={<Home />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/promotions" element={<Stock />} />
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<Post />} /> {/* ✅ исправлено */}
             <Route path="/delivery" element={<Delivery />} />
             <Route path="/contacts" element={<Contacts />} />
+            {/* Админка */}
             <Route path="/admin/add-category" element={<AddCategory />} />
             <Route path="/admin/add-product" element={<AddProduct />} />
-            <Route path="/admin/add-post" element={<AddPost />} />{" "}
-            {/* ✅ новый маршрут */}
+            <Route path="/admin/add-post" element={<AddPost />} />
+            {/* Прочее */}
             <Route path="/category/:id" element={<CategoryProducts />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/account" element={<Account />} />

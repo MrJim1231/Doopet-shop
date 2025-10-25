@@ -1,0 +1,142 @@
+.post {
+  padding: 50px 0;
+  background-color: #fafafa;
+
+  &__container {
+    width: min(100% - 20px, 1200px);
+    margin: 0 auto;
+  }
+
+  &__main {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+    }
+  }
+
+  /* Левая часть */
+  &__content {
+    flex: 3;
+  }
+
+  &__image-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  &__image {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  &__date {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  &__title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  &__text {
+    line-height: 1.6;
+    color: #333;
+    font-size: 17px;
+  }
+
+  /* Правая часть */
+  &__sidebar {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    height: fit-content;
+  }
+
+  &__sidebar-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  &__search {
+    margin-bottom: 30px;
+  }
+
+  &__search-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+
+    input {
+      flex: 1;
+      padding: 8px 10px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      background-color: #4b7bec;
+      color: #fff;
+      border: none;
+      padding: 8px 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #3867d6;
+      }
+    }
+  }
+
+  &__others-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__other-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+
+    &:hover .post__other-title {
+      color: #4b7bec;
+    }
+  }
+
+  &__other-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  &__other-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  &__other-date {
+    font-size: 13px;
+    color: #888;
+  }
+}
