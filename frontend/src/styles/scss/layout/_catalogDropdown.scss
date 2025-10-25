@@ -1,0 +1,111 @@
+@use "../abstracts" as *;
+
+.catalog-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  list-style: none;
+  padding: 10px 0;
+  z-index: 1000;
+  width: 220px;
+  animation: fadeIn 0.25s ease;
+
+  &__menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    position: relative;
+
+    &:hover > .catalog-dropdown__submenu {
+      display: block;
+    }
+  }
+
+  &__link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    color: #1e1e1e;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $color-accent;
+      color: #fff;
+    }
+  }
+
+  &__arrow {
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  /* 🔹 Подменю справа */
+  &__submenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    width: 220px;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    animation: slideIn 0.25s ease;
+  }
+
+  &__submenu-link {
+    display: block;
+    padding: 10px 16px;
+    color: #1e1e1e;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $color-accent;
+      color: #fff;
+    }
+  }
+
+  &__empty {
+    padding: 10px 16px;
+    text-align: center;
+    color: #999;
+  }
+}
+
+/* ---------- Анимации ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
