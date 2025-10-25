@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-// Модель категории
+// 🟢 Модель категории
 const categorySchema = new mongoose.Schema(
   {
     name: {
@@ -11,7 +11,7 @@ const categorySchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      trim: true, // Убирает лишние пробелы
+      trim: true,
       default: "",
     },
     image: {
@@ -40,5 +40,4 @@ categorySchema.virtual("imageUrl").get(function () {
 // ✅ Экспорт модели
 const Category =
   mongoose.models.Category || mongoose.model("Category", categorySchema);
-
-module.exports = Category;
+export default Category;

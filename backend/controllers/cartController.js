@@ -1,8 +1,8 @@
-const Cart = require("../models/Cart");
-const Product = require("../models/Product");
+import Cart from "../models/Cart.js";
+import Product from "../models/Product.js";
 
-// Получить корзину (по userId или sessionId)
-const getCart = async (req, res) => {
+// 🟢 Получить корзину (по userId или sessionId)
+export const getCart = async (req, res) => {
   try {
     const { userId, sessionId } = req.query;
 
@@ -23,8 +23,8 @@ const getCart = async (req, res) => {
   }
 };
 
-// Добавить товар
-const addToCart = async (req, res) => {
+// 🟢 Добавить товар в корзину
+export const addToCart = async (req, res) => {
   try {
     const { userId, sessionId, productId, quantity } = req.body;
 
@@ -66,8 +66,8 @@ const addToCart = async (req, res) => {
   }
 };
 
-// Обновить количество
-const updateQuantity = async (req, res) => {
+// 🟢 Обновить количество товара
+export const updateQuantity = async (req, res) => {
   try {
     const { userId, sessionId, productId, quantity } = req.body;
 
@@ -98,8 +98,8 @@ const updateQuantity = async (req, res) => {
   }
 };
 
-// Удалить товар
-const removeFromCart = async (req, res) => {
+// 🟢 Удалить товар из корзины
+export const removeFromCart = async (req, res) => {
   try {
     const { userId, sessionId, productId } = req.body;
 
@@ -123,8 +123,8 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-// Очистить корзину
-const clearCart = async (req, res) => {
+// 🟢 Очистить корзину
+export const clearCart = async (req, res) => {
   try {
     const { userId, sessionId } = req.body;
 
@@ -144,13 +144,4 @@ const clearCart = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
-
-// Единый экспорт всех функций
-module.exports = {
-  getCart,
-  addToCart,
-  updateQuantity,
-  removeFromCart,
-  clearCart,
 };

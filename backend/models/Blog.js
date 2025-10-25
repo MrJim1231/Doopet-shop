@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-// Модель блога
+// 🟢 Модель блога
 const blogSchema = new mongoose.Schema(
   {
     title: {
@@ -42,4 +42,4 @@ blogSchema.virtual("imageUrl").get(function () {
 
 // ✅ Экспорт модели
 const Blog = mongoose.models.Blog || mongoose.model("Blog", blogSchema);
-module.exports = Blog;
+export default Blog;

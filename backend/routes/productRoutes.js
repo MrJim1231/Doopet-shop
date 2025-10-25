@@ -1,17 +1,18 @@
-const express = require("express");
-const router = express.Router();
-const multer = require("multer");
-const path = require("path");
+import express from "express";
+import multer from "multer";
+import path from "path";
 
-const {
+import {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
-  getHitProducts, // ✅ добавили импорт
-  getRecommendedProducts, // ✅
-} = require("../controllers/productController");
+  getHitProducts,
+  getRecommendedProducts,
+} from "../controllers/productController.js";
+
+const router = express.Router();
 
 // 🟢 Настройка хранения изображений (uploads/)
 const storage = multer.diskStorage({
@@ -38,13 +39,13 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // максимум 5 МБ
 });
 
-// 🔹 Маршруты
-router.get("/hits", getHitProducts); // ✅ новый маршрут (должен идти ДО :id)
-router.get("/recommended", getRecommendedProducts); // ✅ новый маршрут
+// 🔹 Маршруты продуктов
+router.get("/hits", getHitProducts); // ✅ до :id
+router.get("/recommended", getRecommendedProducts);
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.post("/", upload.single("image"), createProduct);
 router.put("/:id", upload.single("image"), updateProduct);
 router.delete("/:id", deleteProduct);
 
-module.exports = router;
+export default router;

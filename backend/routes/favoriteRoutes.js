@@ -1,18 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const {
+import express from "express";
+import {
   getFavorites,
   toggleFavorite,
   isFavorite,
-} = require("../controllers/favoriteController");
+} from "../controllers/favoriteController.js";
 
-// 🔹 Получить все избранные для пользователя
+const router = express.Router();
+
+// 💖 Получить все избранные для пользователя
 router.get("/:userId", getFavorites);
 
-// 🔹 Добавить / удалить из избранного (toggle)
+// 💫 Добавить / удалить из избранного (toggle)
 router.post("/", toggleFavorite);
 
-// 🔹 Проверить, находится ли товар в избранном
+// 🔍 Проверить, находится ли товар в избранном
 router.get("/check/:userId/:productId", isFavorite);
 
-module.exports = router;
+export default router;

@@ -1,9 +1,9 @@
-const Product = require("../models/Product");
-const Category = require("../models/Category");
-const path = require("path");
+import Product from "../models/Product.js";
+import Category from "../models/Category.js";
+import path from "path";
 
-// Получить все продукты (с фильтрами, пагинацией и сортировкой)
-const getProducts = async (req, res) => {
+// 🟢 Получить все продукты (с фильтрами, пагинацией и сортировкой)
+export const getProducts = async (req, res) => {
   try {
     const filter = {};
 
@@ -94,8 +94,8 @@ const getProducts = async (req, res) => {
   }
 };
 
-// Получить продукт по ID
-const getProductById = async (req, res) => {
+// 🟢 Получить продукт по ID
+export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate(
       "categoryId"
@@ -110,8 +110,8 @@ const getProductById = async (req, res) => {
   }
 };
 
-// Создать новый продукт (с загрузкой изображения)
-const createProduct = async (req, res) => {
+// 🟢 Создать новый продукт
+export const createProduct = async (req, res) => {
   try {
     const body = req.body || {};
     const {
@@ -176,8 +176,8 @@ const createProduct = async (req, res) => {
   }
 };
 
-// Обновить продукт
-const updateProduct = async (req, res) => {
+// 🟢 Обновить продукт
+export const updateProduct = async (req, res) => {
   try {
     const body = req.body || {};
     const {
@@ -231,8 +231,8 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// Удалить продукт
-const deleteProduct = async (req, res) => {
+// 🟢 Удалить продукт
+export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
@@ -246,7 +246,7 @@ const deleteProduct = async (req, res) => {
 };
 
 // 🔹 Получить последние 8 товаров с тегом "Хит"
-const getHitProducts = async (req, res) => {
+export const getHitProducts = async (req, res) => {
   try {
     const hits = await Product.find({ tag: "Хит" })
       .sort({ createdAt: -1 })
@@ -259,8 +259,8 @@ const getHitProducts = async (req, res) => {
   }
 };
 
-// 🔹 Рекомендуемые товары (последние 8, например с label: "Новинка")
-const getRecommendedProducts = async (req, res) => {
+// 🔹 Рекомендуемые товары (например, label: "Новинка")
+export const getRecommendedProducts = async (req, res) => {
   try {
     const recommended = await Product.find({ label: "Новинка" })
       .sort({ createdAt: -1 })
@@ -270,14 +270,4 @@ const getRecommendedProducts = async (req, res) => {
     console.error("Ошибка при получении рекомендуемых товаров:", error);
     res.status(500).json({ message: "Ошибка при получении рекомендуемых" });
   }
-};
-
-module.exports = {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getHitProducts, // ✅ экспортируем новую функцию
-  getRecommendedProducts, // ✅
 };

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-// Модель продукта
+// 🟢 Модель продукта
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -60,14 +60,12 @@ const productSchema = new mongoose.Schema(
       default: "",
       set: (v) => (v ? v.toString().replace(/\s+/g, "").toLowerCase() : ""),
     },
-
     // 🆕 Артикул (SKU)
     article: {
       type: String,
       trim: true,
       unique: true,
       default: function () {
-        // генерируем, если не задан вручную
         return "PRD-" + Math.floor(100000 + Math.random() * 900000);
       },
     },
@@ -79,7 +77,7 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-// ✅ Полный URL изображения
+// ✅ Виртуальное поле для полного URL изображения
 productSchema.virtual("imageUrl").get(function () {
   if (!this.image) return "";
   if (this.image.startsWith("http")) return this.image;
@@ -87,7 +85,7 @@ productSchema.virtual("imageUrl").get(function () {
   return `${baseUrl}${this.image}`;
 });
 
+// ✅ Экспорт модели
 const Product =
   mongoose.models.Product || mongoose.model("Product", productSchema);
-
-module.exports = Product;
+export default Product;

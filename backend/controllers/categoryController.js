@@ -1,8 +1,8 @@
-const Category = require("../models/category");
-const path = require("path");
+import Category from "../models/category.js";
+import path from "path";
 
-// Получить все категории
-const getCategories = async (req, res) => {
+// 🟢 Получить все категории
+export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find();
     res.status(200).json(categories);
@@ -11,8 +11,8 @@ const getCategories = async (req, res) => {
   }
 };
 
-// Получить категорию по ID
-const getCategoryById = async (req, res) => {
+// 🟢 Получить категорию по ID
+export const getCategoryById = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
     if (!category) {
@@ -24,10 +24,9 @@ const getCategoryById = async (req, res) => {
   }
 };
 
-// Создать новую категорию
-const createCategory = async (req, res) => {
+// 🟢 Создать новую категорию
+export const createCategory = async (req, res) => {
   try {
-    // 🟢 Проверка: если req.body пустой — создаём пустой объект
     const body = req.body || {};
     const { name, description, image } = body;
 
@@ -61,8 +60,8 @@ const createCategory = async (req, res) => {
   }
 };
 
-// Обновить категорию
-const updateCategory = async (req, res) => {
+// 🟢 Обновить категорию
+export const updateCategory = async (req, res) => {
   try {
     const updates = { ...req.body };
 
@@ -84,8 +83,8 @@ const updateCategory = async (req, res) => {
   }
 };
 
-// Удалить категорию
-const deleteCategory = async (req, res) => {
+// 🟢 Удалить категорию
+export const deleteCategory = async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
     if (!category) {
@@ -95,12 +94,4 @@ const deleteCategory = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
-
-module.exports = {
-  getCategories,
-  getCategoryById,
-  createCategory,
-  updateCategory,
-  deleteCategory,
 };

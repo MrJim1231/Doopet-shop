@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,13 +25,10 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Добавляет createdAt и updatedAt
+    timestamps: true, // createdAt и updatedAt
   }
 );
 
-// Убедитесь, что индекс на поле username больше не существует
-
-// const User = mongoose.model("User", userSchema);
+// ✅ Экспорт модели
 const User = mongoose.models.User || mongoose.model("User", userSchema);
-
-module.exports = User;
+export default User;

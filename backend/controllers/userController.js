@@ -1,21 +1,21 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-// Получить всех пользователей
-const getUsers = async (req, res) => {
+// 🟢 Получить всех пользователей
+export const getUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-password"); // 👈 скрываем пароль
+    const users = await User.find().select("-password"); // скрываем пароль
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Получить пользователя по ID
-const getUserById = async (req, res) => {
+// 🟢 Получить пользователя по ID
+export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password"); // 👈 скрываем пароль
+    const user = await User.findById(req.params.id).select("-password");
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
@@ -25,59 +25,62 @@ const getUserById = async (req, res) => {
   }
 };
 
-// Создать нового пользователя
-const createUser = async (req, res) => {
+// 🟢 Создать нового пользователя
+export const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: "Пожалуйста, заполните все поля" });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const newUser = new User({
-    name,
-    email,
-    password: hashedPassword,
-    role: role || "user",
-  });
-
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role: role || "user",
+    });
+
     const createdUser = await newUser.save();
     const userToReturn = createdUser.toObject();
-    delete userToReturn.password; // 👈 не отдаём пароль в ответе
+    delete userToReturn.password; // не отдаём пароль в ответе
+
     res.status(201).json(userToReturn);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Обновить пользователя
-const updateUser = async (req, res) => {
+// 🟢 Обновить пользователя
+export const updateUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   const updateData = { name, email, role };
 
-  if (password) {
-    updateData.password = await bcrypt.hash(password, 10);
-  }
-
   try {
+    if (password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
     ).select("-password");
+
     if (!updatedUser) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
+
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Удалить пользователя
-const deleteUser = async (req, res) => {
+// 🟢 Удалить пользователя
+export const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
@@ -89,8 +92,8 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// Логин пользователя (генерация токена + данные юзера)
-const loginUser = async (req, res) => {
+// 🟢 Логин пользователя (генерация токена + данные юзера)
+export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -114,7 +117,6 @@ const loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    // 👇 возвращаем токен и данные юзера (без пароля)
     res.status(200).json({
       token,
       user: {
@@ -129,10 +131,10 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Профиль текущего пользователя
-const getProfile = async (req, res) => {
+// 🟢 Профиль текущего пользователя
+export const getProfile = async (req, res) => {
   try {
-    // userId мы получаем из middleware authMiddleware
+    // userId получаем из middleware (authMiddleware)
     const user = await User.findById(req.user.userId).select("-password");
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
@@ -141,14 +143,4 @@ const getProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
-
-module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-  loginUser,
-  getProfile, // 👈 добавляем
 };

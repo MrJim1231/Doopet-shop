@@ -1,8 +1,8 @@
-const Blog = require("../models/blog");
-const path = require("path");
+import Blog from "../models/blog.js";
+import path from "path";
 
 // 🟢 Получить все записи блога
-const getAllBlogs = async (req, res) => {
+export const getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
     res.status(200).json(blogs);
@@ -15,7 +15,7 @@ const getAllBlogs = async (req, res) => {
 };
 
 // 🟢 Получить запись по ID
-const getBlogById = async (req, res) => {
+export const getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) {
@@ -31,7 +31,7 @@ const getBlogById = async (req, res) => {
 };
 
 // 🟢 Создать новую запись блога
-const createBlog = async (req, res) => {
+export const createBlog = async (req, res) => {
   try {
     const body = req.body || {};
     const { title, description, date, image } = body;
@@ -63,7 +63,7 @@ const createBlog = async (req, res) => {
 };
 
 // 🟢 Обновить блог
-const updateBlog = async (req, res) => {
+export const updateBlog = async (req, res) => {
   try {
     const updates = { ...req.body };
     if (req.file) {
@@ -88,7 +88,7 @@ const updateBlog = async (req, res) => {
 };
 
 // 🟢 Удалить блог
-const deleteBlog = async (req, res) => {
+export const deleteBlog = async (req, res) => {
   try {
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
     if (!deletedBlog) {
@@ -101,12 +101,4 @@ const deleteBlog = async (req, res) => {
       error: error.message,
     });
   }
-};
-
-module.exports = {
-  getAllBlogs,
-  getBlogById,
-  createBlog,
-  updateBlog,
-  deleteBlog,
 };

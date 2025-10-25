@@ -1,22 +1,23 @@
-const express = require("express");
-const router = express.Router();
-const {
+import express from "express";
+import {
   createOrder,
   getOrders,
   getOrderById,
   updateOrderStatus,
-} = require("../controllers/ordersController");
+} from "../controllers/ordersController.js";
 
-// Создать заказ
+const router = express.Router();
+
+// 🛒 Создать заказ
 router.post("/", createOrder);
 
-// Получить все заказы
+// 📦 Получить все заказы
 router.get("/", getOrders);
 
-// Получить один заказ по id
+// 🔍 Получить один заказ по ID
 router.get("/:id", getOrderById);
 
-// Обновить статус заказа
+// 🔁 Обновить статус заказа
 router.put("/:id/status", updateOrderStatus);
 
-module.exports = router;
+export default router;

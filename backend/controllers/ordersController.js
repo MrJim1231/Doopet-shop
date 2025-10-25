@@ -1,13 +1,13 @@
-const Order = require("../models/Order");
-const Cart = require("../models/Cart");
-const Product = require("../models/Product");
+import Order from "../models/Order.js";
+import Cart from "../models/Cart.js";
+import Product from "../models/Product.js";
 
-// Создать заказ
-const createOrder = async (req, res) => {
+// 🟢 Создать заказ
+export const createOrder = async (req, res) => {
   try {
     const { userId, sessionId, customer } = req.body;
 
-    // Получаем корзину пользователя/гостя
+    // Получаем корзину пользователя или гостя
     const cart = userId
       ? await Cart.findOne({ userId }).populate("items.productId")
       : await Cart.findOne({ sessionId }).populate("items.productId");
@@ -46,23 +46,15 @@ const createOrder = async (req, res) => {
   }
 };
 
-// Получить все заказы (с возможностью фильтрации по userId)
-const getOrders = async (req, res) => {
+// 🟢 Получить все заказы (или только пользователя)
+export const getOrders = async (req, res) => {
   try {
     const { userId } = req.query;
 
-    let orders;
-    if (userId) {
-      // Только заказы конкретного пользователя
-      orders = await Order.find({ userId })
-        .populate("items.productId")
-        .sort({ createdAt: -1 });
-    } else {
-      // Для админа: все заказы
-      orders = await Order.find()
-        .populate("items.productId")
-        .sort({ createdAt: -1 });
-    }
+    const query = userId ? { userId } : {};
+    const orders = await Order.find(query)
+      .populate("items.productId")
+      .sort({ createdAt: -1 });
 
     res.json(orders);
   } catch (err) {
@@ -70,25 +62,32 @@ const getOrders = async (req, res) => {
   }
 };
 
-// Получить один заказ по id
-const getOrderById = async (req, res) => {
+// 🟢 Получить один заказ по ID
+export const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
       "items.productId"
     );
-    if (!order) return res.status(404).json({ error: "Заказ не найден" });
+
+    if (!order) {
+      return res.status(404).json({ error: "Заказ не найден" });
+    }
+
     res.json(order);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Обновить статус заказа (например, "shipped", "completed")
-const updateOrderStatus = async (req, res) => {
+// 🟢 Обновить статус заказа (например, "shipped", "completed")
+export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const order = await Order.findById(req.params.id);
-    if (!order) return res.status(404).json({ error: "Заказ не найден" });
+
+    if (!order) {
+      return res.status(404).json({ error: "Заказ не найден" });
+    }
 
     order.status = status;
     await order.save();
@@ -97,12 +96,4 @@ const updateOrderStatus = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
-
-// ✅ Экспортируем функции
-module.exports = {
-  createOrder,
-  getOrders,
-  getOrderById,
-  updateOrderStatus,
 };

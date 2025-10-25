@@ -1,8 +1,8 @@
-const Favorite = require("../models/Favorite");
-const Product = require("../models/Product");
+import Favorite from "../models/Favorite.js";
+import Product from "../models/Product.js";
 
 // 🔹 Получить все избранные товары пользователя
-const getFavorites = async (req, res) => {
+export const getFavorites = async (req, res) => {
   try {
     const { userId } = req.params;
     if (!userId) {
@@ -18,7 +18,7 @@ const getFavorites = async (req, res) => {
 };
 
 // 🔹 Добавить или удалить из избранного (toggle)
-const toggleFavorite = async (req, res) => {
+export const toggleFavorite = async (req, res) => {
   try {
     const { userId, productId } = req.body;
 
@@ -52,7 +52,7 @@ const toggleFavorite = async (req, res) => {
 };
 
 // 🔹 Проверить, находится ли товар в избранном
-const isFavorite = async (req, res) => {
+export const isFavorite = async (req, res) => {
   try {
     const { userId, productId } = req.params;
 
@@ -63,5 +63,3 @@ const isFavorite = async (req, res) => {
     res.status(500).json({ message: "Ошибка при проверке избранного" });
   }
 };
-
-module.exports = { getFavorites, toggleFavorite, isFavorite };

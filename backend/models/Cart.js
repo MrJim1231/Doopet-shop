@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const cartSchema = new mongoose.Schema(
   {
@@ -43,7 +43,7 @@ const cartSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Перед сохранением автоматически считаем totalPrice для каждого товара и cartTotal
+// 🟢 Перед сохранением автоматически считаем totalPrice и cartTotal
 cartSchema.pre("save", function (next) {
   this.cartTotal = 0;
   this.items.forEach((item) => {
@@ -53,6 +53,6 @@ cartSchema.pre("save", function (next) {
   next();
 });
 
+// ✅ Экспорт модели
 const Cart = mongoose.models.Cart || mongoose.model("Cart", cartSchema);
-
-module.exports = Cart;
+export default Cart;
