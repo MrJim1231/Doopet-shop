@@ -2,6 +2,7 @@ import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SectionHeader from "../components/SectionHeader";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
+import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
 
 function Contacts() {
@@ -65,6 +66,7 @@ function Contacts() {
         </div>
       </section>
 
+      <SubscribeSection />
       <Footer />
     </div>
   );
