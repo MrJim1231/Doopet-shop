@@ -8,6 +8,8 @@ import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
+import SectionHeader from "../components/SectionHeader"; // ✅ добавлено
+import graphicIcon from "../assets/icons/graphic-elements.svg"; // ✅ иконка
 
 import placeholderImg from "../assets/images/no-image.png";
 import { Link } from "react-router-dom";
@@ -17,7 +19,6 @@ function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🟢 Загрузка избранных товаров
   useEffect(() => {
     const fetchFavorites = async () => {
       if (!user?._id) {
@@ -40,7 +41,6 @@ function Favorites() {
     fetchFavorites();
   }, [user]);
 
-  // 🟢 Удаление из избранного
   const handleRemoveFavorite = async (productId) => {
     if (!user) return;
 
@@ -66,7 +66,11 @@ function Favorites() {
 
       <section className="favorites">
         <div className="favorites__container">
-          <h1 className="favorites__title">Мои закладки</h1>
+          <SectionHeader
+            icon={graphicIcon}
+            title="Закладки"
+            baseClass="favorites__header"
+          />
 
           {loading ? (
             <p>Загрузка...</p>

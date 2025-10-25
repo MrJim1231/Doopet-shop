@@ -1,9 +1,13 @@
 import { useAuth } from "../context/AuthContext";
 import Auth from "./auth/Auth";
+
 import HeaderTopBar from "../layout/HeaderTopBar";
 import Header from "../layout/Header";
 import CatalogBlock from "../layout/CatalogBlock";
 import Breadcrumbs from "../layout/Breadcrumbs";
+import SectionHeader from "../components/SectionHeader"; // ✅ добавлено
+import graphicIcon from "../assets/icons/graphic-elements.svg"; // ✅ добавлено
+
 import {
   User,
   Key,
@@ -30,13 +34,17 @@ function Account() {
       <HeaderTopBar />
       <Header />
       <CatalogBlock />
-      <Breadcrumbs />
+      <Breadcrumbs items={[{ label: "Личный кабинет" }]} />
 
       <section className="account">
         <div className="account__container">
-          <h2 className="account__title">
-            <span className="account__title-icon">🐾</span> Личный кабинет
-          </h2>
+          <SectionHeader
+            icon={graphicIcon}
+            title="Личный кабинет"
+            baseClass="account__header"
+          />
+
+          {/* <h3 className="account__subtitle">Моя учетная запись</h3> */}
 
           <div className="account__content">
             {/* Левая часть */}
