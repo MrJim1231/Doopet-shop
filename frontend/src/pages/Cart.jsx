@@ -1,5 +1,6 @@
 import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // 🟢 добавляем
 import axios from "axios";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 import Header from "../layout/Header";
@@ -17,6 +18,7 @@ function Cart() {
     updateQuantityLocally,
   } = useCart();
 
+  const navigate = useNavigate(); // 🟢 навигация
   const [displayItems, setDisplayItems] = useState([]);
 
   useEffect(() => {
@@ -28,7 +30,6 @@ function Cart() {
   const handleQuantityChange = async (productId, newQty) => {
     if (newQty < 1) return;
 
-    // локально
     updateQuantityLocally(productId, newQty);
     setDisplayItems((prev) =>
       prev.map((item) =>
@@ -51,7 +52,6 @@ function Cart() {
   };
 
   const handleRemove = async (productId) => {
-    // локально
     removeFromCartLocally(productId);
     setDisplayItems((prev) =>
       prev.filter((item) => item.productId._id !== productId)
@@ -180,7 +180,10 @@ function Cart() {
                   </tbody>
                 </table>
 
-                <button className="cart__checkout-btn">
+                <button
+                  className="cart__checkout-btn"
+                  onClick={() => navigate("/order")} // 🟢 переход
+                >
                   Перейти к оформлению заказа
                 </button>
               </div>

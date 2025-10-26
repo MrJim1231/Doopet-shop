@@ -17,6 +17,7 @@ import Cart from "./pages/Cart";
 import Account from "./pages/Account";
 import Favorites from "./pages/Favorites";
 import Post from "./pages/Post";
+import Order from "./pages/Order"; // ✅ добавить импорт
 
 export default function App() {
   return (
@@ -36,17 +37,17 @@ export default function App() {
           <Route path="/blog/:id" element={<Post />} />
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/contacts" element={<Contacts />} />
-
           {/* Админка */}
           <Route path="/admin/add-category" element={<AddCategory />} />
           <Route path="/admin/add-product" element={<AddProduct />} />
           <Route path="/admin/add-post" element={<AddPost />} />
-
           {/* Прочие страницы */}
           <Route path="/category/:id" element={<CategoryProducts />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/account" element={<Account />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/order" element={<Order />} />{" "}
+          {/* ✅ добавить маршрут */}
         </Routes>
       </div>
     </Router>
