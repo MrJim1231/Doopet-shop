@@ -1,4 +1,5 @@
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext"; // 🟢 добавляем
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,6 +12,7 @@ import SectionHeader from "../components/SectionHeader";
 
 function Order() {
   const { cart, fetchCart, clearCart } = useCart();
+  const { user, token } = useAuth(); // 🟢 берём авторизацию
   const [customer, setCustomer] = useState({
     name: "",
     email: "",
@@ -39,9 +41,20 @@ function Order() {
       setLoading(true);
       const sessionId = localStorage.getItem("sessionId");
 
-      const res = await axios.post("http://localhost:5000/api/orders", {
+      // 🔥 Формируем тело запроса
+      const body = {
+        userId: user?._id || null, // 🟢 передаём userId
         sessionId,
         customer,
+      };
+
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      console.log("[Создание заказа] Отправляем тело:", body);
+      console.log("[Создание заказа] С токеном:", !!token);
+
+      const res = await axios.post("http://localhost:5000/api/orders", body, {
+        headers,
       });
 
       toast.success("✅ Заказ успешно оформлен!", {
