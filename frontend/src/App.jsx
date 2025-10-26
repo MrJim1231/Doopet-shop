@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import ToastProvider from "./components/ToastProvider"; // ✅ импортируем
+import ToastProvider from "./components/ToastProvider";
 
 import Home from "./pages/Home";
 import Catalog from "./components/Catalog";
@@ -21,37 +20,35 @@ import Post from "./pages/Post";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="app">
-          {/* ✅ Вынесено в отдельный компонент */}
-          <ToastProvider />
+    <Router>
+      <div className="app">
+        {/* ✅ Глобальные уведомления */}
+        <ToastProvider />
 
-          <Routes>
-            {/* Основные страницы */}
-            <Route path="/" element={<Home />} />
-            <Route path="/catalog" element={<Catalog />} />
-            <Route path="/product/:id" element={<Product />} />
-            <Route path="/promotions" element={<Stock />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<Post />} />
-            <Route path="/delivery" element={<Delivery />} />
-            <Route path="/contacts" element={<Contacts />} />
+        <Routes>
+          {/* Основные страницы */}
+          <Route path="/" element={<Home />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/product/:id" element={<Product />} />
+          <Route path="/promotions" element={<Stock />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<Post />} />
+          <Route path="/delivery" element={<Delivery />} />
+          <Route path="/contacts" element={<Contacts />} />
 
-            {/* Админка */}
-            <Route path="/admin/add-category" element={<AddCategory />} />
-            <Route path="/admin/add-product" element={<AddProduct />} />
-            <Route path="/admin/add-post" element={<AddPost />} />
+          {/* Админка */}
+          <Route path="/admin/add-category" element={<AddCategory />} />
+          <Route path="/admin/add-product" element={<AddProduct />} />
+          <Route path="/admin/add-post" element={<AddPost />} />
 
-            {/* Прочее */}
-            <Route path="/category/:id" element={<CategoryProducts />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/favorites" element={<Favorites />} />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+          {/* Прочие страницы */}
+          <Route path="/category/:id" element={<CategoryProducts />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/favorites" element={<Favorites />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
