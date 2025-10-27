@@ -1,9 +1,10 @@
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom"; // ✅ добавлено
 import Auth from "./auth/Auth";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
-import SectionHeader from "../components/SectionHeader"; // ✅ добавлено
-import graphicIcon from "../assets/icons/graphic-elements.svg"; // ✅ добавлено
+import SectionHeader from "../components/SectionHeader";
+import graphicIcon from "../assets/icons/graphic-elements.svg";
 
 import {
   User,
@@ -21,6 +22,7 @@ import {
 
 function Account() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate(); // ✅ хук навигации
 
   if (!user) {
     return <Auth />;
@@ -38,8 +40,6 @@ function Account() {
             title="Личный кабинет"
             baseClass="account__header"
           />
-
-          {/* <h3 className="account__subtitle">Моя учетная запись</h3> */}
 
           <div className="account__content">
             {/* Левая часть */}
@@ -60,7 +60,12 @@ function Account() {
                     <MapPin className="account__icon" />
                     <p>Изменить мои адреса</p>
                   </div>
-                  <div className="account__card">
+
+                  {/* ❤️ Переход на закладки */}
+                  <div
+                    className="account__card account__card--link"
+                    onClick={() => navigate("/favorites")}
+                  >
                     <Heart className="account__icon" />
                     <p>Посмотреть закладки</p>
                   </div>
@@ -71,10 +76,15 @@ function Account() {
               <div className="account__section">
                 <h3 className="account__subtitle">Мои заказы</h3>
                 <div className="account__grid">
-                  <div className="account__card">
+                  {/* 🕒 История заказов */}
+                  <div
+                    className="account__card account__card--link"
+                    onClick={() => navigate("/orders")}
+                  >
                     <Clock className="account__icon" />
                     <p>История заказов</p>
                   </div>
+
                   <div className="account__card">
                     <FileText className="account__icon" />
                     <p>Файлы для скачивания</p>
@@ -113,8 +123,10 @@ function Account() {
                 <li>Изменить контактную информацию</li>
                 <li>Пароль</li>
                 <li>Адресная книга</li>
-                <li>Закладки</li>
-                <li>История заказов</li>
+                {/* ❤️ пункт "Закладки" */}
+                <li onClick={() => navigate("/favorites")}>Закладки</li>
+                {/* 🕒 пункт "История заказов" */}
+                <li onClick={() => navigate("/orders")}>История заказов</li>
                 <li>Файлы для скачивания</li>
                 <li>История транзакций</li>
                 <li>E-Mail рассылка</li>

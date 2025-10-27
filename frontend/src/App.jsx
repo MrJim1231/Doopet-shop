@@ -4,7 +4,6 @@ import ToastProvider from "./components/ToastProvider";
 import Home from "./pages/Home";
 import Catalog from "./components/Catalog";
 import Product from "./pages/Product";
-import Stock from "./pages/Stock";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Delivery from "./pages/Delivery";
@@ -33,7 +32,6 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/promotions" element={<Stock />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<Post />} />
