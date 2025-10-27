@@ -18,6 +18,7 @@ import Account from "./pages/Account";
 import Favorites from "./pages/Favorites";
 import Post from "./pages/Post";
 // import Order from "./pages/Order";
+import Orders from "./pages/Orders";
 import Checkout from "./pages/Checkout";
 
 export default function App() {
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/favorites" element={<Favorites />} />
           {/* <Route path="/order" element={<Order />} />{" "} */}
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders" element={<Orders />} />
           {/* ✅ добавить маршрут */}
         </Routes>
       </div>
