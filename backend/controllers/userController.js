@@ -93,6 +93,7 @@ export const deleteUser = async (req, res) => {
 };
 
 // 🟢 Логин пользователя (генерация токена + данные юзера)
+// 🟢 Логин пользователя (генерация токена + данные юзера)
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -111,12 +112,25 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Неверный пароль" });
     }
 
+    // Генерируем токен
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, name: user.name, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
+    // ✅ Расшифровываем токен (для проверки на бэке)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log("✅ Данные из токена:");
+    console.log({
+      userId: decoded.userId,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role,
+    });
+
+    // Отправляем клиенту
     res.status(200).json({
       token,
       user: {
