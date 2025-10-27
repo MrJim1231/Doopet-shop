@@ -1,12 +1,16 @@
 @use "../abstracts" as *;
+@use "../mixins" as *;
 
 .orders {
-  padding: 50px 0;
+  padding: 60px 0;
 
   &__container {
     width: min(100% - 20px, 1200px);
     margin-inline: auto;
   }
+
+  // 🔹 Заголовок секции (общий стиль)
+  @include section-header(".orders__header");
 
   &__empty {
     text-align: center;
@@ -44,10 +48,6 @@
       h3 {
         font-size: 1.2rem;
         color: #333;
-      }
-
-      &--status {
-        text-transform: capitalize;
       }
     }
 
