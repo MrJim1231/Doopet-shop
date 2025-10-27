@@ -40,7 +40,7 @@ function Account() {
             title="Личный кабинет"
             baseClass="account__header"
           />
-
+          {/* <h3 className="account__subtitle">Моя учетная запись</h3> */}
           <div className="account__content">
             {/* Левая часть */}
             <div className="account__main">

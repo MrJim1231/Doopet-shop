@@ -38,10 +38,23 @@
     margin-bottom: 20px;
   }
 
+  /* 🔹 Сетка карточек — 4 в ряд с адаптивом */
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr); // всегда 4 в ряд
     gap: 20px;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr); // 3 в ряд
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr); // 2 в ряд
+    }
+
+    @media (max-width: 500px) {
+      grid-template-columns: 1fr; // 1 на мобильных
+    }
   }
 
   &__card {
@@ -52,10 +65,12 @@
     transition: 0.3s;
     background-color: #fff;
     cursor: pointer;
+    min-height: 130px; // 🔹 одинаковая высота карточек
 
     &:hover {
       border-color: $color-accent;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      transform: translateY(-2px);
     }
 
     p {
@@ -78,6 +93,7 @@
     padding: 20px;
     background: #fafafa;
     height: fit-content;
+    margin-top: 46px;
   }
 
   &__menu {
