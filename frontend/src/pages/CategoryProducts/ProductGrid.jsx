@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { useCart } from "../../context/CartContext";
-import { toast } from "react-toastify"; // 🟢 добавлено
+import { useCart } from "../../context/CartContext"; // ✅ используем общий контекст
 
 export default function ProductGrid({ products, loading }) {
   const [quantities, setQuantities] = useState({});
   const [adding, setAdding] = useState({});
-  const { fetchCart } = useCart();
+  const { addToCart } = useCart(); // ✅ берём addToCart из контекста
 
   // Изменение количества
   const handleQuantityChange = (id, delta) => {
@@ -17,43 +15,17 @@ export default function ProductGrid({ products, loading }) {
     });
   };
 
-  // Добавить товар в корзину
+  // Добавление товара в корзину
   const handleAddToCart = async (productId) => {
     const quantity = quantities[productId] || 1;
 
     try {
       setAdding((prev) => ({ ...prev, [productId]: true }));
 
-      // Для гостей используем sessionId
-      const sessionId =
-        localStorage.getItem("sessionId") ||
-        (() => {
-          const id = Math.random().toString(36).substring(2);
-          localStorage.setItem("sessionId", id);
-          return id;
-        })();
-
-      await axios.post("http://localhost:5000/api/cart/add", {
-        sessionId,
-        productId,
-        quantity,
-      });
-
-      await fetchCart();
-
-      // ✅ toast вместо alert
-      toast.success("🛒 Товар добавлен в корзину!", {
-        position: "bottom-right",
-        autoClose: 2000,
-        theme: "colored",
-      });
+      // ✅ используем addToCart из контекста — он сам показывает уведомление
+      await addToCart(productId, quantity);
     } catch (error) {
-      console.error("Ошибка при добавлении в корзину:", error);
-      toast.error("❌ Не удалось добавить товар в корзину", {
-        position: "bottom-right",
-        autoClose: 2000,
-        theme: "colored",
-      });
+      console.error("❌ Ошибка при добавлении в корзину:", error);
     } finally {
       setAdding((prev) => ({ ...prev, [productId]: false }));
     }

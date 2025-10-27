@@ -182,7 +182,7 @@ function Cart() {
 
                 <button
                   className="cart__checkout-btn"
-                  onClick={() => navigate("/order")} // 🟢 переход
+                  onClick={() => navigate("/checkout")} // 🟢 переход
                 >
                   Перейти к оформлению заказа
                 </button>

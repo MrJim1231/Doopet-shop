@@ -17,7 +17,8 @@ import Cart from "./pages/Cart";
 import Account from "./pages/Account";
 import Favorites from "./pages/Favorites";
 import Post from "./pages/Post";
-import Order from "./pages/Order"; // ✅ добавить импорт
+// import Order from "./pages/Order";
+import Checkout from "./pages/Checkout";
 
 export default function App() {
   return (
@@ -46,7 +47,8 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/account" element={<Account />} />
           <Route path="/favorites" element={<Favorites />} />
-          <Route path="/order" element={<Order />} />{" "}
+          {/* <Route path="/order" element={<Order />} />{" "} */}
+          <Route path="/checkout" element={<Checkout />} />
           {/* ✅ добавить маршрут */}
         </Routes>
       </div>
