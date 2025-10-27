@@ -97,3 +97,20 @@ export const updateOrderStatus = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const migrateOrders = async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const userId = req.user.userId;
+
+    const result = await Order.updateMany(
+      { sessionId, userId: null },
+      { userId }
+    );
+
+    console.log(`🟢 Перенесено заказов: ${result.modifiedCount}`);
+    res.json({ message: "Заказы перенесены", count: result.modifiedCount });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

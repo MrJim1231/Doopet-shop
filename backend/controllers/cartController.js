@@ -185,3 +185,56 @@ export const clearCart = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// 🟢 Миграция корзины после авторизации
+export const migrateCart = async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const userId = req.user.userId; // из токена
+
+    if (!sessionId || !userId) {
+      return res
+        .status(400)
+        .json({ message: "sessionId и userId обязательны" });
+    }
+
+    // Ищем гостевую корзину
+    const guestCart = await Cart.findOne({ sessionId });
+    if (!guestCart) {
+      return res.status(404).json({ message: "Гостевая корзина не найдена" });
+    }
+
+    // Проверяем, есть ли уже корзина у пользователя
+    let userCart = await Cart.findOne({ userId });
+
+    if (userCart) {
+      // 🔹 Объединяем товары
+      guestCart.items.forEach((guestItem) => {
+        const existingItem = userCart.items.find(
+          (item) => item.productId.toString() === guestItem.productId.toString()
+        );
+        if (existingItem) {
+          existingItem.quantity += guestItem.quantity;
+          existingItem.totalPrice = existingItem.price * existingItem.quantity;
+        } else {
+          userCart.items.push(guestItem);
+        }
+      });
+      await userCart.save();
+      await Cart.deleteOne({ _id: guestCart._id }); // Удаляем гостевую корзину
+    } else {
+      // Если у пользователя нет корзины — просто присваиваем userId
+      guestCart.userId = userId;
+      await guestCart.save();
+    }
+
+    console.log(
+      `🟢 Корзина sessionId:${sessionId} привязана к userId:${userId}`
+    );
+
+    res.json({ message: "Корзина успешно перенесена" });
+  } catch (err) {
+    console.error("❌ Ошибка при миграции корзины:", err);
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -5,7 +5,9 @@ import {
   updateQuantity,
   removeFromCart,
   clearCart,
+  migrateCart,
 } from "../controllers/cartController.js";
+import auth from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -15,5 +17,6 @@ router.post("/add", addToCart); // добавить товар
 router.put("/update", updateQuantity); // обновить количество
 router.delete("/remove", removeFromCart); // удалить товар
 router.delete("/clear", clearCart); // очистить корзину
+router.post("/migrate", auth, migrateCart); // 🆕 миграция корзины
 
 export default router;
