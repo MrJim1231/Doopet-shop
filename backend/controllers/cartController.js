@@ -1,5 +1,6 @@
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
+import jwt from "jsonwebtoken";
 
 // 🟢 Получить корзину (по userId или sessionId)
 export const getCart = async (req, res) => {
@@ -26,11 +27,41 @@ export const getCart = async (req, res) => {
 // 🟢 Добавить товар в корзину
 export const addToCart = async (req, res) => {
   try {
-    const { userId, sessionId, productId, quantity } = req.body;
+    const { sessionId, productId, quantity } = req.body;
+
+    // 🔹 Проверяем, есть ли токен в заголовках
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    let userId = null;
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        userId = decoded.userId;
+
+        // ✅ Выводим данные о пользователе из токена
+        console.log("✅ Авторизованный пользователь добавляет товар:");
+        console.log({
+          userId: decoded.userId,
+          name: decoded.name,
+          email: decoded.email,
+          role: decoded.role,
+        });
+      } catch (err) {
+        console.log("⚠️ Ошибка при расшифровке токена:", err.message);
+      }
+    } else {
+      console.log(
+        "👤 Гость добавляет товар в корзину (sessionId:",
+        sessionId,
+        ")"
+      );
+    }
 
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ error: "Товар не найден" });
 
+    // 🔹 Ищем корзину по userId или sessionId
     let cart;
     if (userId) {
       cart = await Cart.findOne({ userId });
@@ -42,6 +73,7 @@ export const addToCart = async (req, res) => {
       cart = new Cart({ userId, sessionId, items: [] });
     }
 
+    // 🔹 Проверяем, есть ли уже этот товар в корзине
     const itemIndex = cart.items.findIndex(
       (item) => item.productId.toString() === productId
     );
@@ -60,8 +92,16 @@ export const addToCart = async (req, res) => {
     }
 
     await cart.save();
+
+    console.log("🛒 Товар успешно добавлен в корзину:", {
+      userId: userId || "guest",
+      productId,
+      quantity,
+    });
+
     res.json(await cart.populate("items.productId"));
   } catch (err) {
+    console.error("❌ Ошибка при добавлении в корзину:", err.message);
     res.status(500).json({ error: err.message });
   }
 };

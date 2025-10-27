@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify"; // ✅ подключаем уведомления
+import { toast } from "react-toastify";
+import { useAuth } from "./AuthContext"; // 🟢 импорт авторизации
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { token, user } = useAuth(); // 🟢 получаем токен и пользователя
   const [cart, setCart] = useState({ items: [], cartTotal: 0 });
   const [loading, setLoading] = useState(false);
 
@@ -25,11 +27,14 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const res = await axios.get("http://localhost:5000/api/cart", {
-        params: { sessionId },
+        params: { userId: user?._id, sessionId },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
+
+      console.log("📦 Загружена корзина:", res.data);
       setCart(res.data || { items: [], cartTotal: 0 });
     } catch (error) {
-      console.error("Ошибка при загрузке корзины:", error);
+      console.error("❌ Ошибка при загрузке корзины:", error);
     } finally {
       setLoading(false);
     }
@@ -38,12 +43,24 @@ export const CartProvider = ({ children }) => {
   // 🟢 Добавление товара в корзину
   const addToCart = async (productId, quantity = 1) => {
     try {
-      await axios.post("http://localhost:5000/api/cart/add", {
+      console.log("🟢 Отправка на сервер:");
+      console.log({
+        userId: user?._id,
         sessionId,
         productId,
         quantity,
+        token: token ? "Токен есть ✅" : "Без токена ❌",
       });
 
+      await axios.post(
+        "http://localhost:5000/api/cart/add",
+        { sessionId, productId, quantity },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+
+      console.log("✅ Товар успешно добавлен на сервер");
       await fetchCart();
 
       toast.success("🛒 Товар добавлен в корзину!", {
@@ -52,7 +69,7 @@ export const CartProvider = ({ children }) => {
         theme: "colored",
       });
     } catch (error) {
-      console.error("Ошибка при добавлении в корзину:", error);
+      console.error("❌ Ошибка при добавлении в корзину:", error);
       toast.error("❌ Не удалось добавить товар", {
         position: "bottom-right",
         autoClose: 2000,
@@ -63,20 +80,21 @@ export const CartProvider = ({ children }) => {
 
   // 🟡 Удаление товара
   const removeFromCart = async (productId) => {
+    console.log("🗑️ Удаление товара из корзины:", productId);
     removeFromCartLocally(productId);
 
     try {
       await axios.delete("http://localhost:5000/api/cart/remove", {
-        data: { sessionId, productId },
+        data: { userId: user?._id, sessionId, productId },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
-
       toast.info("🗑️ Товар удалён из корзины", {
         position: "bottom-right",
         autoClose: 2000,
         theme: "colored",
       });
     } catch (error) {
-      console.error("Ошибка при удалении из корзины:", error);
+      console.error("❌ Ошибка при удалении из корзины:", error);
       toast.error("❌ Ошибка при удалении товара", {
         position: "bottom-right",
         autoClose: 2000,
@@ -95,19 +113,20 @@ export const CartProvider = ({ children }) => {
 
   // 🔴 Очистка корзины
   const clearCart = async () => {
+    console.log("🚫 Очистка корзины...");
     try {
       await axios.delete("http://localhost:5000/api/cart/clear", {
-        data: { sessionId },
+        data: { userId: user?._id, sessionId },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setCart({ items: [], cartTotal: 0 });
-
       toast.warn("🚫 Корзина очищена", {
         position: "bottom-right",
         autoClose: 2000,
         theme: "colored",
       });
     } catch (error) {
-      console.error("Ошибка при очистке корзины:", error);
+      console.error("❌ Ошибка при очистке корзины:", error);
       toast.error("❌ Ошибка при очистке корзины", {
         position: "bottom-right",
         autoClose: 2000,
@@ -121,11 +140,7 @@ export const CartProvider = ({ children }) => {
     setCart((prev) => {
       const updatedItems = prev.items.map((item) =>
         item.productId._id === productId
-          ? {
-              ...item,
-              quantity: newQty,
-              totalPrice: item.price * newQty,
-            }
+          ? { ...item, quantity: newQty, totalPrice: item.price * newQty }
           : item
       );
       return { ...prev, items: updatedItems };
