@@ -24,27 +24,35 @@ export const AuthProvider = ({ children }) => {
         });
         setUser(res.data);
 
-        // 🔁 После успешного входа переносим корзину и заказы (если нужно)
+        // 🔁 После успешного входа переносим корзину (если нужно)
         const sessionId = localStorage.getItem("sessionId");
         const migrated = localStorage.getItem("migrated") === "true";
 
         if (sessionId && !migrated) {
           try {
-            console.log("🟢 Миграция корзины и заказов...");
-            await axios.post(
-              "http://localhost:5000/api/cart/migrate",
-              { sessionId },
-              { headers: { Authorization: `Bearer ${token}` } }
+            console.log("🟢 Проверяем наличие корзины для миграции...");
+
+            // Проверим, есть ли вообще корзина у гостя
+            const cartCheck = await axios.get(
+              "http://localhost:5000/api/cart",
+              { params: { sessionId } }
             );
-            await axios.post(
-              "http://localhost:5000/api/orders/migrate",
-              { sessionId },
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-            console.log("✅ Миграция завершена");
+
+            if (cartCheck.data?.items?.length > 0) {
+              console.log("🛒 Найдена гостевая корзина, переносим...");
+              await axios.post(
+                "http://localhost:5000/api/cart/migrate",
+                { sessionId },
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+              console.log("✅ Миграция корзины завершена");
+            } else {
+              console.log("⚪ Гостевая корзина пуста — миграция не требуется.");
+            }
+
             localStorage.setItem("migrated", "true");
           } catch (err) {
-            console.error("❌ Ошибка миграции:", err);
+            console.error("❌ Ошибка миграции корзины:", err.message);
           }
         }
       } catch (err) {

@@ -101,7 +101,7 @@ function Checkout() {
       );
 
       // 🔄 Переход в заказы через 2 секунды
-      setTimeout(() => navigate("/orders"), 2000);
+      setTimeout(() => navigate("/account/orders"), 2000);
     } catch (err) {
       console.error("❌ Ошибка оформления заказа:", err);
       toast.error("❌ Не удалось оформить заказ", {
