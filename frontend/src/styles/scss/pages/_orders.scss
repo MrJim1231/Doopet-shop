@@ -2,7 +2,7 @@
 @use "../mixins" as *;
 
 .orders {
-  padding: 60px 0;
+  padding: 16px 0;
 
   &__container {
     width: min(100% - 20px, 1200px);

@@ -56,16 +56,16 @@ function Favorites() {
 
   return (
     <div className="favorites-page">
-      <Header />
-      <Breadcrumbs items={[{ label: "Закладки" }]} />
+      {/* <Header /> */}
+      {/* <Breadcrumbs items={[{ label: "Закладки" }]} /> */}
 
       <section className="favorites">
         <div className="favorites__container">
-          <SectionHeader
+          {/* <SectionHeader
             icon={graphicIcon}
             title="Закладки"
             baseClass="favorites__header"
-          />
+          /> */}
 
           {loading ? (
             <p>Загрузка...</p>
@@ -117,8 +117,8 @@ function Favorites() {
         </div>
       </section>
 
-      <SubscribeSection />
-      <Footer />
+      {/* <SubscribeSection /> */}
+      {/* <Footer /> */}
     </div>
   );
 }

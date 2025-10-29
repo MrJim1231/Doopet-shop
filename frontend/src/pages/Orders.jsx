@@ -46,16 +46,16 @@ function Orders() {
 
   return (
     <div className="orders-page">
-      <Header />
-      <Breadcrumbs items={[{ label: "Мои заказы" }]} />
+      {/* <Header /> */}
+      {/* <Breadcrumbs items={[{ label: "Мои заказы" }]} /> */}
 
       <section className="orders">
         <div className="orders__container">
-          <SectionHeader
+          {/* <SectionHeader
             icon={graphicIcon}
             title="Мои заказы"
             baseClass="orders__header"
-          />
+          /> */}
 
           {loading ? (
             <p>Загрузка заказов...</p>
@@ -136,7 +136,7 @@ function Orders() {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
