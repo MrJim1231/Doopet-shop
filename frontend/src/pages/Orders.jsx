@@ -24,7 +24,7 @@ function Orders() {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setOrders(res.data);
-      console.log("📦 Заказы загружены:", res.data);
+      // console.log("📦 Заказы загружены:", res.data);
     } catch (err) {
       console.error("❌ Ошибка при загрузке заказов:", err);
     } finally {

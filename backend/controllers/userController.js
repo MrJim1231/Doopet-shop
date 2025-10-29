@@ -122,7 +122,7 @@ export const loginUser = async (req, res) => {
     // ✅ Расшифровываем токен (для проверки на бэке)
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("✅ Данные из токена:");
+    // console.log("✅ Данные из токена:");
     // console.log({
     //   userId: decoded.userId,
     //   name: decoded.name,

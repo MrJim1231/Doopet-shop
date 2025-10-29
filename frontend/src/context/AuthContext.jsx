@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
         if (sessionId && !migrated) {
           try {
-            console.log("🟢 Проверяем наличие корзины для миграции...");
+            // console.log("🟢 Проверяем наличие корзины для миграции...");
 
             // Проверим, есть ли вообще корзина у гостя
             const cartCheck = await axios.get(
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
               );
               console.log("✅ Миграция корзины завершена");
             } else {
-              console.log("⚪ Гостевая корзина пуста — миграция не требуется.");
+              // console.log("⚪ Гостевая корзина пуста — миграция не требуется.");
             }
 
             localStorage.setItem("migrated", "true");

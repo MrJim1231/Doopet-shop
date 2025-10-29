@@ -79,14 +79,14 @@ function Checkout() {
 
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      console.log("📦 Отправляем заказ:", body);
-      console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
+      // console.log("📦 Отправляем заказ:", body);
+      // console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
 
       const res = await axios.post("http://localhost:5000/api/orders", body, {
         headers,
       });
 
-      console.log("✅ Заказ успешно создан:", res.data);
+      // console.log("✅ Заказ успешно создан:", res.data);
 
       toast.success("✅ Заказ успешно оформлен!", {
         position: "bottom-right",

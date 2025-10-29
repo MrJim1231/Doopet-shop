@@ -31,7 +31,7 @@ export const CartProvider = ({ children }) => {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
-      console.log("📦 Загружена корзина:", res.data);
+      // console.log("📦 Загружена корзина:", res.data);
       setCart(res.data || { items: [], cartTotal: 0 });
     } catch (error) {
       console.error("❌ Ошибка при загрузке корзины:", error);
@@ -43,14 +43,14 @@ export const CartProvider = ({ children }) => {
   // 🟢 Добавление товара в корзину
   const addToCart = async (productId, quantity = 1) => {
     try {
-      console.log("🟢 Отправка на сервер:");
-      console.log({
-        userId: user?._id,
-        sessionId,
-        productId,
-        quantity,
-        token: token ? "Токен есть ✅" : "Без токена ❌",
-      });
+      // console.log("🟢 Отправка на сервер:");
+      // console.log({
+      //   userId: user?._id,
+      //   sessionId,
+      //   productId,
+      //   quantity,
+      //   token: token ? "Токен есть ✅" : "Без токена ❌",
+      // });
 
       await axios.post(
         "http://localhost:5000/api/cart/add",
@@ -60,7 +60,7 @@ export const CartProvider = ({ children }) => {
         }
       );
 
-      console.log("✅ Товар успешно добавлен на сервер");
+      // console.log("✅ Товар успешно добавлен на сервер");
       await fetchCart();
 
       toast.success("🛒 Товар добавлен в корзину!", {
@@ -80,7 +80,7 @@ export const CartProvider = ({ children }) => {
 
   // 🟡 Удаление товара
   const removeFromCart = async (productId) => {
-    console.log("🗑️ Удаление товара из корзины:", productId);
+    // console.log("🗑️ Удаление товара из корзины:", productId);
     removeFromCartLocally(productId);
 
     try {
@@ -113,7 +113,7 @@ export const CartProvider = ({ children }) => {
 
   // 🔴 Очистка корзины
   const clearCart = async () => {
-    console.log("🚫 Очистка корзины...");
+    // console.log("🚫 Очистка корзины...");
     try {
       await axios.delete("http://localhost:5000/api/cart/clear", {
         data: { userId: user?._id, sessionId },

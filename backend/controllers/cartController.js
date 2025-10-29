@@ -40,13 +40,13 @@ export const addToCart = async (req, res) => {
         userId = decoded.userId;
 
         // ✅ Выводим данные о пользователе из токена
-        console.log("✅ Авторизованный пользователь добавляет товар:");
-        console.log({
-          userId: decoded.userId,
-          name: decoded.name,
-          email: decoded.email,
-          role: decoded.role,
-        });
+        // console.log("✅ Авторизованный пользователь добавляет товар:");
+        // console.log({
+        //   userId: decoded.userId,
+        //   name: decoded.name,
+        //   email: decoded.email,
+        //   role: decoded.role,
+        // });
       } catch (err) {
         console.log("⚠️ Ошибка при расшифровке токена:", err.message);
       }
@@ -93,11 +93,11 @@ export const addToCart = async (req, res) => {
 
     await cart.save();
 
-    console.log("🛒 Товар успешно добавлен в корзину:", {
-      userId: userId || "guest",
-      productId,
-      quantity,
-    });
+    // console.log("🛒 Товар успешно добавлен в корзину:", {
+    //   userId: userId || "guest",
+    //   productId,
+    //   quantity,
+    // });
 
     res.json(await cart.populate("items.productId"));
   } catch (err) {
@@ -228,9 +228,9 @@ export const migrateCart = async (req, res) => {
       await guestCart.save();
     }
 
-    console.log(
-      `🟢 Корзина sessionId:${sessionId} привязана к userId:${userId}`
-    );
+    // console.log(
+    //   `🟢 Корзина sessionId:${sessionId} привязана к userId:${userId}`
+    // );
 
     res.json({ message: "Корзина успешно перенесена" });
   } catch (err) {
