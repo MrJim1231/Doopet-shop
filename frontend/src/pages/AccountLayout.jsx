@@ -16,7 +16,7 @@ export default function AccountLayout() {
   // 🔁 Редирект только после загрузки, если пользователь не авторизован
   useEffect(() => {
     if (!loading && !user && location.pathname.startsWith("/account")) {
-      navigate("/login");
+      navigate("/auth/login");
     }
   }, [loading, user, location.pathname, navigate]);
 
