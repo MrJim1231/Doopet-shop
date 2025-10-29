@@ -76,9 +76,13 @@ function HeaderTopBar() {
             ref={menuRef}
           >
             <img src={accountIcon} alt="Аккаунт" className="header__icon" />
-            <Link className="header__link header__link--sm" to="/account">
+            <Link
+              className="header__link header__link--sm"
+              to={user ? "/account" : "/auth/login"}
+            >
               {user ? user.name || "Профиль" : "Личный кабинет"}
             </Link>
+
             <button
               className="header__topbar-item-btn"
               onClick={() => setMenuOpen((prev) => !prev)}
@@ -107,10 +111,10 @@ function HeaderTopBar() {
                   </>
                 ) : (
                   <>
-                    <Link to="/account" className="header__account-item">
+                    <Link to="/auth/login" className="header__account-item">
                       Войти
                     </Link>
-                    <Link to="/account" className="header__account-item">
+                    <Link to="/auth/register" className="header__account-item">
                       Регистрация
                     </Link>
                   </>
@@ -122,7 +126,10 @@ function HeaderTopBar() {
           {/* ---------- Закладки ---------- */}
           <li className="header__topbar-item">
             <img src={heartIcon} alt="Закладки" className="header__icon" />
-            <Link to="/favorites" className="header__link header__link--sm">
+            <Link
+              to="/account/favorites"
+              className="header__link header__link--sm"
+            >
               Закладки
             </Link>
           </li>

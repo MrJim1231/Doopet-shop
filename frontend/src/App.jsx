@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ToastProvider from "./components/ToastProvider";
 
 import Home from "./pages/Home";
@@ -6,6 +6,7 @@ import Catalog from "./components/Catalog";
 import Product from "./pages/Product";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
+import Post from "./pages/Post"; // ✅ Добавь этот импорт
 import Delivery from "./pages/Delivery";
 import Contacts from "./pages/Contacts";
 import AddCategory from "./admin/AddCategory";
@@ -13,45 +14,52 @@ import AddProduct from "./admin/AddProduct";
 import AddPost from "./admin/AddPost";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import Cart from "./pages/Cart";
-import Account from "./pages/Account";
+import AccountLayout from "./pages/AccountLayout";
+import AccountMain from "./pages/AccountMain";
 import Favorites from "./pages/Favorites";
-import Post from "./pages/Post";
-// import Order from "./pages/Order";
 import Orders from "./pages/Orders";
 import Checkout from "./pages/Checkout";
 
+// 🔑 Авторизация
+import AuthLayout from "./pages/auth/AuthLayout";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+
 export default function App() {
   return (
-    <Router>
-      <div className="app">
-        {/* ✅ Глобальные уведомления */}
-        <ToastProvider />
+    <div className="app">
+      <ToastProvider />
 
-        <Routes>
-          {/* Основные страницы */}
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:id" element={<Post />} />
-          <Route path="/delivery" element={<Delivery />} />
-          <Route path="/contacts" element={<Contacts />} />
-          {/* Админка */}
-          <Route path="/admin/add-category" element={<AddCategory />} />
-          <Route path="/admin/add-product" element={<AddProduct />} />
-          <Route path="/admin/add-post" element={<AddPost />} />
-          {/* Прочие страницы */}
-          <Route path="/category/:id" element={<CategoryProducts />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/favorites" element={<Favorites />} />
-          {/* <Route path="/order" element={<Order />} />{" "} */}
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/orders" element={<Orders />} />
-          {/* ✅ добавить маршрут */}
-        </Routes>
-      </div>
-    </Router>
+      <Routes>
+        {/* 🌍 Основные страницы */}
+        <Route path="/" element={<Home />} />
+        <Route path="/catalog" element={<Catalog />} />
+        <Route path="/product/:id" element={<Product />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<Post />} />{" "}
+        {/* ✅ теперь Post определён */}
+        <Route path="/delivery" element={<Delivery />} />
+        <Route path="/contacts" element={<Contacts />} />
+        <Route path="/category/:id" element={<CategoryProducts />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        {/* 👤 Личный кабинет */}
+        <Route path="/account" element={<AccountLayout />}>
+          <Route index element={<AccountMain />} />
+          <Route path="favorites" element={<Favorites />} />
+          <Route path="orders" element={<Orders />} />
+        </Route>
+        {/* 🔑 Авторизация */}
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+        {/* 🛠️ Админка */}
+        <Route path="/admin/add-category" element={<AddCategory />} />
+        <Route path="/admin/add-product" element={<AddProduct />} />
+        <Route path="/admin/add-post" element={<AddPost />} />
+      </Routes>
+    </div>
   );
 }
