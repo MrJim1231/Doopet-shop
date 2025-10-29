@@ -20,6 +20,7 @@ import AccountMain from "./pages/account/AccountMain";
 import Favorites from "./pages/account/Favorites";
 import Orders from "./pages/account/Orders";
 import Checkout from "./pages/Checkout";
+import Profile from "./pages/account/Profile";
 
 // 🔑 Авторизация
 import AuthLayout from "./pages/auth/AuthLayout";
@@ -50,6 +51,7 @@ export default function App() {
           <Route index element={<AccountMain />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
         {/* 🔑 Авторизация */}
         <Route path="/auth" element={<AuthLayout />}>

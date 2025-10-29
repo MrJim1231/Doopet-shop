@@ -1,0 +1,45 @@
+.profile {
+  padding: 40px 0;
+
+  &__container {
+    width: min(100% - 20px, 800px);
+    margin-inline: auto;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+  }
+
+  &__btn {
+    padding: 12px 20px;
+    background-color: #00b894;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+  }
+}

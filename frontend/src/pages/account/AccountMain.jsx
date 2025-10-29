@@ -24,19 +24,27 @@ function AccountMain() {
       {/* Моя учетная запись */}
       <div className="account__section">
         <h3 className="account__subtitle">Моя учетная запись</h3>
+
         <div className="account__grid">
-          <div className="account__card">
+          {/* 👤 Изменить контактную информацию */}
+          <div
+            className="account__card account__card--link"
+            onClick={() => navigate("/account/profile")}
+          >
             <User className="account__icon" />
             <p>Изменить контактную информацию</p>
           </div>
+
           <div className="account__card">
             <Key className="account__icon" />
             <p>Изменить свой пароль</p>
           </div>
+
           <div className="account__card">
             <MapPin className="account__icon" />
             <p>Изменить мои адреса</p>
           </div>
+
           <div
             className="account__card account__card--link"
             onClick={() => navigate("/account/favorites")}
@@ -50,6 +58,7 @@ function AccountMain() {
       {/* Мои заказы */}
       <div className="account__section">
         <h3 className="account__subtitle">Мои заказы</h3>
+
         <div className="account__grid">
           <div
             className="account__card account__card--link"
@@ -58,18 +67,22 @@ function AccountMain() {
             <Clock className="account__icon" />
             <p>История заказов</p>
           </div>
+
           <div className="account__card">
             <FileText className="account__icon" />
             <p>Файлы для скачивания</p>
           </div>
+
           <div className="account__card">
             <Gift className="account__icon" />
             <p>Бонусные баллы</p>
           </div>
+
           <div className="account__card">
             <CreditCard className="account__icon" />
             <p>История транзакций</p>
           </div>
+
           <div className="account__card">
             <Repeat className="account__icon" />
             <p>Периодические платежи</p>

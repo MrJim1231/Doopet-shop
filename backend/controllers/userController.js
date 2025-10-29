@@ -158,3 +158,23 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, email, phone, address } = req.body;
+    const user = await User.findById(req.user.userId);
+
+    if (!user)
+      return res.status(404).json({ message: "Пользователь не найден" });
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
+
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
