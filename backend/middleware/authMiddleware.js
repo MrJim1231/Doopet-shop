@@ -10,9 +10,17 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // теперь в req.user есть userId и role
+
+    // ✅ нормализуем ключи — теперь всегда есть userId
+    req.user = {
+      userId: decoded.userId || decoded._id,
+      role: decoded.role || "user",
+      email: decoded.email,
+    };
+
     next();
   } catch (error) {
+    console.error("Ошибка проверки токена:", error.message);
     return res.status(403).json({ message: "Недействительный токен" });
   }
 };

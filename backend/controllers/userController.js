@@ -123,12 +123,12 @@ export const loginUser = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     console.log("✅ Данные из токена:");
-    console.log({
-      userId: decoded.userId,
-      name: decoded.name,
-      email: decoded.email,
-      role: decoded.role,
-    });
+    // console.log({
+    //   userId: decoded.userId,
+    //   name: decoded.name,
+    //   email: decoded.email,
+    //   role: decoded.role,
+    // });
 
     // Отправляем клиенту
     res.status(200).json({

@@ -49,15 +49,18 @@ export const createOrder = async (req, res) => {
 // 🟢 Получить все заказы (или только пользователя)
 export const getOrders = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId, role } = req.user; // получаем из токена
 
-    const query = userId ? { userId } : {};
+    // 🔹 Админ видит все заказы, обычный пользователь — только свои
+    const query = role === "admin" ? {} : { userId };
+
     const orders = await Order.find(query)
       .populate("items.productId")
       .sort({ createdAt: -1 });
 
     res.json(orders);
   } catch (err) {
+    console.error("Ошибка при получении заказов:", err);
     res.status(500).json({ error: err.message });
   }
 };
