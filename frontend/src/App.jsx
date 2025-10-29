@@ -14,10 +14,11 @@ import AddProduct from "./admin/AddProduct";
 import AddPost from "./admin/AddPost";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import Cart from "./pages/Cart";
-import AccountLayout from "./pages/AccountLayout";
-import AccountMain from "./pages/AccountMain";
-import Favorites from "./pages/Favorites";
-import Orders from "./pages/Orders";
+
+import AccountLayout from "./pages/account/AccountLayout";
+import AccountMain from "./pages/account/AccountMain";
+import Favorites from "./pages/account/Favorites";
+import Orders from "./pages/account/Orders";
 import Checkout from "./pages/Checkout";
 
 // 🔑 Авторизация

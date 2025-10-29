@@ -1,10 +1,10 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import Header from "../layout/Header";
-import Breadcrumbs from "../layout/Breadcrumbs";
-import Footer from "../layout/Footer";
-import SectionHeader from "../components/SectionHeader";
-import graphicIcon from "../assets/icons/graphic-elements.svg";
+import { useAuth } from "../../context/AuthContext";
+import Header from "../../layout/Header";
+import Breadcrumbs from "../../layout/Breadcrumbs";
+import Footer from "../../layout/Footer";
+import SectionHeader from "../../components/SectionHeader";
+import graphicIcon from "../../assets/icons/graphic-elements.svg";
 import { LogOut, Heart, User, Clock } from "lucide-react";
 import { useEffect } from "react";
 

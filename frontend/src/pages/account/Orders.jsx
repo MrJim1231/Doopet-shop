@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
-import Header from "../layout/Header";
-import Breadcrumbs from "../layout/Breadcrumbs";
-import Footer from "../layout/Footer";
-import SectionHeader from "../components/SectionHeader";
-import graphicIcon from "../assets/icons/graphic-elements.svg";
+import { useAuth } from "../../context/AuthContext";
+import Header from "../../layout/Header";
+import Footer from "../../layout/Footer";
 
 function Orders() {
   const { user, token } = useAuth();

@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
-import Header from "../layout/Header";
-import Breadcrumbs from "../layout/Breadcrumbs";
-import SubscribeSection from "../components/SubscribeSection";
-import Footer from "../layout/Footer";
-import SectionHeader from "../components/SectionHeader"; // ✅ добавлено
-import graphicIcon from "../assets/icons/graphic-elements.svg"; // ✅ иконка
-
-import placeholderImg from "../assets/images/no-image.png";
+import { useAuth } from "../../context/AuthContext";
+import placeholderImg from "../../assets/images/no-image.png";
 import { Link } from "react-router-dom";
 
 function Favorites() {
