@@ -71,12 +71,6 @@ function Profile() {
   return (
     <section className="profile">
       <div className="profile__container">
-        <SectionHeader
-          icon={graphicIcon}
-          title="Моя информация"
-          baseClass="profile__header"
-        />
-
         <form className="profile__form" onSubmit={handleSubmit}>
           <div className="profile__field">
             <label>Имя</label>

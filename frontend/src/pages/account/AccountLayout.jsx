@@ -13,14 +13,14 @@ export default function AccountLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔁 Редирект только после загрузки, если пользователь не авторизован
+  // 🔁 Редирект на логин, если пользователь не авторизован
   useEffect(() => {
     if (!loading && !user && location.pathname.startsWith("/account")) {
       navigate("/auth/login");
     }
   }, [loading, user, location.pathname, navigate]);
 
-  // ⏳ Загрузка профиля
+  // ⏳ Показываем состояние загрузки
   if (loading) {
     return (
       <>
@@ -33,24 +33,26 @@ export default function AccountLayout() {
     );
   }
 
-  // ⚠️ Если нет пользователя после загрузки (редирект сработает)
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
-  // 🧭 Заголовок и хлебные крошки
+  // 🧭 Определяем заголовок в зависимости от маршрута
   const getTitle = () => {
-    if (location.pathname.includes("favorites")) return "Закладки";
-    if (location.pathname.includes("orders")) return "История заказов";
+    if (location.pathname.includes("/account/favorites")) return "Закладки";
+    if (location.pathname.includes("/account/orders")) return "История заказов";
+    if (location.pathname.includes("/account/profile"))
+      return "Изменить контактную информацию";
     return "Личный кабинет";
   };
 
+  // 🧭 Хлебные крошки
   const getBreadcrumbs = () => {
     const crumbs = [{ label: "Личный кабинет", path: "/account" }];
-    if (location.pathname.includes("favorites"))
+    if (location.pathname.includes("/account/favorites"))
       crumbs.push({ label: "Закладки" });
-    if (location.pathname.includes("orders"))
+    if (location.pathname.includes("/account/orders"))
       crumbs.push({ label: "История заказов" });
+    if (location.pathname.includes("/account/profile"))
+      crumbs.push({ label: "Изменить контактную информацию" });
     return crumbs;
   };
 
@@ -74,6 +76,10 @@ export default function AccountLayout() {
                 <li onClick={() => navigate("/account")}>
                   <User className="account__icon" /> Моя информация
                 </li>
+                <li onClick={() => navigate("/account/profile")}>
+                  <User className="account__icon" /> Изменить контактную
+                  информацию
+                </li>
                 <li onClick={() => navigate("/account/favorites")}>
                   <Heart className="account__icon" /> Закладки
                 </li>
@@ -86,7 +92,7 @@ export default function AccountLayout() {
               </ul>
             </aside>
 
-            {/* 📄 Контент (через <Outlet />) */}
+            {/* 📄 Контент */}
             <div className="account__main">
               <Outlet />
             </div>
