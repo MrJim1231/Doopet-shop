@@ -90,14 +90,14 @@ function Checkout() {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       // 🧾 Выводим всё, что будет отправлено
-      console.log("📦 Отправляем заказ на сервер:");
-      console.table(body.items);
-      console.log("🧍 Данные клиента:", body.customer);
-      console.log("💬 Комментарий:", comment || "—");
-      console.log("🚚 Доставка:", delivery);
-      console.log("💳 Оплата:", payment);
-      console.log("💰 Общая сумма:", total + "€");
-      console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
+      // console.log("📦 Отправляем заказ на сервер:");
+      // console.table(body.items);
+      // console.log("🧍 Данные клиента:", body.customer);
+      // console.log("💬 Комментарий:", comment || "—");
+      // console.log("🚚 Доставка:", delivery);
+      // console.log("💳 Оплата:", payment);
+      // console.log("💰 Общая сумма:", total + "€");
+      // console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
 
       // 📨 Отправка на сервер
       const res = await axios.post("http://localhost:5000/api/orders", body, {

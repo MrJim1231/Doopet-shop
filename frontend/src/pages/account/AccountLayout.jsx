@@ -5,7 +5,7 @@ import Breadcrumbs from "../../layout/Breadcrumbs";
 import Footer from "../../layout/Footer";
 import SectionHeader from "../../components/SectionHeader";
 import graphicIcon from "../../assets/icons/graphic-elements.svg";
-import { LogOut, Heart, User, Clock, Key } from "lucide-react";
+import { LogOut, Heart, User, Clock, Key, MapPin } from "lucide-react";
 import { useEffect } from "react";
 
 export default function AccountLayout() {
@@ -20,7 +20,6 @@ export default function AccountLayout() {
     }
   }, [loading, user, location.pathname, navigate]);
 
-  // ⏳ Состояние загрузки
   if (loading) {
     return (
       <>
@@ -43,6 +42,7 @@ export default function AccountLayout() {
       return "Изменить контактную информацию";
     if (location.pathname.includes("/account/change-password"))
       return "Изменить пароль";
+    if (location.pathname.includes("/account/addresses")) return "Мои адреса";
     return "Личный кабинет";
   };
 
@@ -61,6 +61,9 @@ export default function AccountLayout() {
 
     if (location.pathname.includes("/account/change-password"))
       crumbs.push({ label: "Изменить пароль" });
+
+    if (location.pathname.includes("/account/addresses"))
+      crumbs.push({ label: "Мои адреса" });
 
     return crumbs;
   };
@@ -91,6 +94,9 @@ export default function AccountLayout() {
                 </li>
                 <li onClick={() => navigate("/account/change-password")}>
                   <Key className="account__icon" /> Пароль
+                </li>
+                <li onClick={() => navigate("/account/addresses")}>
+                  <MapPin className="account__icon" /> Адресная книга
                 </li>
                 <li onClick={() => navigate("/account/favorites")}>
                   <Heart className="account__icon" /> Закладки

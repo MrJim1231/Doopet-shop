@@ -22,6 +22,7 @@ import Orders from "./pages/account/Orders";
 import Checkout from "./pages/Checkout";
 import Profile from "./pages/account/Profile";
 import ChangePassword from "./pages/account/ChangePassword";
+import Addresses from "./pages/account/Addresses";
 
 // 🔑 Авторизация
 import AuthLayout from "./pages/auth/AuthLayout";
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="profile" element={<Profile />} />
           <Route path="change-password" element={<ChangePassword />} />
+          <Route path="addresses" element={<Addresses />} />
         </Route>
         {/* 🔑 Авторизация */}
         <Route path="/auth" element={<AuthLayout />}>

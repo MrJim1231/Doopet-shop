@@ -43,7 +43,10 @@ function AccountMain() {
             <p>Изменить свой пароль</p>
           </div>
 
-          <div className="account__card">
+          <div
+            className="account__card account__card--link"
+            onClick={() => navigate("/account/addresses")}
+          >
             <MapPin className="account__icon" />
             <p>Изменить мои адреса</p>
           </div>

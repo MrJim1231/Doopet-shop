@@ -27,10 +27,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    // 📦 Старое поле address можно оставить для совместимости
     address: {
       type: String,
       default: "",
     },
+
+    // 📍 Массив адресов для страницы "Мои адреса"
+    addresses: [
+      {
+        address: { type: String, required: true },
+        city: { type: String, required: true },
+        region: { type: String },
+        zip: { type: String },
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+      },
+    ],
+
     // 🔁 Для восстановления пароля
     resetToken: {
       type: String,
@@ -42,10 +56,9 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // createdAt и updatedAt
+    timestamps: true,
   }
 );
 
-// ✅ Экспорт модели
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
