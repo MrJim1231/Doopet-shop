@@ -5,7 +5,7 @@ import Breadcrumbs from "../../layout/Breadcrumbs";
 import Footer from "../../layout/Footer";
 import SectionHeader from "../../components/SectionHeader";
 import graphicIcon from "../../assets/icons/graphic-elements.svg";
-import { LogOut, Heart, User, Clock } from "lucide-react";
+import { LogOut, Heart, User, Clock, Key } from "lucide-react";
 import { useEffect } from "react";
 
 export default function AccountLayout() {
@@ -20,7 +20,7 @@ export default function AccountLayout() {
     }
   }, [loading, user, location.pathname, navigate]);
 
-  // ⏳ Показываем состояние загрузки
+  // ⏳ Состояние загрузки
   if (loading) {
     return (
       <>
@@ -35,24 +35,33 @@ export default function AccountLayout() {
 
   if (!user) return null;
 
-  // 🧭 Определяем заголовок в зависимости от маршрута
+  // 🧭 Заголовок страницы в зависимости от маршрута
   const getTitle = () => {
     if (location.pathname.includes("/account/favorites")) return "Закладки";
     if (location.pathname.includes("/account/orders")) return "История заказов";
     if (location.pathname.includes("/account/profile"))
       return "Изменить контактную информацию";
+    if (location.pathname.includes("/account/change-password"))
+      return "Изменить пароль";
     return "Личный кабинет";
   };
 
-  // 🧭 Хлебные крошки
+  // 🍞 Хлебные крошки
   const getBreadcrumbs = () => {
     const crumbs = [{ label: "Личный кабинет", path: "/account" }];
+
     if (location.pathname.includes("/account/favorites"))
       crumbs.push({ label: "Закладки" });
+
     if (location.pathname.includes("/account/orders"))
       crumbs.push({ label: "История заказов" });
+
     if (location.pathname.includes("/account/profile"))
       crumbs.push({ label: "Изменить контактную информацию" });
+
+    if (location.pathname.includes("/account/change-password"))
+      crumbs.push({ label: "Изменить пароль" });
+
     return crumbs;
   };
 
@@ -79,6 +88,9 @@ export default function AccountLayout() {
                 <li onClick={() => navigate("/account/profile")}>
                   <User className="account__icon" /> Изменить контактную
                   информацию
+                </li>
+                <li onClick={() => navigate("/account/change-password")}>
+                  <Key className="account__icon" /> Пароль
                 </li>
                 <li onClick={() => navigate("/account/favorites")}>
                   <Heart className="account__icon" /> Закладки
