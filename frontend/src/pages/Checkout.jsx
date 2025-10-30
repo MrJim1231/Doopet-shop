@@ -3,16 +3,16 @@ import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import Footer from "../layout/Footer";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext"; // 🟢 добавлено
+import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"; // 🟢 уведомления
+import { toast } from "react-toastify";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 import SectionHeader from "../components/SectionHeader";
 
 function Checkout() {
   const { cart, fetchCart, clearCart } = useCart();
-  const { user, token } = useAuth(); // 🟢 используем авторизацию
+  const { user, token } = useAuth();
   const navigate = useNavigate();
 
   const [method, setMethod] = useState("guest");
@@ -26,7 +26,6 @@ function Checkout() {
     address2: "",
     city: "",
     zip: "",
-    country: "Латвия",
     region: "",
   });
   const [delivery, setDelivery] = useState("fixed");
@@ -68,25 +67,42 @@ function Checkout() {
         sessionId,
         customer: {
           name: `${customer.name} ${customer.surname}`.trim(),
-          email,
-          phone,
-          address,
+          email: customer.email,
+          phone: customer.phone,
+          address: customer.address,
+          city: customer.city,
+          zip: customer.zip,
+          region: customer.region,
         },
         comment,
         delivery,
         payment,
+        items: cart.items.map((item) => ({
+          productId: item.productId._id,
+          name: item.productId.name,
+          quantity: item.quantity,
+          price: item.price,
+          totalPrice: item.totalPrice,
+        })),
+        total,
       };
 
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      // console.log("📦 Отправляем заказ:", body);
-      // console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
+      // 🧾 Выводим всё, что будет отправлено
+      console.log("📦 Отправляем заказ на сервер:");
+      console.table(body.items);
+      console.log("🧍 Данные клиента:", body.customer);
+      console.log("💬 Комментарий:", comment || "—");
+      console.log("🚚 Доставка:", delivery);
+      console.log("💳 Оплата:", payment);
+      console.log("💰 Общая сумма:", total + "€");
+      console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
 
+      // 📨 Отправка на сервер
       const res = await axios.post("http://localhost:5000/api/orders", body, {
         headers,
       });
-
-      // console.log("✅ Заказ успешно создан:", res.data);
 
       toast.success("✅ Заказ успешно оформлен!", {
         position: "bottom-right",
