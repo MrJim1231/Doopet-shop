@@ -76,8 +76,8 @@ function Checkout() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const { name, email, phone, address } = customer;
-    if (!name || !email || !phone || !address) {
+    const { name, email, phone, address, city, zip, region } = customer;
+    if (!name || !email || !phone || !address || !city) {
       toast.warn("⚠️ Заполните обязательные поля");
       setIsSubmitting(false);
       return;
@@ -94,10 +94,10 @@ function Checkout() {
           name: `${customer.name} ${customer.surname}`.trim(),
           email: customer.email,
           phone: customer.phone,
-          address: customer.address,
-          city: customer.city,
-          zip: customer.zip,
-          region: customer.region,
+          address,
+          city,
+          zip,
+          region,
         },
         comment,
         delivery,
@@ -114,6 +114,7 @@ function Checkout() {
 
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
+      // 📨 Отправка заказа
       const res = await axios.post("http://localhost:5000/api/orders", body, {
         headers,
       });
@@ -122,6 +123,30 @@ function Checkout() {
         position: "bottom-right",
         autoClose: 2000,
       });
+
+      // 🧩 Если пользователь авторизован — проверим, есть ли адрес в списке
+      if (user && token) {
+        const exists = savedAddresses.some(
+          (a) =>
+            a.address.toLowerCase() === address.toLowerCase() &&
+            a.city.toLowerCase() === city.toLowerCase() &&
+            (a.zip || "") === (zip || "")
+        );
+
+        // ➕ Если нет — добавляем его в адреса
+        if (!exists) {
+          try {
+            await axios.post(
+              "http://localhost:5000/api/addresses",
+              { address, city, region, zip },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            console.log("✅ Новый адрес сохранён");
+          } catch (saveErr) {
+            console.warn("⚠️ Не удалось сохранить новый адрес:", saveErr);
+          }
+        }
+      }
 
       await clearCart();
       await fetchCart();
