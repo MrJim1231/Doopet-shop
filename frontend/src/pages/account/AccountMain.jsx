@@ -35,7 +35,10 @@ function AccountMain() {
             <p>Изменить контактную информацию</p>
           </div>
 
-          <div className="account__card">
+          <div
+            className="account__card account__card--link"
+            onClick={() => navigate("/account/change-password")}
+          >
             <Key className="account__icon" />
             <p>Изменить свой пароль</p>
           </div>
