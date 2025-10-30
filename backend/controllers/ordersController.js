@@ -5,9 +5,10 @@ import Product from "../models/Product.js";
 // 🟢 Создать заказ
 export const createOrder = async (req, res) => {
   try {
-    const { userId, sessionId, customer } = req.body;
+    const { userId, sessionId, customer, comment, delivery, payment } =
+      req.body;
 
-    // Получаем корзину пользователя или гостя
+    // Проверяем корзину
     const cart = userId
       ? await Cart.findOne({ userId }).populate("items.productId")
       : await Cart.findOne({ sessionId }).populate("items.productId");
@@ -16,7 +17,7 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ error: "Корзина пуста" });
     }
 
-    // Формируем массив товаров с ценой на момент заказа
+    // Формируем товары
     const items = cart.items.map((item) => ({
       productId: item.productId._id,
       quantity: item.quantity,
@@ -26,22 +27,35 @@ export const createOrder = async (req, res) => {
 
     const total = items.reduce((sum, item) => sum + item.totalPrice, 0);
 
+    // 🆕 Создаём заказ с полными данными клиента
     const order = new Order({
       userId: userId || null,
       sessionId: sessionId || null,
       items,
       total,
-      customer,
+      customer: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        address: customer.address,
+        city: customer.city,
+        region: customer.region,
+        zip: customer.zip,
+      },
+      comment: comment || "",
+      delivery: delivery || "fixed",
+      payment: payment || "cash",
     });
 
     await order.save();
 
-    // Очистка корзины после оформления заказа
+    // Очистка корзины
     cart.items = [];
     await cart.save();
 
     res.status(201).json(order);
   } catch (err) {
+    console.error("Ошибка при создании заказа:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -50,8 +64,6 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
   try {
     const { userId, role } = req.user; // получаем из токена
-
-    // 🔹 Админ видит все заказы, обычный пользователь — только свои
     const query = role === "admin" ? {} : { userId };
 
     const orders = await Order.find(query)
@@ -101,6 +113,7 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
+// 🟢 Миграция заказов гостя при входе
 export const migrateOrders = async (req, res) => {
   try {
     const { sessionId } = req.body;

@@ -23,22 +23,33 @@ const orderSchema = new mongoose.Schema(
         totalPrice: { type: Number, required: true }, // quantity * price
       },
     ],
+
     total: { type: Number, required: true }, // Общая сумма заказа
+
     status: {
       type: String,
       enum: ["pending", "paid", "shipped", "completed", "cancelled"],
       default: "pending",
     },
+
+    // 👤 Информация о клиенте
     customer: {
       name: { type: String, required: true },
       email: { type: String, required: true },
       phone: { type: String, required: true },
       address: { type: String, required: true },
+      city: { type: String, required: true },
+      region: { type: String, required: false },
+      zip: { type: String, required: false },
     },
+
+    // 💬 Дополнительные поля заказа
+    comment: { type: String, required: false, trim: true },
+    delivery: { type: String, required: true, default: "fixed" }, // fixed, courier и т.п.
+    payment: { type: String, required: true, default: "cash" }, // cash, card, etc.
   },
   { timestamps: true }
 );
 
-// ✅ Экспорт модели
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 export default Order;
