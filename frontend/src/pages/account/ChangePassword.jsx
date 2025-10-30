@@ -24,7 +24,7 @@ function ChangePassword() {
 
     try {
       const res = await axios.post(
-        "/api/password/change",
+        "http://localhost:5000/api/password/change", // ✅ абсолютный путь
         { currentPassword, newPassword },
         {
           headers: {
