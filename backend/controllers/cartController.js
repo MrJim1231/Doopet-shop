@@ -51,11 +51,11 @@ export const addToCart = async (req, res) => {
         console.log("⚠️ Ошибка при расшифровке токена:", err.message);
       }
     } else {
-      console.log(
-        "👤 Гость добавляет товар в корзину (sessionId:",
-        sessionId,
-        ")"
-      );
+      // console.log(
+      //   "👤 Гость добавляет товар в корзину (sessionId:",
+      //   sessionId,
+      //   ")"
+      // );
     }
 
     const product = await Product.findById(productId);

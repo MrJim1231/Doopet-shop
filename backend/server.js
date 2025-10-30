@@ -15,6 +15,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import favoriteRoutes from "./routes/favoriteRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
+import passwordRoutes from "./routes/passwordRoutes.js";
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/password", passwordRoutes);
 
 // ✅ Запуск сервера
 app.listen(PORT, () => {

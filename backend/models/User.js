@@ -31,6 +31,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    // 🔁 Для восстановления пароля
+    resetToken: {
+      type: String,
+      default: null,
+    },
+    resetTokenExpiry: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true, // createdAt и updatedAt
