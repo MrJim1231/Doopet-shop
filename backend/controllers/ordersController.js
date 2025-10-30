@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js"; // 🆕 добавили
 
 // 🟢 Создать заказ
 export const createOrder = async (req, res) => {
@@ -49,6 +50,33 @@ export const createOrder = async (req, res) => {
 
     await order.save();
 
+    // 🟢 Если пользователь авторизован — сохраняем адрес
+    if (userId && customer.address && customer.city) {
+      const user = await User.findById(userId);
+
+      if (user) {
+        const addressExists = user.addresses.some(
+          (a) =>
+            a.address.toLowerCase() === customer.address.toLowerCase() &&
+            a.city.toLowerCase() === customer.city.toLowerCase() &&
+            (a.zip || "") === (customer.zip || "")
+        );
+
+        if (!addressExists) {
+          user.addresses.push({
+            address: customer.address,
+            city: customer.city,
+            region: customer.region || "",
+            zip: customer.zip || "",
+          });
+          await user.save();
+          console.log("✅ Адрес добавлен пользователю");
+        } else {
+          console.log("ℹ️ Адрес уже существует, не добавляем повторно");
+        }
+      }
+    }
+
     // Очистка корзины
     cart.items = [];
     await cart.save();
@@ -94,7 +122,7 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-// 🟢 Обновить статус заказа (например, "shipped", "completed")
+// 🟢 Обновить статус заказа
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;

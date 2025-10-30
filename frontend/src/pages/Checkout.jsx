@@ -28,6 +28,8 @@ function Checkout() {
     zip: "",
     region: "",
   });
+
+  const [savedAddresses, setSavedAddresses] = useState([]); // 🆕 список адресов пользователя
   const [delivery, setDelivery] = useState("fixed");
   const [payment, setPayment] = useState("cash");
   const [comment, setComment] = useState("");
@@ -39,12 +41,35 @@ function Checkout() {
   const deliveryCost = 5;
   const total = subtotal + deliveryCost;
 
+  // 🟢 Загружаем корзину и адреса при авторизации
   useEffect(() => {
     fetchCart();
-  }, []);
+
+    if (user && token) {
+      axios
+        .get("http://localhost:5000/api/addresses", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setSavedAddresses(res.data))
+        .catch((err) => console.error("Ошибка загрузки адресов:", err));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setCustomer({ ...customer, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectAddress = (id) => {
+    const selected = savedAddresses.find((a) => a._id === id);
+    if (selected) {
+      setCustomer({
+        ...customer,
+        address: selected.address,
+        city: selected.city,
+        zip: selected.zip || "",
+        region: selected.region || "",
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -89,17 +114,6 @@ function Checkout() {
 
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      // 🧾 Выводим всё, что будет отправлено
-      // console.log("📦 Отправляем заказ на сервер:");
-      // console.table(body.items);
-      // console.log("🧍 Данные клиента:", body.customer);
-      // console.log("💬 Комментарий:", comment || "—");
-      // console.log("🚚 Доставка:", delivery);
-      // console.log("💳 Оплата:", payment);
-      // console.log("💰 Общая сумма:", total + "€");
-      // console.log("🔐 Токен:", token ? "есть ✅" : "нет ❌");
-
-      // 📨 Отправка на сервер
       const res = await axios.post("http://localhost:5000/api/orders", body, {
         headers,
       });
@@ -116,7 +130,6 @@ function Checkout() {
         `✅ Заказ №${res.data._id.slice(-6).toUpperCase()} успешно оформлен!`
       );
 
-      // 🔄 Переход в заказы через 2 секунды
       setTimeout(() => navigate("/account/orders"), 2000);
     } catch (err) {
       console.error("❌ Ошибка оформления заказа:", err);
@@ -223,6 +236,25 @@ function Checkout() {
 
                 <div className="checkout__block">
                   <h4>Адрес доставки</h4>
+
+                  {/* 🟢 Выбор сохранённого адреса */}
+                  {savedAddresses.length > 0 && (
+                    <div className="checkout__saved-addresses">
+                      <label>Выбрать сохранённый адрес:</label>
+                      <select
+                        onChange={(e) => handleSelectAddress(e.target.value)}
+                        defaultValue=""
+                      >
+                        <option value="">— Выберите адрес —</option>
+                        {savedAddresses.map((addr) => (
+                          <option key={addr._id} value={addr._id}>
+                            {addr.city}, {addr.address}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
                   <input
                     type="text"
                     name="address"
@@ -257,7 +289,7 @@ function Checkout() {
               </div>
             </div>
 
-            {/* Шаг 3 */}
+            {/* Доставка */}
             <div className="checkout__step">
               <h3>Шаг 3: Способ доставки</h3>
               <div className="checkout__block">
@@ -280,7 +312,7 @@ function Checkout() {
               </div>
             </div>
 
-            {/* Шаг 4 */}
+            {/* Оплата */}
             <div className="checkout__step">
               <h3>Шаг 4: Оплата</h3>
               <div className="checkout__block">
@@ -307,7 +339,7 @@ function Checkout() {
               </div>
             </div>
 
-            {/* Шаг 5 */}
+            {/* Подтверждение */}
             <div className="checkout__step">
               <h3>Шаг 5: Подтверждение заказа</h3>
               <table className="checkout__table">
