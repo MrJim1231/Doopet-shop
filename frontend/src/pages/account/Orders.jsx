@@ -21,7 +21,6 @@ function Orders() {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setOrders(res.data);
-      // console.log("📦 Заказы загружены:", res.data);
     } catch (err) {
       console.error("❌ Ошибка при загрузке заказов:", err);
     } finally {
@@ -43,17 +42,8 @@ function Orders() {
 
   return (
     <div className="orders-page">
-      {/* <Header /> */}
-      {/* <Breadcrumbs items={[{ label: "Мои заказы" }]} /> */}
-
       <section className="orders">
         <div className="orders__container">
-          {/* <SectionHeader
-            icon={graphicIcon}
-            title="Мои заказы"
-            baseClass="orders__header"
-          /> */}
-
           {loading ? (
             <p>Загрузка заказов...</p>
           ) : orders.length === 0 ? (
@@ -62,6 +52,7 @@ function Orders() {
             <div className="orders__list">
               {orders.map((order) => (
                 <div key={order._id} className="order-card">
+                  {/* 🔹 Заголовок */}
                   <div className="order-card__header">
                     <h3>Заказ №{order._id.slice(-6).toUpperCase()}</h3>
                     <span
@@ -79,6 +70,7 @@ function Orders() {
                     </span>
                   </div>
 
+                  {/* 🔹 Товары */}
                   <div className="order-card__body">
                     {order.items?.length > 0 ? (
                       <ul className="order-card__items">
@@ -117,6 +109,47 @@ function Orders() {
                     )}
                   </div>
 
+                  {/* 🔹 Информация о доставке и клиенте */}
+                  <div className="order-card__details">
+                    <h4>Данные доставки:</h4>
+                    <p>
+                      <strong>Адрес:</strong> {order.customer.address},{" "}
+                      {order.customer.city}
+                      {order.customer.region
+                        ? `, ${order.customer.region}`
+                        : ""}
+                      {order.customer.zip ? `, ${order.customer.zip}` : ""}
+                    </p>
+                    <p>
+                      <strong>Получатель:</strong> {order.customer.name}
+                    </p>
+                    <p>
+                      <strong>Телефон:</strong> {order.customer.phone}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {order.customer.email}
+                    </p>
+
+                    <p>
+                      <strong>Доставка:</strong>{" "}
+                      {order.delivery === "fixed"
+                        ? "Фиксированная доставка (5€)"
+                        : order.delivery}
+                    </p>
+                    <p>
+                      <strong>Оплата:</strong>{" "}
+                      {order.payment === "cash"
+                        ? "Оплата при получении"
+                        : "Оплата картой"}
+                    </p>
+                    {order.comment && (
+                      <p>
+                        <strong>Комментарий:</strong> {order.comment}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* 🔹 Итог */}
                   <div className="order-card__footer">
                     <p>
                       <strong>Итого:</strong> {order.total.toFixed(2)} €
@@ -132,8 +165,6 @@ function Orders() {
           )}
         </div>
       </section>
-
-      {/* <Footer /> */}
     </div>
   );
 }
