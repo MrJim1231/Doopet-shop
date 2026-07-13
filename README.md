@@ -1,5 +1,9 @@
 # DooPet Shop 🐾 — Интернет-магазин зоотоваров
 
+**Ссылка на работающий проект (демо)**: [https://doopet-shop-1.onrender.com/](https://doopet-shop-1.onrender.com/)
+
+Верстка проекта выполнена в соответствии с дизайном по [макету Figma](https://www.figma.com/design/CVLyEjhmF70R7sOxF6vrFC/Doopet--Copy-?node-id=0-1&m=dev&t=RballIbtEBFhYXIq-1).
+
 DooPet Shop — это полноценное full-stack веб-приложение (E-commerce) для продажи товаров для домашних животных. Проект состоит из серверной части на Node.js/Express и клиентского приложения на React (Vite).
 
 ---
