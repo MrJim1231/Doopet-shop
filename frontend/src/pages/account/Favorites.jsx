@@ -4,6 +4,8 @@ import { useAuth } from "../../context/AuthContext";
 import placeholderImg from "../../assets/images/no-image.png";
 import { Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Favorites() {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState([]);
@@ -18,7 +20,7 @@ function Favorites() {
 
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/favorites/${user._id}`
+          `${API_URL}/api/favorites/${user._id}`
         );
         setFavorites(res.data || []);
       } catch (err) {
@@ -35,7 +37,7 @@ function Favorites() {
     if (!user) return;
 
     try {
-      await axios.post("http://localhost:5000/api/favorites", {
+      await axios.post(`${API_URL}/api/favorites`, {
         userId: user._id,
         productId,
       });
@@ -83,7 +85,7 @@ function Favorites() {
                         src={
                           product.image?.startsWith("http")
                             ? product.image
-                            : `http://localhost:5000${product.image}`
+                            : `${API_URL}${product.image}`
                         }
                         alt={product.name}
                         onError={(e) => (e.target.src = placeholderImg)}

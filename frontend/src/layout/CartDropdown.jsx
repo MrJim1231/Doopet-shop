@@ -3,6 +3,8 @@ import { useCart } from "../context/CartContext";
 import trashIcon from "../assets/icons/trash.svg";
 import placeholderImg from "../assets/images/no-image.png";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function CartDropdown() {
   const { cart, removeFromCart, totalPrice } = useCart();
 
@@ -17,7 +19,7 @@ function CartDropdown() {
                   src={
                     item.productId?.image?.startsWith("http")
                       ? item.productId.image
-                      : `http://localhost:5000${item.productId?.image || ""}`
+                      : `${API_URL}${item.productId?.image || ""}`
                   }
                   onError={(e) => (e.target.src = placeholderImg)}
                   alt={item.productId?.name}

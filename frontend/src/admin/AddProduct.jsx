@@ -3,6 +3,8 @@ import axios from "axios";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function AddProduct() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -30,7 +32,7 @@ function AddProduct() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axios.get(`${API_URL}/api/categories`);
       setCategories(res.data);
     } catch (error) {
       console.error("Ошибка при загрузке категорий:", error);
@@ -39,7 +41,7 @@ function AddProduct() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(`${API_URL}/api/products`);
       setProducts(res.data.products || []);
     } catch (error) {
       console.error("Ошибка при загрузке продуктов:", error);
@@ -80,7 +82,7 @@ function AddProduct() {
 
       if (file) formData.append("image", file);
 
-      await axios.post("http://localhost:5000/api/products", formData, {
+      await axios.post(`${API_URL}/api/products`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -112,7 +114,7 @@ function AddProduct() {
     if (!window.confirm("Удалить продукт?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`${API_URL}/api/products/${id}`);
       setProducts((prev) => prev.filter((p) => p._id !== id));
     } catch (error) {
       console.error(error);
@@ -130,102 +132,135 @@ function AddProduct() {
           <h2 className="add-product__title">Добавить продукт</h2>
 
           <form className="add-product__form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleInputChange}
-              placeholder="Название продукта"
-              className="add-product__input"
-            />
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleInputChange}
-              placeholder="Описание продукта"
-              className="add-product__input"
-            />
-            <input
-              type="number"
-              name="price"
-              value={form.price}
-              onChange={handleInputChange}
-              placeholder="Цена"
-              className="add-product__input"
-            />
-            <input
-              type="number"
-              name="oldPrice"
-              value={form.oldPrice}
-              onChange={handleInputChange}
-              placeholder="Старая цена (если есть)"
-              className="add-product__input"
-            />
-            <input
-              type="number"
-              name="stock"
-              value={form.stock}
-              onChange={handleInputChange}
-              placeholder="Количество на складе"
-              className="add-product__input"
-            />
+            <div className="add-product__group">
+              <label>Название товара *</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleInputChange}
+                required
+                className="add-product__input"
+              />
+            </div>
+            <div className="add-product__group">
+              <label>Описание</label>
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={handleInputChange}
+                className="add-product__input"
+              />
+            </div>
+            <div className="add-product__row">
+              <div className="add-product__group">
+                <label>Цена *</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={handleInputChange}
+                  required
+                  className="add-product__input"
+                />
+              </div>
+              <div className="add-product__group">
+                <label>Старая цена</label>
+                <input
+                  type="number"
+                  name="oldPrice"
+                  value={form.oldPrice}
+                  onChange={handleInputChange}
+                  className="add-product__input"
+                />
+              </div>
+            </div>
+            <div className="add-product__row">
+              <div className="add-product__group">
+                <label>Количество на складе *</label>
+                <input
+                  type="number"
+                  name="stock"
+                  value={form.stock}
+                  onChange={handleInputChange}
+                  required
+                  className="add-product__input"
+                />
+              </div>
+              <div className="add-product__group">
+                <label>Категория *</label>
+                <select
+                  name="categoryId"
+                  value={form.categoryId}
+                  onChange={handleInputChange}
+                  required
+                  className="add-product__input"
+                >
+                  <option value="">Выберите категорию</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-            {/* 🟢 Артикул */}
-            <input
-              type="text"
-              name="article"
-              value={form.article}
-              onChange={handleInputChange}
-              placeholder="Артикул (оставьте пустым для автогенерации)"
-              className="add-product__input"
-            />
+            <div className="add-product__row">
+              <div className="add-product__group">
+                <label>Тэг (например 'Хит')</label>
+                <input
+                  type="text"
+                  name="tag"
+                  value={form.tag}
+                  onChange={handleInputChange}
+                  className="add-product__input"
+                />
+              </div>
+              <div className="add-product__group">
+                <label>Лейбл (например 'Новинка')</label>
+                <input
+                  type="text"
+                  name="label"
+                  value={form.label}
+                  onChange={handleInputChange}
+                  className="add-product__input"
+                />
+              </div>
+            </div>
+            <div className="add-product__row">
+              <div className="add-product__group">
+                <label>Производитель</label>
+                <input
+                  type="text"
+                  name="manufacturer"
+                  value={form.manufacturer}
+                  onChange={handleInputChange}
+                  className="add-product__input"
+                />
+              </div>
+              <div className="add-product__group">
+                <label>Размер упаковки</label>
+                <input
+                  type="text"
+                  name="packageSize"
+                  value={form.packageSize}
+                  onChange={handleInputChange}
+                  className="add-product__input"
+                />
+              </div>
+            </div>
 
-            <select
-              name="categoryId"
-              value={form.categoryId}
-              onChange={handleInputChange}
-              className="add-product__input"
-            >
-              <option value="">Выберите категорию</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-
-            <input
-              type="text"
-              name="tag"
-              value={form.tag}
-              onChange={handleInputChange}
-              placeholder="Тэг (например 'Хит')"
-              className="add-product__input"
-            />
-            <input
-              type="text"
-              name="label"
-              value={form.label}
-              onChange={handleInputChange}
-              placeholder="Лейбл (например 'Новинка')"
-              className="add-product__input"
-            />
-            <input
-              type="text"
-              name="manufacturer"
-              value={form.manufacturer}
-              onChange={handleInputChange}
-              placeholder="Производитель"
-              className="add-product__input"
-            />
-            <input
-              type="text"
-              name="packageSize"
-              value={form.packageSize}
-              onChange={handleInputChange}
-              placeholder="Размер упаковки"
-              className="add-product__input"
-            />
+            <div className="add-product__group">
+              <label>Артикул (оставьте пустым для автогенерации)</label>
+              <input
+                type="text"
+                name="article"
+                value={form.article}
+                onChange={handleInputChange}
+                className="add-product__input"
+              />
+            </div>
 
             <div className="add-product__upload">
               <label>Изображение:</label>
@@ -268,7 +303,7 @@ function AddProduct() {
                         src={
                           p.image.startsWith("http")
                             ? p.image
-                            : `http://localhost:5000${p.image}`
+                            : `${API_URL}${p.image}`
                         }
                         alt={p.name}
                         className="add-product__img"

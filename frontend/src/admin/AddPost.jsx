@@ -3,6 +3,8 @@ import axios from "axios";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function AddPost() {
   const [form, setForm] = useState({
     title: "",
@@ -22,7 +24,7 @@ function AddPost() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axios.get(`${API_URL}/api/blogs`);
       setBlogs(res.data);
     } catch (err) {
       console.error("Ошибка при загрузке статей:", err);
@@ -64,7 +66,7 @@ function AddPost() {
         data.append("image", form.imageUrl);
       }
 
-      await axios.post("http://localhost:5000/api/blogs", data, {
+      await axios.post(`${API_URL}/api/blogs`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -84,7 +86,7 @@ function AddPost() {
     if (!window.confirm("Удалить эту статью?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`);
+      await axios.delete(`${API_URL}/api/blogs/${id}`);
       setBlogs((prev) => prev.filter((item) => item._id !== id));
     } catch (err) {
       console.error("Ошибка при удалении:", err);

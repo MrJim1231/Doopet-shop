@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Categories() {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate(); // хук для перехода
@@ -12,7 +14,7 @@ function Categories() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axios.get(`${API_URL}/api/categories`);
       setCategories(res.data);
     } catch (error) {
       console.error("Ошибка при загрузке категорий:", error);

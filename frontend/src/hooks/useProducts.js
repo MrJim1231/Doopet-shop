@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export const useProducts = (categoryId, filters = {}) => {
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState("");
@@ -63,7 +65,7 @@ export const useProducts = (categoryId, filters = {}) => {
       setLoading(true);
       const query = buildQuery(page, limitValue, sortValue, filtersObj);
       const res = await axios.get(
-        `http://localhost:5000/api/products?${query}`
+        `${API_URL}/api/products?${query}`
       );
 
       setProducts(res.data.products);
@@ -81,7 +83,7 @@ export const useProducts = (categoryId, filters = {}) => {
   const fetchCategoryName = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/categories/${categoryId}`
+        `${API_URL}/api/categories/${categoryId}`
       );
       setCategoryName(res.data.name);
     } catch (error) {

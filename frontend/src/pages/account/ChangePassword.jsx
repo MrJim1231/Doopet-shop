@@ -2,7 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-// import "./change-password.scss";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function ChangePassword() {
   const { token } = useAuth();
@@ -24,7 +25,7 @@ function ChangePassword() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/password/change", // ✅ абсолютный путь
+        `${API_URL}/api/password/change`, // ✅ абсолютный путь
         { currentPassword, newPassword },
         {
           headers: {

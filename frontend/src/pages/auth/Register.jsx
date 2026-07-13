@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [message, setMessage] = useState("");
@@ -12,7 +14,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/users", form);
+      await axios.post(`${API_URL}/api/users`, form);
       setMessage("Регистрация успешна! Теперь войдите.");
       setForm({ name: "", email: "", password: "" });
     } catch (err) {

@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import SectionHeader from "./SectionHeader";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function BlogSection() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ function BlogSection() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/blogs");
+        const res = await axios.get(`${API_URL}/api/blogs`);
         setBlogs(res.data);
       } catch (error) {
         console.error("Ошибка при загрузке блога:", error);

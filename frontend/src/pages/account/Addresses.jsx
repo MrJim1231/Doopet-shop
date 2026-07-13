@@ -7,6 +7,8 @@ import Breadcrumbs from "../../layout/Breadcrumbs";
 import SectionHeader from "../../components/SectionHeader";
 import graphicIcon from "../../assets/icons/graphic-elements.svg";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Addresses() {
   const { user, token } = useAuth();
   const [addresses, setAddresses] = useState([]);
@@ -26,7 +28,7 @@ function Addresses() {
   const fetchAddresses = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/addresses", {
+      const res = await axios.get(`${API_URL}/api/addresses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAddresses(res.data);
@@ -47,7 +49,7 @@ function Addresses() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/addresses",
+        `${API_URL}/api/addresses`,
         newAddress,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -62,7 +64,7 @@ function Addresses() {
     if (!window.confirm("Удалить этот адрес?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/addresses/${id}`, {
+      await axios.delete(`${API_URL}/api/addresses/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAddresses(addresses.filter((a) => a._id !== id));

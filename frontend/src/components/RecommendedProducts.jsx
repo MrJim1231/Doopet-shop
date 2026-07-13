@@ -4,6 +4,8 @@ import axios from "axios";
 import { useCart } from "../context/CartContext";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function RecommendedProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ function RecommendedProducts() {
     const fetchRecommended = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/products/recommended"
+          `${API_URL}/api/products/recommended`
         );
         setProducts(res.data || []);
       } catch (error) {

@@ -12,6 +12,8 @@ import heartIcon from "../assets/icons/heart1.svg";
 import heartFilled from "../assets/icons/heart.svg";
 import placeholderImg from "../assets/images/no-image.png";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Product() {
   const { id } = useParams();
   const { addToCart } = useCart();
@@ -28,7 +30,7 @@ function Product() {
       if (!user?._id || !product?._id) return;
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/favorites/check/${user._id}/${product._id}`
+          `${API_URL}/api/favorites/check/${user._id}/${product._id}`
         );
         setIsFavorite(res.data.isFavorite);
       } catch (err) {
@@ -46,7 +48,7 @@ function Product() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/favorites", {
+      const res = await axios.post(`${API_URL}/api/favorites`, {
         userId: user._id,
         productId: product._id,
       });
@@ -99,7 +101,7 @@ function Product() {
                   {product.images.map((img, i) => (
                     <img
                       key={i}
-                      src={`http://localhost:5000/${img}`}
+                      src={`${API_URL}/${img}`}
                       alt={`миниатюра ${i + 1}`}
                       className="product__page-thumb"
                       onError={(e) => (e.target.src = placeholderImg)}

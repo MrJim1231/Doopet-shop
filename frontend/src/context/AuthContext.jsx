@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        const res = await axios.get("http://localhost:5000/api/users/profile", {
+        const res = await axios.get(`${API_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
@@ -34,14 +36,14 @@ export const AuthProvider = ({ children }) => {
 
             // Проверим, есть ли вообще корзина у гостя
             const cartCheck = await axios.get(
-              "http://localhost:5000/api/cart",
+              `${API_URL}/api/cart`,
               { params: { sessionId } }
             );
 
             if (cartCheck.data?.items?.length > 0) {
               console.log("🛒 Найдена гостевая корзина, переносим...");
               await axios.post(
-                "http://localhost:5000/api/cart/migrate",
+                `${API_URL}/api/cart/migrate`,
                 { sessionId },
                 { headers: { Authorization: `Bearer ${token}` } }
               );

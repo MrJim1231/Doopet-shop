@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Filters({
   minPrice,
   maxPrice,
@@ -18,7 +20,7 @@ export default function Filters({
   useEffect(() => {
     const fetchManufacturers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${API_URL}/api/products`);
         const unique = [
           ...new Set(
             res.data.products.map((p) => p.manufacturer?.trim()).filter(Boolean)

@@ -4,6 +4,8 @@ import axios from "axios";
 import { useCart } from "../context/CartContext"; // 🔹 импорт контекста корзины
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function PopularProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,7 @@ function PopularProducts() {
   useEffect(() => {
     const fetchHits = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products/hits");
+        const res = await axios.get(`${API_URL}/api/products/hits`);
         setProducts(res.data || []);
       } catch (error) {
         console.error("Ошибка при загрузке хитов:", error);

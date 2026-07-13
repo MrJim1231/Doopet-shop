@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import graphicIcon from "../../assets/icons/graphic-elements.svg";
 import SectionHeader from "../../components/SectionHeader";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Profile() {
   const { user, token, logout } = useAuth();
   const [form, setForm] = useState({
@@ -36,7 +38,7 @@ function Profile() {
 
     try {
       const res = await axios.put(
-        "http://localhost:5000/api/users/profile",
+        `${API_URL}/api/users/profile`,
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );

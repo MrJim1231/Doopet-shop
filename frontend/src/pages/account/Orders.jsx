@@ -4,6 +4,8 @@ import { useAuth } from "../../context/AuthContext";
 import Header from "../../layout/Header";
 import Footer from "../../layout/Footer";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Orders() {
   const { user, token } = useAuth();
   const [orders, setOrders] = useState([]);
@@ -17,7 +19,7 @@ function Orders() {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/orders", {
+      const res = await axios.get(`${API_URL}/api/orders`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setOrders(res.data);
@@ -80,7 +82,7 @@ function Orders() {
                               src={
                                 item.productId?.image?.startsWith("http")
                                   ? item.productId.image
-                                  : `http://localhost:5000${
+                                  : `${API_URL}${
                                       item.productId?.image || ""
                                     }`
                               }

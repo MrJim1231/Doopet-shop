@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext"; // ✅ используем общий контекст
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function ProductGrid({ products, loading }) {
   const [quantities, setQuantities] = useState({});
   const [adding, setAdding] = useState({});
@@ -63,7 +65,7 @@ export default function ProductGrid({ products, loading }) {
                 src={
                   product.image?.startsWith("http")
                     ? product.image
-                    : `http://localhost:5000${product.image}`
+                    : `${API_URL}${product.image}`
                 }
                 alt={product.name}
                 className="category__card-image"

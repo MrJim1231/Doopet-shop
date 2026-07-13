@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
-// import "./AddCategory.scss";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function AddCategory() {
   const [categories, setCategories] = useState([]);
@@ -21,7 +22,7 @@ function AddCategory() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/categories");
+      const res = await axios.get(`${API_URL}/api/categories`);
       setCategories(res.data);
     } catch (error) {
       console.error("Ошибка при загрузке категорий:", error);
@@ -57,7 +58,7 @@ function AddCategory() {
         formData.append("image", form.image);
       }
 
-      await axios.post("http://localhost:5000/api/categories", formData, {
+      await axios.post(`${API_URL}/api/categories`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -76,7 +77,7 @@ function AddCategory() {
   const handleDelete = async (id) => {
     if (!window.confirm("Удалить категорию?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      await axios.delete(`${API_URL}/api/categories/${id}`);
       setCategories(categories.filter((cat) => cat._id !== id));
     } catch (error) {
       alert("Ошибка при удалении категории");

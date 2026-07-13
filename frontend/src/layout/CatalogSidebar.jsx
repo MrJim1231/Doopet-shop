@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function CatalogSidebar({ open, onClose }) {
   const [categories, setCategories] = useState([]);
 
@@ -10,7 +12,7 @@ function CatalogSidebar({ open, onClose }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/categories");
+        const res = await axios.get(`${API_URL}/api/categories`);
         setCategories(res.data);
       } catch (err) {
         console.error("Ошибка при загрузке категорий:", err);

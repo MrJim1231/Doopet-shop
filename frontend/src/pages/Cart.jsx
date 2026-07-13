@@ -9,6 +9,8 @@ import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Cart() {
   const {
     cart,
@@ -25,7 +27,7 @@ function Cart() {
     if (!loading && typeof cart.items !== "undefined") {
       setDisplayItems(cart.items);
     }
-  }, [cart.items, loading]);
+  }, [cart, loading]);
 
   const handleQuantityChange = async (productId, newQty) => {
     if (newQty < 1) return;
@@ -41,7 +43,7 @@ function Cart() {
 
     try {
       const sessionId = localStorage.getItem("sessionId");
-      await axios.put("http://localhost:5000/api/cart/update", {
+      await axios.put(`${API_URL}/api/cart/update`, {
         sessionId,
         productId,
         quantity: newQty,
@@ -106,7 +108,7 @@ function Cart() {
                           src={
                             item.productId.image?.startsWith("http")
                               ? item.productId.image
-                              : `http://localhost:5000${item.productId.image}`
+                              : `${API_URL}${item.productId.image}`
                           }
                           alt={item.productId.name}
                           style={{ width: "60px" }}

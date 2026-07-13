@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 import SectionHeader from "../components/SectionHeader";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Checkout() {
   const { cart, fetchCart, clearCart } = useCart();
   const { user, token } = useAuth();
@@ -47,7 +49,7 @@ function Checkout() {
 
     if (user && token) {
       axios
-        .get("http://localhost:5000/api/addresses", {
+        .get(`${API_URL}/api/addresses`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => setSavedAddresses(res.data))
@@ -115,7 +117,7 @@ function Checkout() {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       // 📨 Отправка заказа
-      const res = await axios.post("http://localhost:5000/api/orders", body, {
+      const res = await axios.post(`${API_URL}/api/orders`, body, {
         headers,
       });
 
@@ -137,7 +139,7 @@ function Checkout() {
         if (!exists) {
           try {
             await axios.post(
-              "http://localhost:5000/api/addresses",
+              `${API_URL}/api/addresses`,
               { address, city, region, zip },
               { headers: { Authorization: `Bearer ${token}` } }
             );

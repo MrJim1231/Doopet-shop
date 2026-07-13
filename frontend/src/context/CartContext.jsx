@@ -3,6 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext"; // 🟢 импорт авторизации
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -26,7 +28,7 @@ export const CartProvider = ({ children }) => {
   const fetchCart = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/cart", {
+      const res = await axios.get(`${API_URL}/api/cart`, {
         params: { userId: user?._id, sessionId },
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -53,7 +55,7 @@ export const CartProvider = ({ children }) => {
       // });
 
       await axios.post(
-        "http://localhost:5000/api/cart/add",
+        `${API_URL}/api/cart/add`,
         { sessionId, productId, quantity },
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -84,7 +86,7 @@ export const CartProvider = ({ children }) => {
     removeFromCartLocally(productId);
 
     try {
-      await axios.delete("http://localhost:5000/api/cart/remove", {
+      await axios.delete(`${API_URL}/api/cart/remove`, {
         data: { userId: user?._id, sessionId, productId },
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -115,7 +117,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     // console.log("🚫 Очистка корзины...");
     try {
-      await axios.delete("http://localhost:5000/api/cart/clear", {
+      await axios.delete(`${API_URL}/api/cart/clear`, {
         data: { userId: user?._id, sessionId },
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });

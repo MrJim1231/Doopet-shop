@@ -9,6 +9,8 @@ import graphicIcon from "../assets/icons/graphic-elements.svg";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Post() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -19,7 +21,7 @@ function Post() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/blogs/${id}`);
+        const res = await axios.get(`${API_URL}/api/blogs/${id}`);
         setPost(res.data);
       } catch (err) {
         console.error("Ошибка при загрузке статьи:", err);
@@ -28,7 +30,7 @@ function Post() {
 
     const fetchOtherPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/blogs");
+        const res = await axios.get(`${API_URL}/api/blogs`);
         setOtherPosts(res.data.filter((item) => item._id !== id));
       } catch (err) {
         console.error("Ошибка при загрузке других статей:", err);
