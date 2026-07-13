@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import trashIcon from "../assets/icons/trash.svg";
 import placeholderImg from "../assets/images/no-image.png";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -16,11 +17,7 @@ function CartDropdown() {
             {cart.items.map((item) => (
               <li key={item._id} className="cart-dropdown__item">
                 <img
-                  src={
-                    item.productId?.image?.startsWith("http")
-                      ? item.productId.image
-                      : `${API_URL}${item.productId?.image || ""}`
-                  }
+                  src={getImageUrl(item.productId?.image || item.productId?.imageUrl)}
                   onError={(e) => (e.target.src = placeholderImg)}
                   alt={item.productId?.name}
                   className="cart-dropdown__image"

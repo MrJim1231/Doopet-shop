@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import placeholderImg from "../../assets/images/no-image.png";
 import { Link } from "react-router-dom";
+import { getImageUrl } from "../../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -82,11 +83,7 @@ function Favorites() {
                   <div key={product._id} className="favorites__item">
                     <Link to={`/product/${product._id}`}>
                       <img
-                        src={
-                          product.image?.startsWith("http")
-                            ? product.image
-                            : `${API_URL}${product.image}`
-                        }
+                        src={getImageUrl(product.image || product.imageUrl)}
                         alt={product.name}
                         onError={(e) => (e.target.src = placeholderImg)}
                         className="favorites__img"

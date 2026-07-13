@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import Header from "../../layout/Header";
 import Footer from "../../layout/Footer";
+import { getImageUrl } from "../../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -79,13 +80,7 @@ function Orders() {
                         {order.items.map((item) => (
                           <li key={item._id} className="order-card__item">
                             <img
-                              src={
-                                item.productId?.image?.startsWith("http")
-                                  ? item.productId.image
-                                  : `${API_URL}${
-                                      item.productId?.image || ""
-                                    }`
-                              }
+                              src={getImageUrl(item.productId?.image || item.productId?.imageUrl)}
                               alt={item.productId?.name}
                               className="order-card__image"
                             />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -41,7 +42,7 @@ function Categories() {
               >
                 <div className="categories__image-wrapper">
                   <img
-                    src={cat.imageUrl || "https://via.placeholder.com/150"}
+                    src={getImageUrl(cat.image || cat.imageUrl) || "https://via.placeholder.com/150"}
                     alt={cat.name}
                     className="categories__image"
                   />

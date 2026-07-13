@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -169,7 +170,7 @@ function AddPost() {
                 <div className="add-post__item" key={post._id}>
                   <div className="add-post__item-left">
                     <img
-                      src={post.imageUrl || post.image}
+                      src={getImageUrl(post.imageUrl || post.image)}
                       alt={post.title}
                       className="add-post__item-img"
                     />

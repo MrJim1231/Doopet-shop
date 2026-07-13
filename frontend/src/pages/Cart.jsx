@@ -8,6 +8,7 @@ import SectionHeader from "../components/SectionHeader";
 import Breadcrumbs from "../layout/Breadcrumbs";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -105,11 +106,7 @@ function Cart() {
                     <tr key={item.productId._id}>
                       <td>
                         <img
-                          src={
-                            item.productId.image?.startsWith("http")
-                              ? item.productId.image
-                              : `${API_URL}${item.productId.image}`
-                          }
+                          src={getImageUrl(item.productId.image || item.productId.imageUrl)}
                           alt={item.productId.name}
                           style={{ width: "60px" }}
                         />

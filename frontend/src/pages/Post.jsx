@@ -8,6 +8,7 @@ import SectionHeader from "../components/SectionHeader";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../layout/Footer";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -56,7 +57,7 @@ function Post() {
             <div className="post__content">
               <div className="post__image-wrapper">
                 <img
-                  src={post.imageUrl || post.image || "/no-image.jpg"}
+                  src={getImageUrl(post.imageUrl || post.image) || "/no-image.jpg"}
                   alt={post.title}
                   className="post__image"
                 />
@@ -96,7 +97,7 @@ function Post() {
                       className="post__other-item"
                     >
                       <img
-                        src={item.imageUrl || item.image}
+                        src={getImageUrl(item.imageUrl || item.image)}
                         alt={item.title}
                         className="post__other-image"
                       />

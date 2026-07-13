@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext"; // 🔹 импорт контекста корзины
 import graphicIcon from "../assets/icons/graphic-elements.svg";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -73,7 +74,7 @@ function PopularProducts() {
                       )}
                     </div>
                     <img
-                      src={product.imageUrl || product.image}
+                      src={getImageUrl(product.image || product.imageUrl)}
                       alt={product.name}
                       className="popular__products-image"
                     />

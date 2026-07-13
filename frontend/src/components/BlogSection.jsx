@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import SectionHeader from "./SectionHeader";
 import graphicIcon from "../assets/icons/graphic-elements.svg";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -50,7 +51,7 @@ function BlogSection() {
                 <div className="blog__item" key={post._id}>
                   <div className="blog__item-image-wrapper">
                     <img
-                      src={post.imageUrl || post.image || "/no-image.jpg"}
+                      src={getImageUrl(post.imageUrl || post.image) || "/no-image.jpg"}
                       alt={post.title}
                       className="blog__item-image"
                     />

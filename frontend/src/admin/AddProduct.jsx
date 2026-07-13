@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../layout/Header";
 import Breadcrumbs from "../layout/Breadcrumbs";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -300,11 +301,7 @@ function AddProduct() {
                   <div className="add-product__info">
                     {p.image && (
                       <img
-                        src={
-                          p.image.startsWith("http")
-                            ? p.image
-                            : `${API_URL}${p.image}`
-                        }
+                        src={getImageUrl(p.image || p.imageUrl)}
                         alt={p.name}
                         className="add-product__img"
                       />

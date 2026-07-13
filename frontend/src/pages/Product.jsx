@@ -11,6 +11,7 @@ import Footer from "../layout/Footer";
 import heartIcon from "../assets/icons/heart1.svg";
 import heartFilled from "../assets/icons/heart.svg";
 import placeholderImg from "../assets/images/no-image.png";
+import { getImageUrl } from "../utils/image";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -69,7 +70,7 @@ function Product() {
   if (error) return <p>{error}</p>;
   if (!product) return <p>Товар не найден</p>;
 
-  const mainImage = product.imageUrl || placeholderImg;
+  const mainImage = getImageUrl(product.imageUrl) || placeholderImg;
 
   const breadcrumbs = [
     {
@@ -101,7 +102,7 @@ function Product() {
                   {product.images.map((img, i) => (
                     <img
                       key={i}
-                      src={`${API_URL}/${img}`}
+                      src={getImageUrl(img)}
                       alt={`миниатюра ${i + 1}`}
                       className="product__page-thumb"
                       onError={(e) => (e.target.src = placeholderImg)}
